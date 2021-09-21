@@ -16,6 +16,8 @@ struct ContentView: View {
             Button {
                 DJISDKManager.missionControl()?.scheduleElement(DJITakeOffAction())
                 
+                DJISDKManager.missionControl()?.startTimeline()
+                
             } label: {
                 Text("Takeoff").padding(20)
             }.contentShape(Rectangle())
@@ -36,6 +38,8 @@ struct ContentView: View {
             Button {
                 DJISDKManager.missionControl()?.scheduleElement(DJILandAction())
                 
+                DJISDKManager.missionControl()?.startTimeline()
+                
             } label: {
                 Text("Land").padding(20)
             }.contentShape(Rectangle())
@@ -44,6 +48,8 @@ struct ContentView: View {
             Button {
                 DJISDKManager.missionControl()?.unscheduleEverything()
                 DJISDKManager.missionControl()?.scheduleElement(DJILandAction())
+                
+                DJISDKManager.missionControl()?.startTimeline()
                 
             } label: {
                 Text("Force Land").padding(20)
