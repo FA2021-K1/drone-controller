@@ -1,5 +1,6 @@
+import Foundation
+
 class Task {
-    
     let id: String
     let name: String
     let type: TaskType
@@ -13,11 +14,11 @@ class Task {
     }
 }
 
-class FlyToTask:Task {
+class FlyToTask: Task {
     let latitude: Double
     let longitude: Double
     let altitude: Double
-    
+
     internal init(id: String, name: String, type: TaskType, drone_id: String, latitude: Double, longitude: Double, altitude: Double) {
         self.latitude = latitude
         self.longitude = longitude
@@ -26,14 +27,25 @@ class FlyToTask:Task {
     }
 }
 
-class GetDataTask: Task {
-}
+class NonTerminalTask: Task {
+    let tasks: [Task]
 
-class NonTerminalTask:Task {
-    internal init(id: String, name: String, type: TaskType, drone_id: String, tasks: [Task]) {
+    init(id: String, name: String, type: TaskType, drone_id: String, tasks: [Task]) {
         self.tasks = tasks
         super.init(id: id, name: name, type: type, drone_id: drone_id)
     }
-    
-    let tasks: [Task]
+}
+
+class GetDataTask: Task {
+}
+
+class UnknownTask: Decodable {
+    let id: String
+    let name: String
+    let type: TaskType
+    let drone_id: String
+    let latitude: Double?
+    let longitude: Double?
+    let altitude: Double?
+    let tasks: [UnknownTask]?
 }
