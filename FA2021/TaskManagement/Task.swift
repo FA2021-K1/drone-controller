@@ -3,7 +3,7 @@ class Task {
     let id: String
     let name: String
     let type: TaskType
-    let drone_id: String
+    let drone_id: String?
     
     internal init(id: String, name: String, type: TaskType, drone_id: String) {
         self.id = id
