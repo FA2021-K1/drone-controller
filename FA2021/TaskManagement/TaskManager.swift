@@ -21,17 +21,18 @@ struct TaskManager {
         let id: String = unknown.id
         let name: String = unknown.name
         let type: TaskType = unknown.type
+        let drone_id: String = unknown.drone_id
         let task: Task
 
         switch type {
         case .FlyToTask:
-            task = FlyToTask(id: id, name: name, type: type,
+            task = FlyToTask(id: id, name: name, type: type, drone_id: drone_id,
                     latitude: unknown.latitude ?? 0,
                     longitude: unknown.longitude ?? 0,
                     altitude: unknown.altitude ?? 0)
 
         case .GetDataTask:
-            task = GetDataTask(id: id, name: name, type: type)
+            task = GetDataTask(id: id, name: name, type: type, drone_id: drone_id)
 
         case .NonTerminalTask:
             var tasks: [Task] = []
@@ -42,7 +43,7 @@ struct TaskManager {
             } else {
                 tasks = []
             }
-            task = NonTerminalTask(id: id, name: name, type: type, tasks: tasks)
+            task = NonTerminalTask(id: id, name: name, type: type, drone_id: drone_id, tasks: tasks)
         }
         return task
     }
