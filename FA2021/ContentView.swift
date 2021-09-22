@@ -12,6 +12,12 @@ struct ContentView: View {
     var missionControl = MissionScheduler()
     
     var body: some View {
+        
+        // app crashes if no product is connected
+        let connectedProduct = DJISDKManager.product()!
+        
+        Text("Connected aircraft:" + (connectedProduct.model!))
+        
         List {
             Button {
                 DJISDKManager.missionControl()?.scheduleElement(DJITakeOffAction())
