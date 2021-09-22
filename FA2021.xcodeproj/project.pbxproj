@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,7 @@
 		CCD2593926F7E01E007AD953 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCD2593826F7E01E007AD953 /* Preview Assets.xcassets */; };
 		CCD2594426F7E01E007AD953 /* FA2021Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594326F7E01E007AD953 /* FA2021Tests.swift */; };
 		CCD2594F26F7E01E007AD953 /* FA2021UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594E26F7E01E007AD953 /* FA2021UITests.swift */; };
+		DD9FFB9226FB8761009AD69B /* iDroneControl in Frameworks */ = {isa = PBXBuildFile; productRef = DD9FFB9126FB8761009AD69B /* iDroneControl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +68,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D9BF4AB80A9FE99FD3E2853 /* Pods_FA2021.framework in Frameworks */,
+				DD9FFB9226FB8761009AD69B /* iDroneControl in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,6 +201,9 @@
 			dependencies = (
 			);
 			name = FA2021;
+			packageProductDependencies = (
+				DD9FFB9126FB8761009AD69B /* iDroneControl */,
+			);
 			productName = FA2021;
 			productReference = CCD2592E26F7E01A007AD953 /* FA2021.app */;
 			productType = "com.apple.product-type.application";
@@ -273,6 +278,9 @@
 				Base,
 			);
 			mainGroup = CCD2592526F7E01A007AD953;
+			packageReferences = (
+				DD9FFB9026FB8761009AD69B /* XCRemoteSwiftPackageReference "DroneProtocol" */,
+			);
 			productRefGroup = CCD2592F26F7E01A007AD953 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -746,6 +754,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DD9FFB9026FB8761009AD69B /* XCRemoteSwiftPackageReference "DroneProtocol" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fa21-collaborative-drone-interactions/DroneProtocol";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DD9FFB9126FB8761009AD69B /* iDroneControl */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DD9FFB9026FB8761009AD69B /* XCRemoteSwiftPackageReference "DroneProtocol" */;
+			productName = iDroneControl;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CCD2592626F7E01A007AD953 /* Project object */;
 }

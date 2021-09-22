@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "iDroneControl",
+        "repositoryURL": "https://github.com/fa21-collaborative-drone-interactions/DroneProtocol",
+        "state": {
+          "branch": "main",
+          "revision": "a85a77433a641223bf14bd4aa9c81301def9048c",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}
