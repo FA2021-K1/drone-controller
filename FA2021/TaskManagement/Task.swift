@@ -1,5 +1,9 @@
 import Foundation
 
+enum TaskType: String, Decodable {
+    case FlyToTask, GetDataTask, NonTerminalTask
+}
+
 class Task {
     let id: String
     let name: String

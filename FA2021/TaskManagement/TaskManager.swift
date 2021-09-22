@@ -1,9 +1,5 @@
 import Foundation
 
-enum TaskType {
-    case FlyToTask, GetDataTask, NonTerminalTask
-}
-
 struct TaskRegistration {
     let taskId: String
     let droneId: String
@@ -50,21 +46,7 @@ class TaskManager {
         --> we can filter for earliest timestamp, see if we currenlty to this task
      */
     func checkTaskResponsibility(){
-
-
-
     }
-
-    
-    /**
-     @return tasks waiting to be assigned
-     */
-    func retrieveAvailableTasks() -> [Task] {
-        // allTasksAvailableOrInProgress   coaty?: get/observe all tasks in network
-        // dronesWorkingOnTaskSinceTimestamp    coaty? (if not coaty add to json): get all drones that work on task with timestamp
-        // filter allTasksAvailableOrInProgress with dronesWorkingOnTaskSinceTimestamp
-        return [];
-	}
 
 	func parseJsonToTasks(json: String) -> [Task] {
             guard let data = json.data(using: .utf8) else {
