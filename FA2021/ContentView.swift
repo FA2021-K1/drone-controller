@@ -9,57 +9,34 @@ import SwiftUI
 import DJISDK
 
 struct ContentView: View {
-    var missionControl = MissionScheduler()
+    var missionScheduler = MissionScheduler()
     
     var body: some View {
-        
         // app crashes if no product is connected
-        let connectedProduct = DJISDKManager.product()!
+        // let connectedProduct = DJISDKManager.product()
         
-        Text("Connected aircraft:" + (connectedProduct.model!))
+        // Text("Connected aircraft:" + (connectedProduct?.model ?? "Not connected"))
         
         List {
             Button {
-                DJISDKManager.missionControl()?.scheduleElement(DJITakeOffAction())
-                
-                DJISDKManager.missionControl()?.startTimeline()
-                
+                missionScheduler.takeOff()
             } label: {
                 Text("Takeoff").padding(20)
             }.contentShape(Rectangle())
             
             Button {
-                guard let mission = missionControl.createDemoMission()
-                else {
-                    return
-                }
-                
-                DJISDKManager.missionControl()?.scheduleElement(mission)
-                
+                missionScheduler.executeMission()
             } label: {
                 Text("Start Mission").padding(20)
             }.contentShape(Rectangle())
             
             
             Button {
-                DJISDKManager.missionControl()?.scheduleElement(DJILandAction())
-                
-                DJISDKManager.missionControl()?.startTimeline()
-                
+                missionScheduler.land()
             } label: {
                 Text("Land").padding(20)
             }.contentShape(Rectangle())
             
-            
-            Button {
-                DJISDKManager.missionControl()?.unscheduleEverything()
-                DJISDKManager.missionControl()?.scheduleElement(DJILandAction())
-                
-                DJISDKManager.missionControl()?.startTimeline()
-                
-            } label: {
-                Text("Force Land").padding(20)
-            }.contentShape(Rectangle())
         }
     }
 }

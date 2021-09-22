@@ -8,9 +8,56 @@
 import Foundation
 import DJISDK
 
-struct MissionScheduler {
+class MissionScheduler: NSObject {
     
-    func createDemoMission() -> DJIMissionControlTimelineElement? {
+    private var missionControl: DJIMissionControl?
+    private var registered = false
+    
+    override init() {
+        super.init()
+        registerSDK()
+    }
+    
+    private func registerSDK() {
+        let appKey = Bundle.main.object(forInfoDictionaryKey: SDK_APP_KEY_INFO_PLIST_KEY) as? String
+        
+        guard appKey != nil && appKey!.isEmpty == false else {
+            print("Please enter your app key in the info.plist")
+            return
+        }
+        DJISDKManager.registerApp(with: self)
+        registered = true
+    }
+    
+    func clearScheduleAndExecute(actions: [DJIMissionControlTimelineElement]) {
+        if !registered {
+            print("Warning, SDK is not registered!")
+            return
+        }
+        
+        missionControl?.unscheduleEverything()
+        missionControl?.scheduleElements(actions)
+        missionControl?.startTimeline()
+    }
+    
+    func takeOff() {
+        clearScheduleAndExecute(actions: [DJITakeOffAction()])
+    }
+    
+    func land() {
+        clearScheduleAndExecute(actions: [DJILandAction()])
+    }
+    
+    func executeMission() {
+        guard let mission = createDemoMission()
+        else {
+            print("Mission could not be created")
+            return
+        }
+        clearScheduleAndExecute(actions: [mission])
+    }
+    
+    private func createDemoMission() -> DJIMissionControlTimelineElement? {
         let startingCoordinates = CLLocationCoordinate2DMake(46.746102, 11.359648)
         let endingCoordinates = CLLocationCoordinate2DMake(46.776097, 11.359169)
         
@@ -48,7 +95,7 @@ struct MissionScheduler {
         waypoint1.cornerRadiusInMeters = 5
         waypoint1.turnMode = DJIWaypointTurnMode.clockwise
         waypoint1.gimbalPitch = 0
-        
+
         let waypoint2 = DJIWaypoint(coordinate: endingCoordinates)
         waypoint2.altitude = 26
         waypoint2.heading = 0
@@ -62,5 +109,14 @@ struct MissionScheduler {
         mission.add(waypoint2)
         
         return DJIWaypointMission(mission: mission)
+    }
+}
+
+extension MissionScheduler: DJISDKManagerDelegate {
+    func appRegisteredWithError(_ error: Error?) {
+        
+    }
+    func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
+        
     }
 }
