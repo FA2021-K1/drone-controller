@@ -14,7 +14,6 @@ struct ContentView: View {
     var body: some View {
         // app crashes if no product is connected
         // let connectedProduct = DJISDKManager.product()
-        
         // Text("Connected aircraft:" + (connectedProduct?.model ?? "Not connected"))
         
         List {
@@ -36,8 +35,12 @@ struct ContentView: View {
             } label: {
                 Text("Land").padding(20)
             }.contentShape(Rectangle())
-            
         }
+        
+        Divider()
+        
+        
+        
     }
 }
 
