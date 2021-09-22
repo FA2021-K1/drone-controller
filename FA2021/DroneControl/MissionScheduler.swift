@@ -7,22 +7,84 @@
 
 import Foundation
 import DJISDK
+import Combine
 
-class MissionScheduler: NSObject {
+class MissionScheduler: NSObject, ObservableObject {
     
     private var missionControl: DJIMissionControl?
+    private var product: DJIBaseProduct?
     private var registered = false
+    private var logCancellable: AnyCancellable?
+    
+    @Published
+    var log = Log()
     
     override init() {
         super.init()
+        self.logCancellable = log.$logEntries.sink(receiveValue: {_ in
+            self.objectWillChange.send()
+        })
         registerSDK()
+        DJISDKManager.startConnectionToProduct()
+        test()
+    }
+    
+    func test() {
+        log.add(message: "Creating connected key")
+        guard let connectedKey = DJIProductKey(param: DJIParamConnection) else {
+            log.add(message: "Error creating the connectedKey")
+            return;
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DJISDKManager.keyManager()?.startListeningForChanges(on: connectedKey, withListener: self, andUpdate: { (oldValue: DJIKeyedValue?, newValue : DJIKeyedValue?) in
+                if newValue != nil {
+                    if newValue!.boolValue {
+                        // At this point, a product is connected so we can show it.
+                        
+                        // UI goes on MT.
+                        DispatchQueue.main.async {
+                            self.productConnected()
+                        }
+                    }
+                }
+            })
+            DJISDKManager.keyManager()?.getValueFor(connectedKey, withCompletion: { (value:DJIKeyedValue?, error:Error?) in
+                if let unwrappedValue = value {
+                    if unwrappedValue.boolValue {
+                        // UI goes on MT.
+                        DispatchQueue.main.async {
+                            self.productConnected()
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    // MARK : Product connection UI changes
+    
+    func productConnected() {
+        guard let newProduct = DJISDKManager.product() else {
+            self.log.add(message: "Product is connected but DJISDKManager.product is nil -> something is wrong")
+            return;
+        }
+
+        //Updates the product's model
+        self.log.add(message: "Model: \((newProduct.model)!)")
+        
+        //Updates the product's connection status
+        self.log.add(message: "Status: Product Connected")
+        
+        product = newProduct
     }
     
     private func registerSDK() {
+        log.add(message: "Registering SDK")
         let appKey = Bundle.main.object(forInfoDictionaryKey: SDK_APP_KEY_INFO_PLIST_KEY) as? String
         
         guard appKey != nil && appKey!.isEmpty == false else {
-            print("Please enter your app key in the info.plist")
+            log.add(message: "Please enter your app key in the info.plist")
             return
         }
         DJISDKManager.registerApp(with: self)
@@ -31,27 +93,42 @@ class MissionScheduler: NSObject {
     
     func clearScheduleAndExecute(actions: [DJIMissionControlTimelineElement]) {
         if !registered {
-            print("Warning, SDK is not registered!")
+            log.add(message: "Warning, SDK is not registered! Abort.")
             return
         }
         
+        log.add(message: "Unscheduling everything and adding to mission...")
+        
+        missionControl?.stopTimeline()
         missionControl?.unscheduleEverything()
-        missionControl?.scheduleElements(actions)
+    
+        
+        if let error = missionControl?.scheduleElements(actions) {
+            log.add(message: "error scheduling mission elments: \(String(describing: error))")
+            return
+        }
+        
+        log.add(message: "Starting timeline")
+        missionControl?.currentTimelineMarker = 0
         missionControl?.startTimeline()
     }
     
     func takeOff() {
+        log.add(message: "Taking off!")
+        
         clearScheduleAndExecute(actions: [DJITakeOffAction()])
     }
     
     func land() {
+        log.add(message: "Landing")
         clearScheduleAndExecute(actions: [DJILandAction()])
     }
     
     func executeMission() {
+        log.add(message: "Executing Mission")
         guard let mission = createDemoMission()
         else {
-            print("Mission could not be created")
+            log.add(message: "Mission could not be created. Abort.")
             return
         }
         clearScheduleAndExecute(actions: [mission])

@@ -9,6 +9,7 @@ import SwiftUI
 import DJISDK
 
 struct ContentView: View {
+    @StateObject
     var missionScheduler = MissionScheduler()
     
     var body: some View {
@@ -16,6 +17,15 @@ struct ContentView: View {
         // let connectedProduct = DJISDKManager.product()
         
         // Text("Connected aircraft:" + (connectedProduct?.model ?? "Not connected"))
+        ScrollView {
+            VStack {
+                ForEach(missionScheduler.log.logEntries, id: \.self) { logEntry in
+                    Text(logEntry)
+                        .padding()
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
         
         List {
             Button {
