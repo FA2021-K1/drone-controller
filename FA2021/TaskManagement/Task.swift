@@ -10,7 +10,7 @@ class Task {
     let type: TaskType
     let drone_id: String?
     
-    internal init(id: String, name: String, type: TaskType, drone_id: String) {
+    internal init(id: String, name: String, type: TaskType, drone_id: String?) {
         self.id = id
         self.name = name
         self.type = type

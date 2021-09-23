@@ -14,84 +14,13 @@ struct TaskRegistration {
     }
 }
 
-class TaskManager {
+protocol TaskManager {
+    var syncLib: SyncLibrary { get set }
     
-    var currentTasks: [Task]
-    let droneId: String = "abcdefg" // TODO: find out from where to get droneId
-    
-    init() {
-        currentTasks = []
-        // TODO: registerForUnfinishedTasks() // api call to syncLibrary
-    }
-    
-    /**
-     entry point
-     */
-    func scanForTask(){
-        
-        if (!currentTasks.isEmpty) {
-            return
-        }
-        // note: we expect the query to only return unfinishedTasks
-        var unfinishedTasks: [Task] = []//=  TODO: makeQuery()
-        
-        while unfinishedTasks.isEmpty {
-            sleep(1)
-            
-            //unfinishedTasks = TODO: makeQuery()
-        }
-        
-        selectTaskFromAvailableTasks(unfinishedTasks: unfinishedTasks)
-        
-    }
-    
-    
-    func selectTaskFromAvailableTasks(unfinishedTasks: [Task]){
-        for task in unfinishedTasks {
-            if (task.drone_id == nil) {
-                
-                // TODO: registerForTask(task.id, checkTaskResponsibility)
-                
-                //TODO: startTask(task)  // api call to drone team
-                currentTasks.append(task)
-                
-                return
-            }
-        }
-    }
-    
-    /**
-     expected parameters:
-     -[{taskId, droneId, timestamp}] where taskId is always the same (the one we registered for)
-     --> we can filter for earliest timestamp, see if we currenlty to this task
-     */
-    func checkTaskResponsibility(taskRegistrations: [TaskRegistration]){
-        
-        let earliestTaskRegistration = getEarliestTaskRegistration(taskRegistrations: taskRegistrations)
-        
-        if (earliestTaskRegistration.droneId == droneId){
-            // continue executing task
-            return
-        }
-        
-        // remove respective task from currentTasks when aborting
-        currentTasks = currentTasks.filter { task in task.id != earliestTaskRegistration.taskId }
-        
-        // TODO: abort task execution // api call to drone team
-        
-    }
-    
-    func getEarliestTaskRegistration(taskRegistrations:[TaskRegistration]) -> TaskRegistration{
-        var earliestTaskRegistration: TaskRegistration = taskRegistrations[0]
-        for taskRegistration in taskRegistrations {
-            if (taskRegistration.timestamp < earliestTaskRegistration.timestamp){
-                earliestTaskRegistration = taskRegistration
-            }
-        }
-        
-        return earliestTaskRegistration
-    }
-    
+    func scanForTask()
+}
+
+extension TaskManager {
     
     // json parsing
     func parseJsonToTasks(json: String) -> [Task] {
