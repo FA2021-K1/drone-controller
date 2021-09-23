@@ -37,7 +37,6 @@ class TaskManager {
         
         while unfinishedTasks.isEmpty {
             sleep(1)
-            
             //unfinishedTasks = TODO: makeQuery()
         }
         
@@ -49,12 +48,10 @@ class TaskManager {
     func selectTaskFromAvailableTasks(unfinishedTasks: [Task]){
         for task in unfinishedTasks {
             if (task.drone_id == nil) {
-                
                 // TODO: registerForTask(task.id, checkTaskResponsibility)
                 
                 //TODO: startTask(task)  // api call to drone team
                 currentTasks.append(task)
-                
                 return
             }
         }
@@ -63,7 +60,7 @@ class TaskManager {
     /**
      expected parameters:
      -[{taskId, droneId, timestamp}] where taskId is always the same (the one we registered for)
-     --> we can filter for earliest timestamp, see if we currenlty to this task
+     --> we can filter for earliest timestamp, see if we currently to this task
      */
     func checkTaskResponsibility(taskRegistrations: [TaskRegistration]){
         
@@ -100,7 +97,10 @@ class TaskManager {
         }
         var unknown_tasks: [UnknownTask] = []
         do {
-            unknown_tasks = try! JSONDecoder().decode([UnknownTask].self, from: data)
+            unknown_tasks = try JSONDecoder().decode([UnknownTask].self, from: data)
+        } catch {
+            print("ERROR: Failed to decode JSON containing tasks!")
+            return []
         }
         var tasks: [Task] = []
         for unknown_task in unknown_tasks {
