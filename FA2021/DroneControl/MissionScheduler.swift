@@ -13,23 +13,30 @@ class MissionScheduler: NSObject, ObservableObject {
     
     private var missionControl: DJIMissionControl?
     private var product: DJIBaseProduct?
-    private var registered = false
+    private var missionSchedulerState: MissionSchedulerState
     private var logCancellable: AnyCancellable?
     
     @Published
     var log = Log()
     
     override init() {
+        self.missionSchedulerState = .initializing
         super.init()
         self.logCancellable = log.$logEntries.sink(receiveValue: {_ in
             self.objectWillChange.send()
         })
+        
         registerSDK()
-        DJISDKManager.startConnectionToProduct()
-        test()
+        connectProductAndAnnounce()
+        
+        missionControl = DJISDKManager.missionControl()
+        setupListeners()
     }
     
-    func test() {
+    func connectProductAndAnnounce() {
+        log.add(message: "Connecting to product")
+        DJISDKManager.startConnectionToProduct()
+        
         log.add(message: "Creating connected key")
         guard let connectedKey = DJIProductKey(param: DJIParamConnection) else {
             log.add(message: "Error creating the connectedKey")
@@ -67,9 +74,9 @@ class MissionScheduler: NSObject, ObservableObject {
     func productConnected() {
         guard let newProduct = DJISDKManager.product() else {
             self.log.add(message: "Product is connected but DJISDKManager.product is nil -> something is wrong")
-            return;
+            self.missionSchedulerState = .initialized
+            return
         }
-
         //Updates the product's model
         self.log.add(message: "Model: \((newProduct.model)!)")
         
@@ -77,6 +84,7 @@ class MissionScheduler: NSObject, ObservableObject {
         self.log.add(message: "Status: Product Connected")
         
         product = newProduct
+        missionSchedulerState = .ready
     }
     
     private func registerSDK() {
@@ -88,34 +96,37 @@ class MissionScheduler: NSObject, ObservableObject {
             return
         }
         DJISDKManager.registerApp(with: self)
-        registered = true
     }
     
     func clearScheduleAndExecute(actions: [DJIMissionControlTimelineElement]) {
-        if !registered {
-            log.add(message: "Warning, SDK is not registered! Abort.")
+        switch self.missionSchedulerState {
+        case .initializing, .initialized:
+            log.add(message: "Mission Scheduler is not ready, abort. Current state: \(String(describing: missionSchedulerState))")
             return
+        case .starting, .started, .pausing, .paused, .stopping:
+            DispatchQueue.main.async {
+                self.log.add(message: "Stopping mission and unscheduling everything...")
+                self.missionSchedulerState = .stopping
+                self.missionControl?.stopTimeline()
+                self.missionControl?.unscheduleEverything()
+            }
+        case .ready:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                if let error = self.missionControl?.scheduleElements(actions) {
+                    self.log.add(message: "error scheduling mission elments: \(String(describing: error))")
+                    return
+                }
+                
+                self.log.add(message: "Starting timeline")
+                self.missionSchedulerState = .starting
+                self.missionControl?.currentTimelineMarker = 0
+                self.missionControl?.startTimeline()
+            }
         }
-        
-        log.add(message: "Unscheduling everything and adding to mission...")
-        
-        missionControl?.stopTimeline()
-        missionControl?.unscheduleEverything()
-    
-        
-        if let error = missionControl?.scheduleElements(actions) {
-            log.add(message: "error scheduling mission elments: \(String(describing: error))")
-            return
-        }
-        
-        log.add(message: "Starting timeline")
-        missionControl?.currentTimelineMarker = 0
-        missionControl?.startTimeline()
     }
     
     func takeOff() {
         log.add(message: "Taking off!")
-        
         clearScheduleAndExecute(actions: [DJITakeOffAction()])
     }
     
@@ -172,7 +183,7 @@ class MissionScheduler: NSObject, ObservableObject {
         waypoint1.cornerRadiusInMeters = 5
         waypoint1.turnMode = DJIWaypointTurnMode.clockwise
         waypoint1.gimbalPitch = 0
-
+        
         let waypoint2 = DJIWaypoint(coordinate: endingCoordinates)
         waypoint2.altitude = 26
         waypoint2.heading = 0
@@ -191,9 +202,61 @@ class MissionScheduler: NSObject, ObservableObject {
 
 extension MissionScheduler: DJISDKManagerDelegate {
     func appRegisteredWithError(_ error: Error?) {
-        
+        if (error != nil) {
+            log.add(message: "Registering SDK failed")
+        } else {
+            log.add(message: "Registering SDK successful")
+            missionSchedulerState = .initialized
+        }
     }
     func didUpdateDatabaseDownloadProgress(_ progress: Progress) {
         
     }
+}
+
+extension MissionScheduler {
+    func setupListeners() {
+        missionControl?.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
+            
+            switch event {
+            case .started:
+                self.didStart()
+            case .stopped:
+                self.didStop()
+            case .paused:
+                self.didPause()
+            case .resumed:
+                self.didResume()
+            default:
+                break
+            }
+        })
+    }
+    
+    func didStart() {
+        missionSchedulerState = .started
+    }
+    
+    func didStop() {
+        missionSchedulerState = .ready
+    }
+    
+    func didPause() {
+        missionSchedulerState = .paused
+    }
+    
+    func didResume() {
+        missionSchedulerState = .started
+    }
+}
+
+enum MissionSchedulerState: String {
+    case initializing
+    case initialized
+    case ready
+    case starting
+    case started
+    case pausing
+    case paused
+    case stopping
 }
