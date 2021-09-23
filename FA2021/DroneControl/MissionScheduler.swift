@@ -34,12 +34,12 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func connectProductAndAnnounce() {
-        log.add(message: "Connecting to product")
+        self.log.add(message: "Connecting to product")
         DJISDKManager.startConnectionToProduct()
         
-        log.add(message: "Creating connected key")
+        self.log.add(message: "Creating connected key")
         guard let connectedKey = DJIProductKey(param: DJIParamConnection) else {
-            log.add(message: "Error creating the connectedKey")
+            self.log.add(message: "Error creating the connectedKey")
             return;
         }
         
@@ -74,7 +74,7 @@ class MissionScheduler: NSObject, ObservableObject {
     func productConnected() {
         guard let newProduct = DJISDKManager.product() else {
             self.log.add(message: "Product is connected but DJISDKManager.product is nil -> something is wrong")
-            self.missionSchedulerState = .initialized
+            self.connectProductAndAnnounce()
             return
         }
         //Updates the product's model
@@ -109,9 +109,13 @@ class MissionScheduler: NSObject, ObservableObject {
                 self.missionSchedulerState = .stopping
                 self.missionControl?.stopTimeline()
                 self.missionControl?.unscheduleEverything()
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.clearScheduleAndExecute(actions: actions)
+                }
             }
         case .ready:
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.async {
                 if let error = self.missionControl?.scheduleElements(actions) {
                     self.log.add(message: "error scheduling mission elments: \(String(describing: error))")
                     return
@@ -132,7 +136,7 @@ class MissionScheduler: NSObject, ObservableObject {
     
     func land() {
         log.add(message: "Landing")
-        clearScheduleAndExecute(actions: [DJILandAction()])
+        clearScheduleAndExecute(actions: [DJIGoHomeAction()])
     }
     
     func fly5m() {
@@ -290,6 +294,9 @@ extension MissionScheduler {
     func setupListeners() {
         missionControl?.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
             
+            self.log.add(message: error?.localizedDescription ?? "Mission Control Listener reported Element nil")
+            
+            // https://github.com/dji-sdk/Mobile-SDK-iOS/issues/161#issuecomment-330616112
             switch event {
             case .started:
                 self.didStart()
@@ -300,24 +307,29 @@ extension MissionScheduler {
             case .resumed:
                 self.didResume()
             default:
+                self.log.add(message: "This should not happen! \(event)")
                 break
             }
         })
     }
     
     func didStart() {
+        self.log.add(message: "Mission Scheduler started mission")
         missionSchedulerState = .started
     }
     
     func didStop() {
+        self.log.add(message: "Mission Scheduler is ready")
         missionSchedulerState = .ready
     }
     
     func didPause() {
+        self.log.add(message: "Mission Scheduler paused mission")
         missionSchedulerState = .paused
     }
     
     func didResume() {
+        self.log.add(message: "Mission Scheduler resumed mission")
         missionSchedulerState = .started
     }
 }
