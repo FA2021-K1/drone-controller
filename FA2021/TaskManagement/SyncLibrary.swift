@@ -5,6 +5,9 @@
 //  Created by FA21 on 23.09.21.
 //
 
+// This is a mock class!!
+// TODO: delete this file when real Library is available
+
 import Foundation
 
 
@@ -18,7 +21,7 @@ class SyncLibrary {
     let droneId: String
     
     func makeQuery() -> [Task] {
-        let task = Task(id: "abcd",name: "DOIT", type: .FlyToTask, drone_id: nil )
+        let task = Task(id: "abcd", name: "DOIT", type: .FlyToTask, drone_id: nil )
         let taskList = [task]
         
         return taskList
