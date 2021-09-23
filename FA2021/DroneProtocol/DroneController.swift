@@ -21,6 +21,11 @@ class DroneController: Controller {
         self.communicationManager.publishAdvertise(event)
     }
     
+    func publishTaskDictionary(taskDroneDictonary: [String : String]) {
+        
+    }
+    
+    
     func retrieveAvailableTasks() ->Observable<TasksDetails> {
         let query = QueryEvent.with(objectTypes: [TasksDetails.objectType])
         return self.communicationManager.publishQuery(query).asObservable().map { (r) in
