@@ -139,45 +139,56 @@ class MissionScheduler: NSObject, ObservableObject {
         clearScheduleAndExecute(actions: [DJIGoHomeAction()])
     }
     
-    func fly5m() {
-        log.add(message: "Flying 5m")
+    func addMetersToCoordinates(metersLat: Double, latitude: Double,
+                                metersLng: Double, longitude: Double) -> CLLocationCoordinate2D {
         
-        guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
-        else {
-            log.add(message: "Missing Controller Key")
-            return
-        }
-        let value = DJISDKManager.keyManager()?.getValueFor(key)
-        
-        let currentLoc = value?.value as! CLLocation
-        let currentCoor = currentLoc.coordinate
-        
-        
-        // convert meters in lat and long
         let earth = 6378.137
         let pi =  Double.pi
         let m = (1 / ((2 * pi / 360) * earth) ) / 1000
-        let lat = currentCoor.latitude + (5 * m)
-        let lon = currentCoor.longitude + (5 * m) / cos(currentCoor.latitude * (pi / 180))
+        let lat = latitude + (metersLat * m)
+        let lon = longitude + (metersLng * m) / cos(latitude * (pi / 180))
         
-        let coor = CLLocationCoordinate2DMake(lat, lon)
+        return CLLocationCoordinate2DMake(lat, lon)
+    }
+    
+    func getCurrentPos() -> CLLocationCoordinate2D? {
+        guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
+        else {
+            log.add(message: "Missing controller key")
+            return nil;
+        }
+        let value = DJISDKManager.keyManager()?.getValueFor(key)
         
-        guard let action = createWaypointMissionTo(coordinates: coor)
+        let loc = value?.value as! CLLocation
+        return loc.coordinate
+    }
+    
+    func flyDirection(direction: Direction, meters: Double) {
+        guard let pos = getCurrentPos()
+        else {
+            log.add(message: "Cannot retrieve current location")
+            return
+        }
+        
+        let coordinates : CLLocationCoordinate2D
+        
+        switch direction {
+            case Direction.north:
+                coordinates = addMetersToCoordinates(metersLat: meters, latitude: pos.latitude, metersLng: 0, longitude: pos.longitude)
+            case Direction.south:
+                coordinates = addMetersToCoordinates(metersLat: (-1) * meters, latitude: pos.latitude, metersLng: 0, longitude: pos.longitude)
+            case Direction.east:
+                coordinates = addMetersToCoordinates(metersLat: 0, latitude: pos.latitude, metersLng: meters, longitude: pos.longitude)
+            case Direction.west:
+                coordinates = addMetersToCoordinates(metersLat: 0, latitude: pos.latitude, metersLng: (-1) * meters, longitude: pos.longitude)
+        }
+        
+        guard let action = createWaypointMissionTo(coordinates: coordinates)
         else {
             log.add(message: "Mission is nil. Abort.")
             return
         }
         clearScheduleAndExecute(actions: [action])
-    }
-    
-    func executeMission() {
-        log.add(message: "Executing Mission")
-        guard let mission = createDemoMission()
-        else {
-            log.add(message: "Mission could not be created. Abort.")
-            return
-        }
-        clearScheduleAndExecute(actions: [mission])
     }
     
     func createWaypointMissionTo(coordinates: CLLocationCoordinate2D) -> DJIMissionControlTimelineElement? {
@@ -194,7 +205,7 @@ class MissionScheduler: NSObject, ObservableObject {
         
         guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
         else {
-            log.add(message: "Missing Controller Key")
+            log.add(message: "Missing controller key")
             return nil
         }
         let value = DJISDKManager.keyManager()?.getValueFor(key)
@@ -203,7 +214,7 @@ class MissionScheduler: NSObject, ObservableObject {
         let currentCoor = currentLoc.coordinate
         
         if !CLLocationCoordinate2DIsValid(coordinates) || !CLLocationCoordinate2DIsValid(currentCoor) {
-            log.add(message: "Invalid Coordinates")
+            log.add(message: "Invalid coordinates")
             return nil
         }
         
@@ -274,6 +285,17 @@ class MissionScheduler: NSObject, ObservableObject {
         
         return DJIWaypointMission(mission: mission)
     }
+    
+    // only for demo mission
+    func executeMission() {
+        log.add(message: "Executing Mission")
+        guard let mission = createDemoMission()
+        else {
+            log.add(message: "Mission could not be created. Abort.")
+            return
+        }
+        clearScheduleAndExecute(actions: [mission])
+    }
 }
 
 extension MissionScheduler: DJISDKManagerDelegate {
@@ -343,4 +365,11 @@ enum MissionSchedulerState: String {
     case pausing
     case paused
     case stopping
+}
+
+enum Direction: String {
+    case north
+    case south
+    case east
+    case west
 }
