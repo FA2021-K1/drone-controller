@@ -11,7 +11,7 @@ final class TaskTableMessage: CoatyObject{
     
     // MARK: - Class registration.
     override class var objectType: String {
-        return register(objectType: "idrone.sync.task", with: self)
+        return register(objectType: "idrone.sync.tasktable", with: self)
     }
     
     // MARK: - Properties.
@@ -21,7 +21,7 @@ final class TaskTableMessage: CoatyObject{
     
     // MARK: - Initializers.
     
-    init(table:TaskTable) {
+    init(_ table:TaskTable) {
         self.table = table
         super.init(coreType: .CoatyObject,
                    objectType: TasksDetails.objectType,
