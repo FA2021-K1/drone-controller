@@ -17,6 +17,17 @@
 		CCD2593926F7E01E007AD953 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCD2593826F7E01E007AD953 /* Preview Assets.xcassets */; };
 		CCD2594426F7E01E007AD953 /* FA2021Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594326F7E01E007AD953 /* FA2021Tests.swift */; };
 		CCD2594F26F7E01E007AD953 /* FA2021UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594E26F7E01E007AD953 /* FA2021UITests.swift */; };
+		F8C883F426FB1F0600947AA7 /* MultipeerConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C883F326FB1F0600947AA7 /* MultipeerConfiguration.swift */; };
+		F8C883F626FB1F7B00947AA7 /* MultipeerTransceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C883F526FB1F7B00947AA7 /* MultipeerTransceiver.swift */; };
+		F8C883F826FB1FBE00947AA7 /* MultipeerDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C883F726FB1FBE00947AA7 /* MultipeerDatasource.swift */; };
+		F8C883FA26FB200100947AA7 /* Peer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C883F926FB200100947AA7 /* Peer.swift */; };
+		F8C883FE26FB251400947AA7 /* MultipeerKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C883FD26FB251400947AA7 /* MultipeerKit.swift */; };
+		F8C8840026FB253A00947AA7 /* MultipeerConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C883FF26FB253A00947AA7 /* MultipeerConnection.swift */; };
+		F8C8840226FB258300947AA7 /* MockMultipeerConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C8840126FB258300947AA7 /* MockMultipeerConnection.swift */; };
+		F8C8840426FB25B500947AA7 /* MultipeerProtocoll.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C8840326FB25B500947AA7 /* MultipeerProtocoll.swift */; };
+		F8C8840626FB25E400947AA7 /* MultipeerMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C8840526FB25E400947AA7 /* MultipeerMessage.swift */; };
+		F8C8840826FB263900947AA7 /* MCPeerID+Me.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C8840726FB263900947AA7 /* MCPeerID+Me.swift */; };
+		F8C8840A26FB66D600947AA7 /* NetworkTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C8840926FB66D600947AA7 /* NetworkTest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +70,17 @@
 		E2B5B997AC276CC63AFD784D /* Pods-FA2021.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021.debug.xcconfig"; path = "Target Support Files/Pods-FA2021/Pods-FA2021.debug.xcconfig"; sourceTree = "<group>"; };
 		E6B3338464A8663E4BC7A62C /* Pods-FA2021-FA2021UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021-FA2021UITests.release.xcconfig"; path = "Target Support Files/Pods-FA2021-FA2021UITests/Pods-FA2021-FA2021UITests.release.xcconfig"; sourceTree = "<group>"; };
 		EC3695E6893B6CDA93F8FDBF /* Pods_FA2021.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FA2021.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F8C883F326FB1F0600947AA7 /* MultipeerConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerConfiguration.swift; sourceTree = "<group>"; };
+		F8C883F526FB1F7B00947AA7 /* MultipeerTransceiver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerTransceiver.swift; sourceTree = "<group>"; };
+		F8C883F726FB1FBE00947AA7 /* MultipeerDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerDatasource.swift; sourceTree = "<group>"; };
+		F8C883F926FB200100947AA7 /* Peer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Peer.swift; sourceTree = "<group>"; };
+		F8C883FD26FB251400947AA7 /* MultipeerKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerKit.swift; sourceTree = "<group>"; };
+		F8C883FF26FB253A00947AA7 /* MultipeerConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerConnection.swift; sourceTree = "<group>"; };
+		F8C8840126FB258300947AA7 /* MockMultipeerConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMultipeerConnection.swift; sourceTree = "<group>"; };
+		F8C8840326FB25B500947AA7 /* MultipeerProtocoll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerProtocoll.swift; sourceTree = "<group>"; };
+		F8C8840526FB25E400947AA7 /* MultipeerMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerMessage.swift; sourceTree = "<group>"; };
+		F8C8840726FB263900947AA7 /* MCPeerID+Me.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MCPeerID+Me.swift"; sourceTree = "<group>"; };
+		F8C8840926FB66D600947AA7 /* NetworkTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkTest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +167,7 @@
 		CCD2593026F7E01A007AD953 /* FA2021 */ = {
 			isa = PBXGroup;
 			children = (
+				F8C883F026FB105700947AA7 /* Network */,
 				CC8E98F626F8E61A0013973F /* DroneControl */,
 				CCD2593126F7E01A007AD953 /* FA2021App.swift */,
 				CCD2593326F7E01A007AD953 /* ContentView.swift */,
@@ -179,6 +202,40 @@
 				CCD2595026F7E01E007AD953 /* Info.plist */,
 			);
 			path = FA2021UITests;
+			sourceTree = "<group>";
+		};
+		F8C883F026FB105700947AA7 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				F8C883FC26FB250400947AA7 /* InternalAPI */,
+				F8C883FB26FB24EF00947AA7 /* ExternalAPI */,
+				F8C8840926FB66D600947AA7 /* NetworkTest.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		F8C883FB26FB24EF00947AA7 /* ExternalAPI */ = {
+			isa = PBXGroup;
+			children = (
+				F8C883F326FB1F0600947AA7 /* MultipeerConfiguration.swift */,
+				F8C883F526FB1F7B00947AA7 /* MultipeerTransceiver.swift */,
+				F8C883F726FB1FBE00947AA7 /* MultipeerDatasource.swift */,
+				F8C883F926FB200100947AA7 /* Peer.swift */,
+			);
+			path = ExternalAPI;
+			sourceTree = "<group>";
+		};
+		F8C883FC26FB250400947AA7 /* InternalAPI */ = {
+			isa = PBXGroup;
+			children = (
+				F8C883FD26FB251400947AA7 /* MultipeerKit.swift */,
+				F8C883FF26FB253A00947AA7 /* MultipeerConnection.swift */,
+				F8C8840126FB258300947AA7 /* MockMultipeerConnection.swift */,
+				F8C8840326FB25B500947AA7 /* MultipeerProtocoll.swift */,
+				F8C8840526FB25E400947AA7 /* MultipeerMessage.swift */,
+				F8C8840726FB263900947AA7 /* MCPeerID+Me.swift */,
+			);
+			path = InternalAPI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -418,9 +475,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8C8840426FB25B500947AA7 /* MultipeerProtocoll.swift in Sources */,
+				F8C8840A26FB66D600947AA7 /* NetworkTest.swift in Sources */,
+				F8C883F626FB1F7B00947AA7 /* MultipeerTransceiver.swift in Sources */,
+				F8C8840026FB253A00947AA7 /* MultipeerConnection.swift in Sources */,
+				F8C8840226FB258300947AA7 /* MockMultipeerConnection.swift in Sources */,
+				F8C8840826FB263900947AA7 /* MCPeerID+Me.swift in Sources */,
+				F8C8840626FB25E400947AA7 /* MultipeerMessage.swift in Sources */,
+				F8C883FA26FB200100947AA7 /* Peer.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
 				CC8E98F826F8E6670013973F /* MissionScheduler.swift in Sources */,
+				F8C883F426FB1F0600947AA7 /* MultipeerConfiguration.swift in Sources */,
 				CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */,
+				F8C883F826FB1FBE00947AA7 /* MultipeerDatasource.swift in Sources */,
+				F8C883FE26FB251400947AA7 /* MultipeerKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,7 +575,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -562,7 +630,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -578,18 +646,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"FA2021/Preview Content\"";
-				DEVELOPMENT_TEAM = 647HPUH5PY;
+				DEVELOPMENT_TEAM = V7R5BV392U;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = FA2021/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.ase.fa2021;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.tum.in.ase.fa2021-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -601,18 +671,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"FA2021/Preview Content\"";
-				DEVELOPMENT_TEAM = 647HPUH5PY;
+				DEVELOPMENT_TEAM = V7R5BV392U;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = FA2021/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = de.tum.in.ase.fa2021;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.tum.in.ase.fa2021-2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

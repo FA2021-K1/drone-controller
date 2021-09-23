@@ -12,7 +12,7 @@ import Network
 import os.log
 
 /// Handles all aspects related to the multipeer communication.
-public final class MultipeerTransceiver {
+public final class MultipeerTransceiver: ObservableObject {
 
     private let log = MultipeerKit.log(for: MultipeerTransceiver.self)
 
@@ -39,7 +39,7 @@ public final class MultipeerTransceiver {
     }
     
     /// All peers currently available for invitation, connection and data transmission.
-    public private(set) var availablePeers: [Peer] = [] {
+    @Published public private(set) var availablePeers: [Peer] = [] {
         didSet {
             guard availablePeers != oldValue else { return }
 

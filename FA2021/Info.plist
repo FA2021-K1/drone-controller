@@ -22,6 +22,12 @@
 	<string>82d1d33a8dc4cee3c3733f7b</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_drone._tcp</string>
+	</array>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Connect to other iPhones.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
