@@ -34,6 +34,12 @@ struct ContentView: View {
             }.contentShape(Rectangle())
             
             Button {
+                missionScheduler.fly5m()
+            } label: {
+                Text("Fly 5m").padding(20)
+            }.contentShape(Rectangle())
+            
+            Button {
                 missionScheduler.executeMission()
             } label: {
                 Text("Start Mission").padding(20)
