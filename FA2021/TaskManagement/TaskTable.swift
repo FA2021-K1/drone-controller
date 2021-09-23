@@ -39,12 +39,19 @@ class TaskTable: Codable {
         //TODO...
     }
     
-    func encode(to encoder: Encoder) throws {
-        return try! table.encode(to: encoder)
+    enum CodingKeys: String, CodingKey{
+        case table
     }
     
+    // MARK: Codable methods.
+    
     required init(from decoder: Decoder) throws {
-        table = [String : DroneClaim](from: decoder)
-        try super.init(from: decoder)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.table = try container.decode([String : DroneClaim].self, forKey: .table)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(table, forKey: .table)
     }
 }
