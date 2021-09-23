@@ -11,7 +11,7 @@ import RxSwift
 /// A Coaty controller that invokes remote operations to control lights.
 class DroneController: Controller {
     
-    let droneTable = TaskTable()
+    private let droneTable = TaskTable()
     
     override func onInit() {
         try! self.communicationManager
@@ -42,5 +42,9 @@ class DroneController: Controller {
 
         // Publish the event by the communication manager.
         self.communicationManager.publishAdvertise(event)
+    }
+    
+    func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = Date().timeIntervalSinceReferenceDate,state: TaskTable.TaskState){
+        droneTable.table[taskId] = TaskTable.DroneClaim(droneId: droneId, timestamp: timestamp, state: state)
     }
 }
