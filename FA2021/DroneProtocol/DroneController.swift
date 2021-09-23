@@ -21,11 +21,12 @@ class DroneController: Controller {
         self.communicationManager.publishAdvertise(event)
     }
     
-    func retrieveAvailableTasks() {
+    func retrieveAvailableTasks(callback:((TaskD))) {
         let query = QueryEvent.with(objectTypes: [TaskControlResponse.objectType])
         
         self.communicationManager.publishQuery(query)
             .subscribe(onNext: { (resolveEvent) in
+                
         })
         .disposed(by: self.disposeBag)
     }

@@ -4,7 +4,7 @@ import CoatySwift
 class CoatyAPI{
 
     var container: Container?
-    var droneController: DroneController
+    var droneController: DroneController?
     func start(){
         let components = Components(controllers: [
             "DroneController": DroneController.self
@@ -24,7 +24,7 @@ class CoatyAPI{
         // your CoatySwift controllers up and running.
         self.container = Container.resolve(components: components,
                                            configuration: configuration)
-        self.droneController = container?.getController(name: "DroneController") as! DroneController
+        self.droneController = (container?.getController(name: "DroneController") as! DroneController)
     }
 
     private func createDroneCoatyConfiguration() -> Configuration? {
