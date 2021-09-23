@@ -15,7 +15,6 @@ struct ContentView: View {
     var body: some View {
         // app crashes if no product is connected
         // let connectedProduct = DJISDKManager.product()
-        
         // Text("Connected aircraft:" + (connectedProduct?.model ?? "Not connected"))
         ScrollView {
             VStack {
@@ -35,6 +34,12 @@ struct ContentView: View {
             }.contentShape(Rectangle())
             
             Button {
+                missionScheduler.fly5m()
+            } label: {
+                Text("Fly 5m").padding(20)
+            }.contentShape(Rectangle())
+            
+            Button {
                 missionScheduler.executeMission()
             } label: {
                 Text("Start Mission").padding(20)
@@ -46,8 +51,12 @@ struct ContentView: View {
             } label: {
                 Text("Land").padding(20)
             }.contentShape(Rectangle())
-            
         }
+        
+        Divider()
+        
+        
+        
     }
 }
 

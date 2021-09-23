@@ -135,6 +135,37 @@ class MissionScheduler: NSObject, ObservableObject {
         clearScheduleAndExecute(actions: [DJILandAction()])
     }
     
+    func fly5m() {
+        log.add(message: "Flying 5m")
+        
+        guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
+        else {
+            log.add(message: "Missing Controller Key")
+            return
+        }
+        let value = DJISDKManager.keyManager()?.getValueFor(key)
+        
+        let currentLoc = value?.value as! CLLocation
+        let currentCoor = currentLoc.coordinate
+        
+        
+        // convert meters in lat and long
+        let earth = 6378.137
+        let pi =  Double.pi
+        let m = (1 / ((2 * pi / 360) * earth) ) / 1000
+        let lat = currentCoor.latitude + (5 * m)
+        let lon = currentCoor.longitude + (5 * m) / cos(currentCoor.latitude * (pi / 180))
+        
+        let coor = CLLocationCoordinate2DMake(lat, lon)
+        
+        guard let action = createWaypointMissionTo(coordinates: coor)
+        else {
+            log.add(message: "Mission is nil. Abort.")
+            return
+        }
+        clearScheduleAndExecute(actions: [action])
+    }
+    
     func executeMission() {
         log.add(message: "Executing Mission")
         guard let mission = createDemoMission()
@@ -143,6 +174,47 @@ class MissionScheduler: NSObject, ObservableObject {
             return
         }
         clearScheduleAndExecute(actions: [mission])
+    }
+    
+    func createWaypointMissionTo(coordinates: CLLocationCoordinate2D) -> DJIMissionControlTimelineElement? {
+        let mission = DJIMutableWaypointMission()
+        mission.maxFlightSpeed = 15
+        mission.autoFlightSpeed = 8
+        mission.finishedAction = .noAction
+        mission.headingMode = .auto
+        mission.flightPathMode = .normal
+        mission.rotateGimbalPitch = true
+        mission.exitMissionOnRCSignalLost = true
+        mission.gotoFirstWaypointMode = .pointToPoint
+        mission.repeatTimes = 1
+        
+        guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
+        else {
+            log.add(message: "Missing Controller Key")
+            return nil
+        }
+        let value = DJISDKManager.keyManager()?.getValueFor(key)
+        
+        let currentLoc = value?.value as! CLLocation
+        let currentCoor = currentLoc.coordinate
+        
+        if !CLLocationCoordinate2DIsValid(coordinates) || !CLLocationCoordinate2DIsValid(currentCoor) {
+            log.add(message: "Invalid Coordinates")
+            return nil
+        }
+        
+        let waypoint = DJIWaypoint(coordinate: coordinates)
+        waypoint.altitude = 25
+        waypoint.heading = 0
+        waypoint.actionRepeatTimes = 1
+        waypoint.actionTimeoutInSeconds = 60
+        waypoint.cornerRadiusInMeters = 5
+        waypoint.turnMode = DJIWaypointTurnMode.clockwise
+        waypoint.gimbalPitch = 0
+        
+        mission.add(waypoint)
+        
+        return DJIWaypointMission(mission: mission)
     }
     
     private func createDemoMission() -> DJIMissionControlTimelineElement? {
