@@ -10,8 +10,7 @@ class CoatyAPI{
             "DroneController": DroneController.self
         ],
                                     objectTypes: [
-            TaskDetails.self,
-            TaskControlResponse.self,
+            TasksDetails.self,
             TaskStatusUpdate.self
         ])
         // Create a configuration.

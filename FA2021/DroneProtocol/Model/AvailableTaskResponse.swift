@@ -1,43 +1,43 @@
 //
-//  TaskStatus.swift
-//  iDroneControl
+//  AvailableTaskResponse.swift
+//  FA2021
 //
-//  Created by FA21 on 22.09.21.
+//  Created by FA21 on 23.09.21.
 //
 import Foundation
 import CoatySwift
 
-final class TaskDetails: CoatyObject{
+final class AvailableTaskResponse: CoatyObject{
     
     // MARK: - Class registration.
     override class var objectType: String {
-        return register(objectType: "idrone.sync.task", with: self)
+        return register(objectType: "idrone.sync.availableTaskResponse", with: self)
     }
     
     // MARK: - Properties.
     
-    var jsonDetails: String
+    var availableTasks: [TasksDetails]
     
     
     // MARK: - Initializers.
     
-    init(json:String) {
-        self.jsonDetails=json
+    init() {
+        self.availableTasks=[]
         super.init(coreType: .CoatyObject,
-                   objectType: TaskDetails.objectType,
+                   objectType: TasksDetails.objectType,
                    objectId: .init(),
                    name: "Task")
     }
     
     enum CodingKeys: String, CodingKey{
-        case jsonDetails
+        case availableTasks
     }
     
     // MARK: Codable methods.
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.jsonDetails = try container.decode(String.self, forKey: .jsonDetails)
+        self.jsonDetails = try container.decode(String.self, forKey: .availableTasks)
         try super.init(from: decoder)
     }
     

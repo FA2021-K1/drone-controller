@@ -23,9 +23,9 @@
 		F890A06926FC787D000906AA /* DroneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06826FC787D000906AA /* DroneController.swift */; };
 		F890A06B26FC78A0000906AA /* MissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06A26FC78A0000906AA /* MissionController.swift */; };
 		F890A06D26FC78BF000906AA /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06C26FC78BF000906AA /* TimeUtil.swift */; };
-		F890A06F26FC78E9000906AA /* TaskControlResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06E26FC78E9000906AA /* TaskControlResponse.swift */; };
-		F890A07126FC78FA000906AA /* TaskDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07026FC78FA000906AA /* TaskDetails.swift */; };
+		F890A07126FC78FA000906AA /* TasksDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07026FC78FA000906AA /* TasksDetails.swift */; };
 		F890A07326FC7917000906AA /* TaskStatusUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07226FC7917000906AA /* TaskStatusUpdate.swift */; };
+		F890A07526FC96C4000906AA /* AvailableTaskResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07426FC96C4000906AA /* AvailableTaskResponse.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,9 +74,9 @@
 		F890A06826FC787D000906AA /* DroneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneController.swift; sourceTree = "<group>"; };
 		F890A06A26FC78A0000906AA /* MissionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionController.swift; sourceTree = "<group>"; };
 		F890A06C26FC78BF000906AA /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
-		F890A06E26FC78E9000906AA /* TaskControlResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskControlResponse.swift; sourceTree = "<group>"; };
-		F890A07026FC78FA000906AA /* TaskDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetails.swift; sourceTree = "<group>"; };
+		F890A07026FC78FA000906AA /* TasksDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksDetails.swift; sourceTree = "<group>"; };
 		F890A07226FC7917000906AA /* TaskStatusUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatusUpdate.swift; sourceTree = "<group>"; };
+		F890A07426FC96C4000906AA /* AvailableTaskResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvailableTaskResponse.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,9 +225,9 @@
 		F890A05E26FC76B5000906AA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F890A06E26FC78E9000906AA /* TaskControlResponse.swift */,
-				F890A07026FC78FA000906AA /* TaskDetails.swift */,
+				F890A07026FC78FA000906AA /* TasksDetails.swift */,
 				F890A07226FC7917000906AA /* TaskStatusUpdate.swift */,
+				F890A07426FC96C4000906AA /* AvailableTaskResponse.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -483,10 +483,10 @@
 			files = (
 				F890A06B26FC78A0000906AA /* MissionController.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
-				F890A06F26FC78E9000906AA /* TaskControlResponse.swift in Sources */,
 				F890A06926FC787D000906AA /* DroneController.swift in Sources */,
-				F890A07126FC78FA000906AA /* TaskDetails.swift in Sources */,
+				F890A07126FC78FA000906AA /* TasksDetails.swift in Sources */,
 				F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */,
+				F890A07526FC96C4000906AA /* AvailableTaskResponse.swift in Sources */,
 				F890A07326FC7917000906AA /* TaskStatusUpdate.swift in Sources */,
 				CC8E98F826F8E6670013973F /* MissionScheduler.swift in Sources */,
 				F890A06D26FC78BF000906AA /* TimeUtil.swift in Sources */,

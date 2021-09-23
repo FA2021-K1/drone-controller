@@ -21,10 +21,10 @@ class DroneController: Controller {
         self.communicationManager.publishAdvertise(event)
     }
     
-    func retrieveAvailableTasks() ->Observable<AvailableTasksResponse> {
-        let query = QueryEvent.with(objectTypes: [AvailableTasksResponse.objectType])
+    func retrieveAvailableTasks() ->Observable<TasksDetails> {
+        let query = QueryEvent.with(objectTypes: [TasksDetails.objectType])
         return self.communicationManager.publishQuery(query).asObservable().map { (r) in
-            return r.data.objects[0] as!AvailableTasksResponse
+            return r.data.objects[0] as!TasksDetails
         }
 
     }

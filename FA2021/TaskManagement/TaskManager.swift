@@ -17,10 +17,10 @@ struct TaskRegistration {
 class TaskManager {
 
     let currentTasks: [Task]
-
+    let api:CoatyAPI
     init() {
         currentTasks = []
-        // TODO: registerForUnfinishedTasks() // api call to syncLibrary
+        api=CoatyAPI()
     }
 
     func unfinishedTasksChanged(unfinishedTasks: [Task]){
@@ -45,10 +45,16 @@ class TaskManager {
      -[{taskId, droneId, timestamp}] where taskId is always the same (the one we registered for)
         --> we can filter for earliest timestamp, see if we currenlty to this task
      */
-    func checkTaskResponsibility(taskId:String) ->  String{
-        
+    func checkTaskResponsibility(taskId:String) {
+
     }
 
+    func getAvailableTasks(callback: @escaping ([Task])->Void) {
+        
+            api.droneController?.retrieveAvailableTasks().subscribe(onNext:{r in
+                callback(self.parseJsonToTasks(json: r.json))
+            }).dispose()
+    }
 	func parseJsonToTasks(json: String) -> [Task] {
             guard let data = json.data(using: .utf8) else {
                 return []
