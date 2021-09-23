@@ -7,20 +7,25 @@
 
 import Foundation
 
-class TaskTable: Encodable {
-    enum TaskState: UInt8 {
+class TaskTable: Codable {
+    enum TaskState: UInt8, Codable{
         case available
         case claimed
         case finished
     }
     
-    struct DroneClaim
+    struct DroneClaim: Codable
     {
         var droneId: String
         var timestamp: TimeInterval
+        var state: TaskState
     }
     
-    var table = [String : DroneClaim]()
+    var table: [String : DroneClaim]
+    
+    init() {
+        table = [String : DroneClaim]()
+    }
     
     func updateTable(otherTable: TaskTable){
         table.merge(otherTable.table) { claimOne, claimTwo in
@@ -35,6 +40,11 @@ class TaskTable: Encodable {
     }
     
     func encode(to encoder: Encoder) throws {
-        
+        return try! table.encode(to: encoder)
+    }
+    
+    required init(from decoder: Decoder) throws {
+        table = [String : DroneClaim](from: decoder)
+        try super.init(from: decoder)
     }
 }
