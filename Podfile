@@ -7,6 +7,7 @@ target 'FA2021' do
 
   # Pods for FA2021
   pod 'DJI-SDK-iOS', '~> 4.15.1'
+  pod 'CoatySwift', '~> 2.0'
 
   target 'FA2021Tests' do
     inherit! :search_paths
