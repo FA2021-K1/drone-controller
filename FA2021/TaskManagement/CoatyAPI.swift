@@ -1,22 +1,21 @@
 import Foundation
 import CoatySwift
-import DroneProtocol
 
 class CoatyAPI{
 
     var container: Container?
-    var droneController:DroneController
+    var droneController: DroneController
     func start(){
         let components = Components(controllers: [
             "DroneController": DroneController.self
         ],
                                     objectTypes: [
-            Task.self,
+            TaskDetails.self,
             TaskControlResponse.self,
-            TaskMessage.self
+            TaskStatusUpdate.self
         ])
         // Create a configuration.
-        guard let configuration = createSwitchLightConfiguration() else {
+        guard let configuration = createDroneCoatyConfiguration() else {
             print("Invalid configuration! Please check your options.")
             return
         }
@@ -25,10 +24,10 @@ class CoatyAPI{
         // your CoatySwift controllers up and running.
         self.container = Container.resolve(components: components,
                                            configuration: configuration)
-        self.droneController=container?.getController(name: "DroneController") as! DroneController
+        self.droneController = container?.getController(name: "DroneController") as! DroneController
     }
 
-    private func createSwitchLightConfiguration() -> Configuration? {
+    private func createDroneCoatyConfiguration() -> Configuration? {
         return try? .build { config in
             
             // Adjusts the logging level of CoatySwift messages.

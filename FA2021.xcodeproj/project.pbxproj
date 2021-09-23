@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,7 +20,12 @@
 		F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAA26FB130F00DAF66D /* TaskManager.swift */; };
 		F8826AAD26FB130F00DAF66D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAB26FB130F00DAF66D /* Task.swift */; };
 		F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A03F26FB9405000906AA /* CoatyAPI.swift */; };
-		F890A05326FC6E65000906AA /* DroneProtocol in Frameworks */ = {isa = PBXBuildFile; productRef = F890A05226FC6E65000906AA /* DroneProtocol */; };
+		F890A06926FC787D000906AA /* DroneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06826FC787D000906AA /* DroneController.swift */; };
+		F890A06B26FC78A0000906AA /* MissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06A26FC78A0000906AA /* MissionController.swift */; };
+		F890A06D26FC78BF000906AA /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06C26FC78BF000906AA /* TimeUtil.swift */; };
+		F890A06F26FC78E9000906AA /* TaskControlResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06E26FC78E9000906AA /* TaskControlResponse.swift */; };
+		F890A07126FC78FA000906AA /* TaskDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07026FC78FA000906AA /* TaskDetails.swift */; };
+		F890A07326FC7917000906AA /* TaskStatusUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07226FC7917000906AA /* TaskStatusUpdate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +71,12 @@
 		F8826AAA26FB130F00DAF66D /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		F8826AAB26FB130F00DAF66D /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		F890A03F26FB9405000906AA /* CoatyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoatyAPI.swift; sourceTree = "<group>"; };
+		F890A06826FC787D000906AA /* DroneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneController.swift; sourceTree = "<group>"; };
+		F890A06A26FC78A0000906AA /* MissionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionController.swift; sourceTree = "<group>"; };
+		F890A06C26FC78BF000906AA /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
+		F890A06E26FC78E9000906AA /* TaskControlResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskControlResponse.swift; sourceTree = "<group>"; };
+		F890A07026FC78FA000906AA /* TaskDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetails.swift; sourceTree = "<group>"; };
+		F890A07226FC7917000906AA /* TaskStatusUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskStatusUpdate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +85,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1C581546B6981EA494E5A558 /* Pods_FA2021.framework in Frameworks */,
-				F890A05326FC6E65000906AA /* DroneProtocol in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +153,7 @@
 		CCD2593026F7E01A007AD953 /* FA2021 */ = {
 			isa = PBXGroup;
 			children = (
+				F890A05726FC7675000906AA /* DroneProtocol */,
 				F8826AA926FB130F00DAF66D /* TaskManagement */,
 				CC8E98F626F8E61A0013973F /* DroneControl */,
 				CCD2593126F7E01A007AD953 /* FA2021App.swift */,
@@ -200,6 +211,35 @@
 			path = TaskManagement;
 			sourceTree = "<group>";
 		};
+		F890A05726FC7675000906AA /* DroneProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				F890A06526FC76CC000906AA /* Util */,
+				F890A05E26FC76B5000906AA /* Model */,
+				F890A06826FC787D000906AA /* DroneController.swift */,
+				F890A06A26FC78A0000906AA /* MissionController.swift */,
+			);
+			path = DroneProtocol;
+			sourceTree = "<group>";
+		};
+		F890A05E26FC76B5000906AA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F890A06E26FC78E9000906AA /* TaskControlResponse.swift */,
+				F890A07026FC78FA000906AA /* TaskDetails.swift */,
+				F890A07226FC7917000906AA /* TaskStatusUpdate.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F890A06526FC76CC000906AA /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				F890A06C26FC78BF000906AA /* TimeUtil.swift */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -219,7 +259,6 @@
 			);
 			name = FA2021;
 			packageProductDependencies = (
-				F890A05226FC6E65000906AA /* DroneProtocol */,
 			);
 			productName = FA2021;
 			productReference = CCD2592E26F7E01A007AD953 /* FA2021.app */;
@@ -296,7 +335,6 @@
 			);
 			mainGroup = CCD2592526F7E01A007AD953;
 			packageReferences = (
-				F890A05126FC6E65000906AA /* XCRemoteSwiftPackageReference "DroneProtocol" */,
 			);
 			productRefGroup = CCD2592F26F7E01A007AD953 /* Products */;
 			projectDirPath = "";
@@ -443,9 +481,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F890A06B26FC78A0000906AA /* MissionController.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
+				F890A06F26FC78E9000906AA /* TaskControlResponse.swift in Sources */,
+				F890A06926FC787D000906AA /* DroneController.swift in Sources */,
+				F890A07126FC78FA000906AA /* TaskDetails.swift in Sources */,
 				F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */,
+				F890A07326FC7917000906AA /* TaskStatusUpdate.swift in Sources */,
 				CC8E98F826F8E6670013973F /* MissionScheduler.swift in Sources */,
+				F890A06D26FC78BF000906AA /* TimeUtil.swift in Sources */,
 				F8826AAD26FB130F00DAF66D /* Task.swift in Sources */,
 				F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */,
 				CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */,
@@ -774,25 +818,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		F890A05126FC6E65000906AA /* XCRemoteSwiftPackageReference "DroneProtocol" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/fa21-collaborative-drone-interactions/DroneProtocol";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		F890A05226FC6E65000906AA /* DroneProtocol */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F890A05126FC6E65000906AA /* XCRemoteSwiftPackageReference "DroneProtocol" */;
-			productName = DroneProtocol;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CCD2592626F7E01A007AD953 /* Project object */;
 }

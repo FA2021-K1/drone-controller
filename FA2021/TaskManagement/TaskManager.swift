@@ -1,5 +1,4 @@
 import Foundation
-import DroneProtocol
 
 struct TaskRegistration {
     let taskId: String
