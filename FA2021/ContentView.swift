@@ -13,9 +13,13 @@ struct ContentView: View {
     var missionScheduler = MissionScheduler()
     
     var body: some View {
-        // app crashes if no product is connected
-        // let connectedProduct = DJISDKManager.product()
-        // Text("Connected aircraft:" + (connectedProduct?.model ?? "Not connected"))
+        Text("Drone Controls")
+            .fontWeight(.semibold)
+            .foregroundColor(Color.init(red: 0, green: 101, blue: 189))
+        
+        Divider()
+        
+        // logger
         ScrollView {
             VStack {
                 ForEach(missionScheduler.log.logEntries, id: \.self) { logEntry in
@@ -26,6 +30,9 @@ struct ContentView: View {
             }
         }
         
+        Divider()
+        
+        // steering
         List {
             Button {
                 missionScheduler.takeOff()
@@ -34,9 +41,9 @@ struct ContentView: View {
             }.contentShape(Rectangle())
             
             Button {
-                missionScheduler.fly5m()
+                missionScheduler.flyDirection(direction: .north, meters: 5)
             } label: {
-                Text("Fly 5m").padding(20)
+                Text("Fly 5m North").padding(20)
             }.contentShape(Rectangle())
             
             Button {
@@ -54,9 +61,6 @@ struct ContentView: View {
         }
         
         Divider()
-        
-        
-        
     }
 }
 
