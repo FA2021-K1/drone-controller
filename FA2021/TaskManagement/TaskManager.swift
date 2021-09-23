@@ -29,7 +29,10 @@ extension TaskManager {
         }
         var unknown_tasks: [UnknownTask] = []
         do {
-            unknown_tasks = try! JSONDecoder().decode([UnknownTask].self, from: data)
+            unknown_tasks = try JSONDecoder().decode([UnknownTask].self, from: data)
+        } catch {
+            print("ERROR: Failed to decode JSON containing tasks!")
+            return []
         }
         var tasks: [Task] = []
         for unknown_task in unknown_tasks {
