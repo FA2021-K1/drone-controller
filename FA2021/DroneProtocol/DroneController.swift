@@ -44,7 +44,7 @@ class DroneController: Controller {
         self.communicationManager.publishAdvertise(event)
     }
     
-    func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = Date().timeIntervalSinceReferenceDate,state: TaskTable.TaskState){
+    func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = Date().timeIntervalSinceReferenceDate, state: TaskTable.TaskState){
         droneTable.table[taskId] = TaskTable.DroneClaim(droneId: droneId, timestamp: timestamp, state: state)
     }
 }
