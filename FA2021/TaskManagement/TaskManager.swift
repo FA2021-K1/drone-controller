@@ -46,7 +46,8 @@ class TaskManager {
      -[{taskId, droneId, timestamp}] where taskId is always the same (the one we registered for)
         --> we can filter for earliest timestamp, see if we currenlty to this task
      */
-    func checkTaskResponsibility(){
+    func checkTaskResponsibility(taskId:String) ->  String{
+        
     }
 
 	func parseJsonToTasks(json: String) -> [Task] {
