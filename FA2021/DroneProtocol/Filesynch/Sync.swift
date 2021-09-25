@@ -14,7 +14,9 @@ class Sync<T: Codable>{
     let comManager: CommunicationManager
     let mergeFunction: (T, T) -> T
     
-    init(initialValue: T, mergeFunction: @escaping (T, T) -> T, comManager: CommunicationManager, disposeBag: DisposeBag) {
+    init(initialValue: T, updateIntervalSeconds: Int = 5, mergeFunction: @escaping (T, T) -> T, comManager: CommunicationManager, disposeBag: DisposeBag) {
+        precondition(updateIntervalSeconds > 0, "UpdateInterval needs to be positive.")
+        
         localInstance = initialValue
         self.comManager = comManager
         self.mergeFunction = mergeFunction
