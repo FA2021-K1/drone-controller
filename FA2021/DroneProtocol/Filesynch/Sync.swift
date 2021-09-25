@@ -43,17 +43,11 @@ class Sync<T: Codable>{
              })
             .disposed(by: controller.disposeBag)
     }
-    private func onUpdate(){
-        
+    
+    func getDataObservable() -> Observable<T> {
+        return Observable.just(localInstance)
     }
-    func getDataObservable()->Observable<T>{
-        return Observable
-            .timer(RxTimeInterval.seconds(0),
-                   period: RxTimeInterval.seconds(5),
-                   scheduler: MainScheduler.instance).map ({ (i:Int) in
-                        return self.localInstance
-                   }).asObservable()
-    }
+    
     func publishTaskDictionary(){
         let syncMessage = SyncMessage(localInstance)
         
