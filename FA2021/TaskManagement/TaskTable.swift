@@ -33,16 +33,9 @@ class TaskTable: Codable {
     
     func updateTable(otherTable: TaskTable) -> TaskTable {
         table.merge(otherTable.table) { claimOne, claimTwo in
-            let correctClaim = claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
-            onConflict(correctClaim: correctClaim)
-            return correctClaim
+            claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
         }
-        
         return self
-    }
-    
-    func onConflict(correctClaim: DroneClaim){
-        //TODO...
     }
     
     enum CodingKeys: String, CodingKey{
