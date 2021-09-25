@@ -4,16 +4,19 @@ class FirstComeFirstServe: TaskManager {
 
     var api: CoatyAPI
     var droneId: String
-    var currentTasksId: [String]
+    var currentTasksId: Set<String>
 
     init(droneId: String) {
         self.droneId = droneId
         self.api = CoatyAPI()
         api.start()
-        api.allTasksObservable?.subscribe(onNext: { tasks in
-            print(tasks)
-        })
         currentTasksId = []
+        api.allTasksObservable?.subscribe(onNext: { tasks in
+            try! print(String(JSONSerializer.toJson(tasks)))
+        })
+        api.droneController?.getDroneTableSync()?.getDataObservable().subscribe(onNext: {
+            table in self.checkResponsibilityForTask(taskTable: table)
+        })
     }
     
     /**
@@ -21,7 +24,7 @@ class FirstComeFirstServe: TaskManager {
      */
     func scanForTask(){
         var unfinishedTaskIds: [String] = getUnfinishedTasksId()
-        
+                
         while (unfinishedTaskIds.isEmpty) {
             sleep(1)
             unfinishedTaskIds = getUnfinishedTasksId()
@@ -46,19 +49,30 @@ class FirstComeFirstServe: TaskManager {
     
     
     func claimTask(taskId: String) {
+        
+        print("claim Task")
+        
         api.droneController?.claimTask(taskId: taskId, droneId: droneId)
+        currentTasksId.insert(taskId)
         
         // TODO: call drone team api to start task
     }    
     
     func checkResponsibilityForTask(taskTable: TaskTable){
         
+        try! print(String(data: JSONEncoder().encode(taskTable), encoding: .utf8))
+        
         for taskId in currentTasksId {
-            for (otherTaskId, droneClaim) in taskTable.table {
-                if (taskId == otherTaskId && droneClaim.droneId != droneId) {
-                    // TODO: call drone team api to abort task with id taskId
+      
+            if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
+             
+                if (tableResult.droneId == droneId) {
+                    return
                 }
             }
+            
+            // TODO: call drone team api to abort Task with taskId
+            currentTasksId.remove(taskId)
         }
     }
     
