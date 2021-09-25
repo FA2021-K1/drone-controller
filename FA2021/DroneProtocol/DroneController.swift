@@ -6,7 +6,6 @@
 //
 import CoatySwift
 import Foundation
-import RxSwift
 
 /// A Coaty controller that invokes remote operations to control lights.
 class DroneController: Controller {

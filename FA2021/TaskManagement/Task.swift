@@ -31,12 +31,7 @@ class Task {
         do {
             unknown_tasks = try! JSONDecoder().decode([UnknownTask].self, from: data)
         }
-        var tasks: [Task] = []
-        for unknown_task in unknown_tasks {
-            tasks.append(parseTask(unknownTask: unknown_task))
-        }
-
-        return tasks
+        return unknown_tasks.map {(utask) -> Task in parseTask(unknownTask: utask)}
     }
     
     static func parseTask(unknownTask: UnknownTask) -> Task {
@@ -68,9 +63,7 @@ class Task {
         case .NonTerminalTask:
             var tasks: [Task] = []
             if let unknown_tasks: [UnknownTask] = unknownTask.tasks {
-                for unknown_task in unknown_tasks {
-                    tasks.append(parseTask(unknownTask: unknown_task))
-                }
+                tasks = unknown_tasks.map {(utask) -> Task in parseTask(unknownTask: utask)}
             } else {
                 tasks = []
             }
