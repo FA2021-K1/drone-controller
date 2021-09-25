@@ -1,8 +1,10 @@
 import Foundation
 
 class FirstComeFirstServe: TaskManager {
+    
     var api: CoatyAPI
     var droneId: String
+    var currentTasksId: [String]
     
     init(droneId: String) {
         self.droneId = droneId
@@ -11,6 +13,7 @@ class FirstComeFirstServe: TaskManager {
         api.allTasksObservable?.subscribe(onNext: { tasks in
             print(tasks)
         })
+        currentTasksId = []
     }
     
     /**
@@ -48,18 +51,14 @@ class FirstComeFirstServe: TaskManager {
         // TODO: call drone team api to start task
     }    
     
-    func checkResponsibilityForTask(correctClaim: TaskTable.DroneClaim){
+    func checkResponsibilityForTask(taskTable: TaskTable){
         
-        if (correctClaim.droneId == droneId) {
-            return
+        for taskId in currentTasksId {
+            for (otherTaskId, droneClaim) in taskTable.table {
+                if (taskId == otherTaskId && droneClaim.droneId != droneId) {
+                    // TODO: call drone team api to abort task with id taskId
+                }
+            }
         }
-        
-        // TODO: call drone team api to abort task
-        
     }
-    
-    func getCurrentTasksId() -> [String] {
-        return getTable().filter {$0.value.droneId == droneId}.map {$0.key}
-    }
-    
 }

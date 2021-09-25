@@ -16,9 +16,9 @@ struct TaskRegistration {
 
 protocol TaskManager {
     var api: CoatyAPI { get }
+    var currentTasksId: [String] { get }
 
     func scanForTask()
-    func getCurrentTasksId() -> [String]
 }
 
 extension TaskManager {
