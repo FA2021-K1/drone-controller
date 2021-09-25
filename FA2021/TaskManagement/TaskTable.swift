@@ -34,11 +34,10 @@ class TaskTable: Codable {
         return self
     }
     
+    init() {}
+    
     enum CodingKeys: String, CodingKey{
         case table
-    }
-    init() {
-        
     }
     // MARK: Codable methods.
     
