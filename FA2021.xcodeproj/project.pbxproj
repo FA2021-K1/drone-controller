@@ -10,6 +10,7 @@
 		624944FD5F6F0543B0AF115E /* Pods_FA2021Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 99C637700C61468C49267E0A /* Pods_FA2021Tests.framework */; };
 		6D9BF4AB80A9FE99FD3E2853 /* Pods_FA2021.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC3695E6893B6CDA93F8FDBF /* Pods_FA2021.framework */; };
 		9604ADB56EE0EE8C19D7F2F8 /* Pods_FA2021_FA2021UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 881D1BD05DA9B1AC7688581A /* Pods_FA2021_FA2021UITests.framework */; };
+		CC397DF526FCDC4E00D5254D /* CameraFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DF426FCDC4E00D5254D /* CameraFeed.swift */; };
 		CC8E98F826F8E6670013973F /* MissionScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8E98F726F8E6670013973F /* MissionScheduler.swift */; };
 		CCB6EAA026FB4D7700E94439 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB6EA9F26FB4D7700E94439 /* Log.swift */; };
 		CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2593126F7E01A007AD953 /* FA2021App.swift */; };
@@ -18,7 +19,6 @@
 		CCD2593926F7E01E007AD953 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCD2593826F7E01E007AD953 /* Preview Assets.xcassets */; };
 		CCD2594426F7E01E007AD953 /* FA2021Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594326F7E01E007AD953 /* FA2021Tests.swift */; };
 		CCD2594F26F7E01E007AD953 /* FA2021UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594E26F7E01E007AD953 /* FA2021UITests.swift */; };
-		F864929F26FB5CFA00449DD9 /* CameraFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F864929E26FB5CFA00449DD9 /* CameraFeed.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +45,7 @@
 		93D85D8C5606ECEDA66F33CD /* Pods-FA2021-FA2021UITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021-FA2021UITests.debug.xcconfig"; path = "Target Support Files/Pods-FA2021-FA2021UITests/Pods-FA2021-FA2021UITests.debug.xcconfig"; sourceTree = "<group>"; };
 		99C637700C61468C49267E0A /* Pods_FA2021Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FA2021Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B38F08FEC7097825943B1F21 /* Pods-FA2021Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021Tests.release.xcconfig"; path = "Target Support Files/Pods-FA2021Tests/Pods-FA2021Tests.release.xcconfig"; sourceTree = "<group>"; };
+		CC397DF426FCDC4E00D5254D /* CameraFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraFeed.swift; sourceTree = "<group>"; };
 		CC8E98F726F8E6670013973F /* MissionScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionScheduler.swift; sourceTree = "<group>"; };
 		CCB6EA9F26FB4D7700E94439 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		CCD2592E26F7E01A007AD953 /* FA2021.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FA2021.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -62,7 +63,6 @@
 		E2B5B997AC276CC63AFD784D /* Pods-FA2021.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021.debug.xcconfig"; path = "Target Support Files/Pods-FA2021/Pods-FA2021.debug.xcconfig"; sourceTree = "<group>"; };
 		E6B3338464A8663E4BC7A62C /* Pods-FA2021-FA2021UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021-FA2021UITests.release.xcconfig"; path = "Target Support Files/Pods-FA2021-FA2021UITests/Pods-FA2021-FA2021UITests.release.xcconfig"; sourceTree = "<group>"; };
 		EC3695E6893B6CDA93F8FDBF /* Pods_FA2021.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FA2021.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F864929E26FB5CFA00449DD9 /* CameraFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFeed.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				CC8E98F726F8E6670013973F /* MissionScheduler.swift */,
+				CC397DF426FCDC4E00D5254D /* CameraFeed.swift */,
 				CCB6EA9F26FB4D7700E94439 /* Log.swift */,
 			);
 			path = DroneControl;
@@ -152,7 +153,6 @@
 			children = (
 				CC8E98F626F8E61A0013973F /* DroneControl */,
 				CCD2593126F7E01A007AD953 /* FA2021App.swift */,
-				F864929E26FB5CFA00449DD9 /* CameraFeed.swift */,
 				CCD2593326F7E01A007AD953 /* ContentView.swift */,
 				CCD2593526F7E01E007AD953 /* Assets.xcassets */,
 				CCD2593A26F7E01E007AD953 /* Info.plist */,
@@ -424,8 +424,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F864929F26FB5CFA00449DD9 /* CameraFeed.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
+				CC397DF526FCDC4E00D5254D /* CameraFeed.swift in Sources */,
 				CC8E98F826F8E6670013973F /* MissionScheduler.swift in Sources */,
 				CCB6EAA026FB4D7700E94439 /* Log.swift in Sources */,
 				CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */,

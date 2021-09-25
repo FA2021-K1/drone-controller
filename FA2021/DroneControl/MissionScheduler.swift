@@ -13,6 +13,7 @@ class MissionScheduler: NSObject, ObservableObject {
     
     private var missionControl: DJIMissionControl?
     private var product: DJIBaseProduct?
+    private var aircraft: DJIAircraft?
     private var missionSchedulerState: MissionSchedulerState
     private var logCancellable: AnyCancellable?
     
@@ -35,6 +36,7 @@ class MissionScheduler: NSObject, ObservableObject {
     
     func connectProductAndAnnounce() {
         self.log.add(message: "Connecting to product")
+        self.missionSchedulerState = .connecting
         DJISDKManager.startConnectionToProduct()
         
         self.log.add(message: "Creating connected key")
@@ -73,18 +75,21 @@ class MissionScheduler: NSObject, ObservableObject {
     
     func productConnected() {
         guard let newProduct = DJISDKManager.product() else {
-            self.log.add(message: "Product is connected but DJISDKManager.product is nil -> something is wrong")
+            // Product is connected but DJISDKManager.product is nil -> something is wrong
+            self.log.add(message: "Status: Identifying product.")
             self.connectProductAndAnnounce()
             return
         }
-        //Updates the product's model
-        self.log.add(message: "Model: \((newProduct.model)!)")
         
-        //Updates the product's connection status
-        self.log.add(message: "Status: Product Connected")
+        // Announce the product's model
+        self.log.add(message: "Status: Connected. Model: \((newProduct.model)!)")
+        missionSchedulerState = .ready
         
         product = newProduct
-        missionSchedulerState = .ready
+        
+        if product!.isKind(of: DJIAircraft.self) {
+            aircraft = product as? DJIAircraft
+        }
     }
     
     private func registerSDK() {
@@ -126,17 +131,27 @@ class MissionScheduler: NSObject, ObservableObject {
                 self.missionControl?.currentTimelineMarker = 0
                 self.missionControl?.startTimeline()
             }
+        default: break
         }
+        
     }
     
     func takeOff() {
         log.add(message: "Taking off!")
-        clearScheduleAndExecute(actions: [DJITakeOffAction()])
+        // clearScheduleAndExecute(actions: [DJITakeOffAction()])
+        aircraft?.flightController?.startTakeoff {_ in
+            self.log.add(message: "Takeoff completed")
+            self.missionSchedulerState = .inAir
+        }
     }
     
     func land() {
         log.add(message: "Landing")
-        clearScheduleAndExecute(actions: [DJIGoHomeAction()])
+        // clearScheduleAndExecute(actions: [DJIGoHomeAction()])
+        aircraft?.flightController?.startLanding {_ in
+            self.log.add(message: "Landing completed")
+            self.missionSchedulerState = .ready
+        }
     }
     
     func addMetersToCoordinates(metersLat: Double, latitude: Double,
@@ -200,7 +215,7 @@ class MissionScheduler: NSObject, ObservableObject {
         mission.flightPathMode = .normal
         mission.rotateGimbalPitch = true
         mission.exitMissionOnRCSignalLost = true
-        mission.gotoFirstWaypointMode = .pointToPoint
+        mission.gotoFirstWaypointMode = .safely
         mission.repeatTimes = 1
         
         guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
@@ -219,7 +234,7 @@ class MissionScheduler: NSObject, ObservableObject {
         }
         
         let waypoint = DJIWaypoint(coordinate: coordinates)
-        waypoint.altitude = 25
+        waypoint.altitude = 15
         waypoint.heading = 0
         waypoint.actionRepeatTimes = 1
         waypoint.actionTimeoutInSeconds = 60
@@ -227,7 +242,29 @@ class MissionScheduler: NSObject, ObservableObject {
         waypoint.turnMode = DJIWaypointTurnMode.clockwise
         waypoint.gimbalPitch = 0
         
+        let waypoint2 = DJIWaypoint(coordinate: coordinates)
+        waypoint2.altitude = 6
+        waypoint2.heading = 0
+        waypoint2.actionRepeatTimes = 1
+        waypoint2.actionTimeoutInSeconds = 60
+        waypoint2.cornerRadiusInMeters = 5
+        waypoint2.turnMode = DJIWaypointTurnMode.clockwise
+        waypoint2.gimbalPitch = -90
+        
+        let starting = DJIWaypoint(coordinate: getCurrentPos()!)
+        starting.altitude = 15
+        starting.heading = 0
+        starting.actionRepeatTimes = 1
+        starting.actionTimeoutInSeconds = 60
+        starting.cornerRadiusInMeters = 5
+        starting.turnMode = DJIWaypointTurnMode.clockwise
+        starting.gimbalPitch = 0
+        
+        mission.add(starting)
         mission.add(waypoint)
+        mission.add(waypoint2)
+        mission.add(waypoint)
+        mission.add(starting)
         
         return DJIWaypointMission(mission: mission)
     }
@@ -359,12 +396,16 @@ extension MissionScheduler {
 enum MissionSchedulerState: String {
     case initializing
     case initialized
+    case connecting
     case ready
+    case takingOff
+    case inAir
     case starting
     case started
     case pausing
     case paused
     case stopping
+    case landing
 }
 
 enum Direction: String {
