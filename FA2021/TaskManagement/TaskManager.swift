@@ -5,7 +5,7 @@ struct TaskRegistration {
     let droneId: String
     let timestamp: TimeInterval
     let status: Any
-    
+
     internal init(taskId: String, droneId: String, timestamp: TimeInterval, status: Any) {
         self.taskId = taskId
         self.droneId = droneId
@@ -15,13 +15,14 @@ struct TaskRegistration {
 }
 
 protocol TaskManager {
-    var syncLib: SyncLibrary { get set }
-    
+    let currentTasks: [Task]
+    let api: CoatyAPI
+
     func scanForTask()
 }
 
 extension TaskManager {
-    
+
     // json parsing
     func parseJsonToTasks(json: String) -> [Task] {
         guard let data = json.data(using: .utf8) else {
@@ -38,27 +39,27 @@ extension TaskManager {
         for unknown_task in unknown_tasks {
             tasks.append(parseTask(unknown: unknown_task))
         }
-        
+
         return tasks
     }
-    
+
     func parseTask(unknown: UnknownTask) -> Task {
         let id: String = unknown.id
         let name: String = unknown.name
         let type: TaskType = unknown.type
         let drone_id: String = unknown.drone_id
         let task: Task
-        
+
         switch type {
         case .FlyToTask:
             task = FlyToTask(id: id, name: name, type: type, drone_id: drone_id,
                              latitude: unknown.latitude ?? 0,
                              longitude: unknown.longitude ?? 0,
                              altitude: unknown.altitude ?? 0)
-            
+
         case .GetDataTask:
             task = GetDataTask(id: id, name: name, type: type, drone_id: drone_id)
-            
+
         case .NonTerminalTask:
             var tasks: [Task] = []
             if let unknown_tasks: [UnknownTask] = unknown.tasks {
@@ -72,4 +73,11 @@ extension TaskManager {
         }
         return task
     }
+
+    func getAvailableTasks(callback: @escaping ([Task])->Void) {
+
+                /*api.droneController?.retrieveAvailableTasks().subscribe(onNext:{r in
+                    callback(self.parseJsonToTasks(json: r.json))
+                }).dispose()*/
+        }
 }
