@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import DJISDK
 
 class NetworkTest: ObservableObject {
     @Published var transceiver: MultipeerTransceiver
