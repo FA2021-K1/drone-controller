@@ -13,7 +13,6 @@ class Sync<T: Codable>{
     var localInstance: T
     let controller: Controller
     let mergeFunction: (T, T) -> T
-    
     init(controller: Controller, initialValue: T, updateIntervalSeconds: Int = 5, mergeFunction: @escaping (T, T) -> T) {
         precondition(updateIntervalSeconds > 0, "UpdateInterval needs to be positive.")
         
@@ -31,6 +30,8 @@ class Sync<T: Codable>{
             }
         }).disposed(by: controller.disposeBag)
         
+
+                
         
         // Start RxSwift timer to publish the TaskTable every 5 seconds.
         _ = Observable
@@ -42,7 +43,17 @@ class Sync<T: Codable>{
              })
             .disposed(by: controller.disposeBag)
     }
-    
+    private func onUpdate(){
+        
+    }
+    func getDataObservable()->Observable<T>{
+        return Observable
+            .timer(RxTimeInterval.seconds(0),
+                   period: RxTimeInterval.seconds(5),
+                   scheduler: MainScheduler.instance).map ({ (i:Int) in
+                        return self.localInstance
+                   }).asObservable()
+    }
     func publishTaskDictionary(){
         let syncMessage = SyncMessage(localInstance)
         
