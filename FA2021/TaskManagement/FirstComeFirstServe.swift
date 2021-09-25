@@ -17,14 +17,14 @@ class FirstComeFirstServe: TaskManager {
      entry point
      */
     func scanForTask(){
-        var unfinishedTasIds: [String] = getUnfinishedTasksId()
+        var unfinishedTaskIds: [String] = getUnfinishedTasksId()
         
-        while (unfinishedTasIds.isEmpty) {
+        while (unfinishedTaskIds.isEmpty) {
             sleep(1)
-            unfinishedTasIds = getUnfinishedTasksId()
+            unfinishedTaskIds = getUnfinishedTasksId()
         }
         
-        claimTask(taskId: unfinishedTasIds[0])
+        claimTask(taskId: unfinishedTaskIds[0])
     }
     
     

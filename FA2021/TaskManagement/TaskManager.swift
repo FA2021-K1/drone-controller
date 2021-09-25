@@ -28,5 +28,5 @@ extension TaskManager {
                 /*api.droneController?.retrieveAvailableTasks().subscribe(onNext:{r in
                     callback(self.parseJsonToTasks(json: r.json))
                 }).dispose()*/
-        }
+    }
 }
