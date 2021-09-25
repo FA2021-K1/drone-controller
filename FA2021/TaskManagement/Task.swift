@@ -1,55 +1,135 @@
 import Foundation
 
 enum TaskType: String, Decodable {
-    case FlyToTask, GetDataTask, NonTerminalTask
+    case FlyTask, SearchTask, IdleTask, NonTerminalTask
 }
 
 class Task {
     let id: String
     let name: String
-    let type: TaskType
-    let drone_id: String?
     
-    internal init(id: String, name: String, type: TaskType, drone_id: String) {
+    internal init(id: String, name: String) {
         self.id = id
         self.name = name
-        self.type = type
-        self.drone_id = drone_id
     }
-}
-
-class FlyToTask: Task {
-    let latitude: Double
-    let longitude: Double
-    let altitude: Double
-
-    internal init(id: String, name: String, type: TaskType, drone_id: String, latitude: Double, longitude: Double, altitude: Double) {
-        self.latitude = latitude
-        self.longitude = longitude
-        self.altitude = altitude
-        super.init(id: id, name: name, type: type, drone_id: drone_id)
+    
+    func getTerminalTasksList() -> [Task] {
+        if let nonTerminalTask = self as? NonTerminalTask {
+            return nonTerminalTask.tasks.flatMap { $0.getTerminalTasksList() }
+        } else if self is TerminalTask  {
+            return [self]
+        } else {
+            fatalError("Unexpected task type: Aborting")
+        }
     }
+    
+    static func parseJsonToTasks(json: String) -> [Task] {
+        guard let data = json.data(using: .utf8) else {
+            return []
+        }
+        var unknown_tasks: [UnknownTask] = []
+        do {
+            unknown_tasks = try! JSONDecoder().decode([UnknownTask].self, from: data)
+        }
+        var tasks: [Task] = []
+        for unknown_task in unknown_tasks {
+            tasks.append(parseTask(unknownTask: unknown_task))
+        }
+
+        return tasks
+    }
+    
+    static func parseTask(unknownTask: UnknownTask) -> Task {
+        let id: String = unknownTask.id
+        let name: String = unknownTask.name
+        let type: TaskType = unknownTask.type
+        let task: Task
+
+        switch type {
+        case .FlyTask:
+            task = FlyTask(id: id, name: name, coordinate:
+                Coordinate(
+                    latitude: unknownTask.latitude ?? 0,
+                    longitude: unknownTask.longitude ?? 0,
+                    altitude: unknownTask.altitude ?? 0)
+            )
+
+        case .SearchTask:
+            task = SearchTask(id: id, name: name, coordinate:
+                Coordinate(
+                    latitude: unknownTask.latitude ?? 0,
+                    longitude: unknownTask.longitude ?? 0,
+                    altitude: unknownTask.altitude ?? 0),
+                radius: unknownTask.radius ?? 0)
+            
+        case .IdleTask:
+            task = IdleTask(id: id, name: name, delay: unknownTask.delay ?? 0)
+        
+        case .NonTerminalTask:
+            var tasks: [Task] = []
+            if let unknown_tasks: [UnknownTask] = unknownTask.tasks {
+                for unknown_task in unknown_tasks {
+                    tasks.append(parseTask(unknownTask: unknown_task))
+                }
+            } else {
+                tasks = []
+            }
+            task = NonTerminalTask(id: id, name: name, tasks: tasks)
+        }
+        return task
+    }
+    
 }
 
 class NonTerminalTask: Task {
     let tasks: [Task]
 
-    init(id: String, name: String, type: TaskType, drone_id: String, tasks: [Task]) {
+    init(id: String, name: String, tasks: [Task]) {
         self.tasks = tasks
-        super.init(id: id, name: name, type: type, drone_id: drone_id)
+        super.init(id: id, name: name)
     }
 }
 
-class GetDataTask: Task {
+class TerminalTask: Task {
+}
+
+class FlyTask: TerminalTask {
+    let coordinate: Coordinate
+    
+    init(id: String, name: String, coordinate: Coordinate) {
+        self.coordinate = coordinate
+        super.init(id: id, name: name)
+    }
+}
+
+class SearchTask: TerminalTask {
+    let coordinate: Coordinate
+    let radius: Double
+    
+    init(id: String, name: String, coordinate: Coordinate, radius: Double) {
+        self.radius = radius
+        self.coordinate = coordinate
+        super.init(id: id, name: name)
+    }
+}
+
+class IdleTask: TerminalTask {
+    let delay: Double
+    
+    init(id: String, name: String, delay: Double) {
+        self.delay = delay
+        super.init(id: id, name: name)
+    }
 }
 
 class UnknownTask: Decodable {
     let id: String
     let name: String
     let type: TaskType
-    let drone_id: String
     let latitude: Double?
     let longitude: Double?
     let altitude: Double?
     let tasks: [UnknownTask]?
+    let radius: Double?
+    let delay: Double?
 }
