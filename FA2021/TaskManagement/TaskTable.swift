@@ -21,11 +21,7 @@ class TaskTable: Codable {
         var state: TaskState
     }
     
-    var table: [String : DroneClaim]
-    
-    init() {
-        table = [String : DroneClaim]()
-    }
+    var table: [String : DroneClaim] = [String : DroneClaim]()
     
     func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = TimeUtil.getCurrentTime(), state: TaskTable.TaskState){
         table[taskId] = TaskTable.DroneClaim(droneId: droneId, timestamp: timestamp, state: state)
