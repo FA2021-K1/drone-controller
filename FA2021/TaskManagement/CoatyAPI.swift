@@ -51,8 +51,8 @@ class CoatyAPI{
             //
             // Note: Keep alive for the broker connection has been reduced to 10secs to minimize
             // connectivity issues when running with a remote public broker.
-            let mqttClientOptions = MQTTClientOptions(host: "localhost",
-                                                      port: 8080,
+            let mqttClientOptions = MQTTClientOptions(host: "192.168.1.194",
+                                                      port: 1883,
                                                       keepAlive: 10)
             config.communication = CommunicationOptions(namespace: "coaty.examples.remoteops",
                                                         mqttClientOptions: mqttClientOptions,

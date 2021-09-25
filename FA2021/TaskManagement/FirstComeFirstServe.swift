@@ -18,7 +18,33 @@ class FirstComeFirstServe: TaskManager {
      entry point
      */
     func scanForTask(){
+        var unfinishedTasIds: [String] = getUnfinishedTasksId()
+        
+        
+        while (unfinishedTasIds.isEmpty) {
+            sleep(1)
             
+            unfinishedTasIds = getUnfinishedTasksId()
+            
+        }
+    }
+    
+    
+    /**
+     looks at current TaskTable
+     @return all tasks that 
+     */
+    func getUnfinishedTasksId() -> [String] {
+        
+        var table: [String: TaskTable.DroneClaim] = (api.droneController?.getDroneTableSync()?.localInstance.table)!
+        
+        var unfinishedTasksId: [String] = []
+        for (taskId, droneClaim) in table {
+            if (droneClaim.state == TaskTable.TaskState.available) {
+                unfinishedTasksId.append(taskId)
+            }
+        }
+        return unfinishedTasksId
     }
     
 

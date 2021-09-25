@@ -10,6 +10,9 @@ import Foundation
 /// A Coaty controller that invokes remote operations to control lights.
 class DroneController: Controller {
     private var droneTableSync: Sync<TaskTable>?
+    func getDroneTableSync() -> Sync<TaskTable>? {
+        return droneTableSync
+    }
     
     override func onInit() {
         droneTableSync = Sync<TaskTable>(controller: self, initialValue: TaskTable(), mergeFunction: { local, other in
