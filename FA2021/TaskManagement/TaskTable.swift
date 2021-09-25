@@ -39,9 +39,6 @@ class TaskTable: Codable {
     enum CodingKeys: String, CodingKey{
         case table
     }
-    init() {
-        
-    }
     // MARK: Codable methods.
     
     required init(from decoder: Decoder) throws {
