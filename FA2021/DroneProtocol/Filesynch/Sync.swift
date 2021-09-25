@@ -35,7 +35,7 @@ class Sync<T: Codable>{
         // Start RxSwift timer to publish the TaskTable every 5 seconds.
         _ = Observable
              .timer(RxTimeInterval.seconds(0),
-                    period: RxTimeInterval.seconds(5),
+                    period: RxTimeInterval.seconds(updateIntervalSeconds),
                     scheduler: MainScheduler.instance)
             .subscribe(onNext: { (i: Int) in
                 self.publishTaskDictionary()
