@@ -15,10 +15,10 @@ struct TaskRegistration {
 }
 
 protocol TaskManager {
-    var currentTasks: [Task] { get set }
     var api: CoatyAPI { get }
 
     func scanForTask()
+    func getCurrentTasksId() -> [String]
 }
 
 extension TaskManager {
@@ -28,5 +28,5 @@ extension TaskManager {
                 /*api.droneController?.retrieveAvailableTasks().subscribe(onNext:{r in
                     callback(self.parseJsonToTasks(json: r.json))
                 }).dispose()*/
-        }
+    }
 }

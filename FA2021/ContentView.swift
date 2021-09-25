@@ -14,9 +14,9 @@ struct ContentView: View {
     var body: some View {
         
         // app crashes if no product is connected
-        let connectedProduct = DJISDKManager.product()!
+//        let connectedProduct = DJISDKManager.product()!
         
-        Text("Connected aircraft:" + (connectedProduct.model!))
+//        Text("Connected aircraft:" + (connectedProduct.model!))
         
         List {
             Button {
