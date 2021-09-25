@@ -16,7 +16,7 @@ class DroneController: Controller {
     }
         
     override func onInit() {
-        droneTableSync = Sync<TaskTable>(controller: self, initialValue: TaskTable(), mergeFunction: { local, other in
+        droneTableSync = Sync<TaskTable>(controller: self, initialValue: TaskTable(),mergeFunction: { local, other in
             local.updateTable(otherTable: other)
         })
     }

@@ -1,5 +1,5 @@
 import Foundation
-
+import RxSwift
 class FirstComeFirstServe: TaskManager {
 
     var api: CoatyAPI
