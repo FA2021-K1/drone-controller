@@ -21,6 +21,7 @@
 		F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B526FF039900A4E6BB /* SyncMessage.swift */; };
 		F86307BA26FF460700A4E6BB /* FirstComeFirstServe.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */; };
 		F86307BC26FF468000A4E6BB /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BB26FF468000A4E6BB /* Coordinate.swift */; };
+		F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BD26FF5AC100A4E6BB /* LiveData.swift */; };
 		F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAA26FB130F00DAF66D /* TaskManager.swift */; };
 		F8826AAD26FB130F00DAF66D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAB26FB130F00DAF66D /* Task.swift */; };
 		F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A03F26FB9405000906AA /* CoatyAPI.swift */; };
@@ -75,6 +76,7 @@
 		F86307B526FF039900A4E6BB /* SyncMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMessage.swift; sourceTree = "<group>"; };
 		F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstComeFirstServe.swift; sourceTree = "<group>"; };
 		F86307BB26FF468000A4E6BB /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
+		F86307BD26FF5AC100A4E6BB /* LiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveData.swift; sourceTree = "<group>"; };
 		F8826AAA26FB130F00DAF66D /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		F8826AAB26FB130F00DAF66D /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		F890A03F26FB9405000906AA /* CoatyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoatyAPI.swift; sourceTree = "<group>"; };
@@ -245,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				F890A07026FC78FA000906AA /* TasksDetails.swift */,
+				F86307BD26FF5AC100A4E6BB /* LiveData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -501,6 +504,7 @@
 				F890A06B26FC78A0000906AA /* MissionController.swift in Sources */,
 				F890A07726FCA067000906AA /* TaskTable.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
+				F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */,
 				F890A06926FC787D000906AA /* DroneController.swift in Sources */,
 				F890A07126FC78FA000906AA /* TasksDetails.swift in Sources */,
 				F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */,

@@ -12,7 +12,8 @@ class CoatyAPI{
         ],
                                     objectTypes: [
             TasksDetails.self,
-            SyncMessage<TaskTable>.self
+            SyncMessage<TaskTable>.self,
+                                        LiveData.self
         ])
         // Create a configuration.
         guard let configuration = createDroneCoatyConfiguration() else {
@@ -31,6 +32,10 @@ class CoatyAPI{
             }).asObservable()
     }
 
+    func postLiveData(data:String){
+        let ev=try! AdvertiseEvent.with(object: LiveData(json: data))
+        container?.communicationManager?.publishAdvertise(ev)
+    }
     private func createDroneCoatyConfiguration() -> Configuration? {
         return try? .build { config in
             

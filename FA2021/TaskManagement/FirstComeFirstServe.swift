@@ -1,11 +1,11 @@
 import Foundation
 
 class FirstComeFirstServe: TaskManager {
-    
+
     var api: CoatyAPI
     var droneId: String
     var currentTasksId: [String]
-    
+
     init(droneId: String) {
         self.droneId = droneId
         self.api = CoatyAPI()
@@ -61,4 +61,5 @@ class FirstComeFirstServe: TaskManager {
             }
         }
     }
+    
 }
