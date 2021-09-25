@@ -14,9 +14,9 @@ class DroneController: Controller {
     private var droneTableSync: Sync<TaskTable>?
     
     override func onInit() {
-        droneTableSync = Sync<TaskTable>(initialValue: TaskTable(), mergeFunction: { local, other in
+        droneTableSync = Sync<TaskTable>(controller: self, initialValue: TaskTable(), mergeFunction: { local, other in
             local.updateTable(otherTable: other)
-        },comManager: self.communicationManager, disposeBag: self.disposeBag)
+        })
     }
     
     func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = Date().timeIntervalSinceReferenceDate, state: TaskTable.TaskState){

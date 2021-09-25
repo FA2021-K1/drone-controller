@@ -11,17 +11,17 @@ import RxSwift
 
 class Sync<T: Codable>{
     var localInstance: T
-    let comManager: CommunicationManager
+    let controller: Controller
     let mergeFunction: (T, T) -> T
     
-    init(initialValue: T, updateIntervalSeconds: Int = 5, mergeFunction: @escaping (T, T) -> T, comManager: CommunicationManager, disposeBag: DisposeBag) {
+    init(controller: Controller, initialValue: T, updateIntervalSeconds: Int = 5, mergeFunction: @escaping (T, T) -> T) {
         precondition(updateIntervalSeconds > 0, "UpdateInterval needs to be positive.")
         
         localInstance = initialValue
-        self.comManager = comManager
+        self.controller = controller
         self.mergeFunction = mergeFunction
         
-        try! self.comManager
+        try! self.controller.communicationManager
         .observeAdvertise(withObjectType: "idrone.sync.syncmessage")
         .subscribe(onNext: { (advertiseEvent) in
             if (advertiseEvent.data.object is SyncMessage<T>)
@@ -29,8 +29,7 @@ class Sync<T: Codable>{
                 let eventMessage = advertiseEvent.data.object as! SyncMessage<T>
                 self.localInstance = mergeFunction(self.localInstance, eventMessage.object)
             }
-        })
-        .disposed(by: disposeBag)
+        }).disposed(by: controller.disposeBag)
         
         
         // Start RxSwift timer to publish the TaskTable every 5 seconds.
@@ -41,7 +40,7 @@ class Sync<T: Codable>{
             .subscribe(onNext: { (i: Int) in
                 self.publishTaskDictionary()
              })
-            .disposed(by: disposeBag)
+            .disposed(by: controller.disposeBag)
     }
     
     func publishTaskDictionary(){
@@ -51,7 +50,7 @@ class Sync<T: Codable>{
         let event = try! AdvertiseEvent.with(object: syncMessage)
 
         // Publish the event by the communication manager.
-        self.comManager.publishAdvertise(event)
+        self.controller.communicationManager.publishAdvertise(event)
     }
     
     
