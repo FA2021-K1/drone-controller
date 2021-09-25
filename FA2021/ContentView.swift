@@ -10,13 +10,12 @@ import DJISDK
 import Network
 import MultipeerConnectivity
 
+
+
 struct ContentView: View {
     
     var missionControl = MissionScheduler()
-    
-    @StateObject var networkTest1 = NetworkTest(peerName: UIDevice.current.name)
-
-    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @StateObject var network = NetworkTest(peerName: UIDevice.current.name)
     
     var body: some View {
         List {
@@ -64,20 +63,24 @@ struct ContentView: View {
             
             
             Button {
-                networkTest1.receive()
+                network.receive()
             } label: {
                 Text("Connect to Network").padding(20)
             }.contentShape(Rectangle())
             
             
             Button {
-                networkTest1.send()
+                network.send()
             } label: {
                 Text("Send message").padding(20)
             }.contentShape(Rectangle())
             
-            Text("Available drones: \(networkTest1.transceiver.availablePeers.count+1)").padding(20)
-            Text("\(networkTest1.senderID): \(networkTest1.textMessage)").padding(20)
+            Text(network.dronesPrint())
+            
+            Text(network.messagePrint())
+            
+            Text(network.coordsPrint())
+            
         }
     }
 }
