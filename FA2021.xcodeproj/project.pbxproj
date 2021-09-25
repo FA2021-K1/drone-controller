@@ -116,14 +116,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CC8E98F626F8E61A0013973F /* DroneControl */ = {
+		CC8E98F626F8E61A0013973F /* FlightControl */ = {
 			isa = PBXGroup;
 			children = (
 				CC8E98F726F8E6670013973F /* MissionScheduler.swift */,
 				CC397DF426FCDC4E00D5254D /* CameraFeed.swift */,
 				CCB6EA9F26FB4D7700E94439 /* Log.swift */,
 			);
-			path = DroneControl;
+			path = FlightControl;
 			sourceTree = "<group>";
 		};
 		CCD2592526F7E01A007AD953 = {
@@ -151,7 +151,7 @@
 		CCD2593026F7E01A007AD953 /* FA2021 */ = {
 			isa = PBXGroup;
 			children = (
-				CC8E98F626F8E61A0013973F /* DroneControl */,
+				CC8E98F626F8E61A0013973F /* FlightControl */,
 				CCD2593126F7E01A007AD953 /* FA2021App.swift */,
 				CCD2593326F7E01A007AD953 /* ContentView.swift */,
 				CCD2593526F7E01E007AD953 /* Assets.xcassets */,
