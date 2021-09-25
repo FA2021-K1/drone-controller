@@ -25,11 +25,15 @@ class FirstComeFirstServe: TaskManager {
                             "altitude":\(26+(i%50))
                         },
                         "speed":5,
-                        "batteryLevel":\(100-(i%100)),
+                        "batteryLevel":\(100-((i/4)%100)),
                         "tasks":[
                             {
                                 "task_id":22,
                                 "status": "claimed"
+                            },
+                            {
+                                "task_id":28,
+                                "status": "finished"
                             }
                         ],
                         "drone_id": 123
