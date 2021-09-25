@@ -11,7 +11,7 @@ class CoatyAPI{
         ],
                                     objectTypes: [
             TasksDetails.self,
-            TaskTableMessage.self
+            SyncMessage<TaskTable>.self
         ])
         // Create a configuration.
         guard let configuration = createDroneCoatyConfiguration() else {

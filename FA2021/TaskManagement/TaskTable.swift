@@ -27,12 +27,14 @@ class TaskTable: Codable {
         table = [String : DroneClaim]()
     }
     
-    func updateTable(otherTable: TaskTable){
+    func updateTable(otherTable: TaskTable) -> TaskTable {
         table.merge(otherTable.table) { claimOne, claimTwo in
             let correctClaim = claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
             onConflict(correctClaim: correctClaim)
             return correctClaim
         }
+        
+        return self
     }
     
     func onConflict(correctClaim: DroneClaim){

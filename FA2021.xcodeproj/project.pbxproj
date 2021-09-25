@@ -17,6 +17,8 @@
 		CCD2593926F7E01E007AD953 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCD2593826F7E01E007AD953 /* Preview Assets.xcassets */; };
 		CCD2594426F7E01E007AD953 /* FA2021Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594326F7E01E007AD953 /* FA2021Tests.swift */; };
 		CCD2594F26F7E01E007AD953 /* FA2021UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594E26F7E01E007AD953 /* FA2021UITests.swift */; };
+		F86307B426FF017B00A4E6BB /* Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B326FF017B00A4E6BB /* Sync.swift */; };
+		F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B526FF039900A4E6BB /* SyncMessage.swift */; };
 		F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAA26FB130F00DAF66D /* TaskManager.swift */; };
 		F8826AAD26FB130F00DAF66D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAB26FB130F00DAF66D /* Task.swift */; };
 		F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A03F26FB9405000906AA /* CoatyAPI.swift */; };
@@ -25,7 +27,6 @@
 		F890A06D26FC78BF000906AA /* TimeUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A06C26FC78BF000906AA /* TimeUtil.swift */; };
 		F890A07126FC78FA000906AA /* TasksDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07026FC78FA000906AA /* TasksDetails.swift */; };
 		F890A07726FCA067000906AA /* TaskTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07626FCA067000906AA /* TaskTable.swift */; };
-		F890A07926FCA72E000906AA /* TaskTableMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A07826FCA72E000906AA /* TaskTableMessage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		CCD2594A26F7E01E007AD953 /* FA2021UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FA2021UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCD2594E26F7E01E007AD953 /* FA2021UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FA2021UITests.swift; sourceTree = "<group>"; };
 		CCD2595026F7E01E007AD953 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F86307B326FF017B00A4E6BB /* Sync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sync.swift; sourceTree = "<group>"; };
+		F86307B526FF039900A4E6BB /* SyncMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMessage.swift; sourceTree = "<group>"; };
 		F8826AAA26FB130F00DAF66D /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		F8826AAB26FB130F00DAF66D /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		F890A03F26FB9405000906AA /* CoatyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoatyAPI.swift; sourceTree = "<group>"; };
@@ -76,7 +79,6 @@
 		F890A06C26FC78BF000906AA /* TimeUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeUtil.swift; sourceTree = "<group>"; };
 		F890A07026FC78FA000906AA /* TasksDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksDetails.swift; sourceTree = "<group>"; };
 		F890A07626FCA067000906AA /* TaskTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTable.swift; sourceTree = "<group>"; };
-		F890A07826FCA72E000906AA /* TaskTableMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableMessage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +203,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F86307B026FEFC3400A4E6BB /* Filesynch */ = {
+			isa = PBXGroup;
+			children = (
+				F86307B326FF017B00A4E6BB /* Sync.swift */,
+				F86307B526FF039900A4E6BB /* SyncMessage.swift */,
+			);
+			path = Filesynch;
+			sourceTree = "<group>";
+		};
 		F8826AA926FB130F00DAF66D /* TaskManagement */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +226,7 @@
 		F890A05726FC7675000906AA /* DroneProtocol */ = {
 			isa = PBXGroup;
 			children = (
+				F86307B026FEFC3400A4E6BB /* Filesynch */,
 				F890A06526FC76CC000906AA /* Util */,
 				F890A05E26FC76B5000906AA /* Model */,
 				F890A06826FC787D000906AA /* DroneController.swift */,
@@ -227,7 +239,6 @@
 			isa = PBXGroup;
 			children = (
 				F890A07026FC78FA000906AA /* TasksDetails.swift */,
-				F890A07826FCA72E000906AA /* TaskTableMessage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -484,14 +495,15 @@
 				F890A06B26FC78A0000906AA /* MissionController.swift in Sources */,
 				F890A07726FCA067000906AA /* TaskTable.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
-				F890A07926FCA72E000906AA /* TaskTableMessage.swift in Sources */,
 				F890A06926FC787D000906AA /* DroneController.swift in Sources */,
 				F890A07126FC78FA000906AA /* TasksDetails.swift in Sources */,
 				F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */,
 				CC8E98F826F8E6670013973F /* MissionScheduler.swift in Sources */,
 				F890A06D26FC78BF000906AA /* TimeUtil.swift in Sources */,
 				F8826AAD26FB130F00DAF66D /* Task.swift in Sources */,
+				F86307B426FF017B00A4E6BB /* Sync.swift in Sources */,
 				F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */,
+				F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */,
 				CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

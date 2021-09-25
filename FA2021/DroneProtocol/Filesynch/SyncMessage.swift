@@ -7,43 +7,43 @@
 import Foundation
 import CoatySwift
 
-final class TaskTableMessage: CoatyObject{
+final class SyncMessage<T: Codable>: CoatyObject{
     
     // MARK: - Class registration.
     override class var objectType: String {
-        return register(objectType: "idrone.sync.tasktable", with: self)
+        return register(objectType: "idrone.sync.syncmessage", with: self)
     }
     
     // MARK: - Properties.
     
-    var table: TaskTable
+    var object: T
     
     
     // MARK: - Initializers.
     
-    init(_ table:TaskTable) {
-        self.table = table
+    init(_ object: T) {
+        self.object = object
         super.init(coreType: .CoatyObject,
                    objectType: TasksDetails.objectType,
                    objectId: .init(),
-                   name: "TaskTableMessage")
+                   name: "SyncMessage")
     }
     
     enum CodingKeys: String, CodingKey{
-        case table
+        case object
     }
     
     // MARK: Codable methods.
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.table = try container.decode(TaskTable.self, forKey: .table)
+        self.object = try container.decode(T.self, forKey: .object)
         try super.init(from: decoder)
     }
     
     override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(table, forKey: .table)
+        try container.encode(object, forKey: .object)
     }
 }
