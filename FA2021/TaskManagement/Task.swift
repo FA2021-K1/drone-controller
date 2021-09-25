@@ -23,13 +23,17 @@ class Task {
         }
     }
     
-    static func parseJsonToTasks(json: String) throws -> [Task] {
+    static func parseJsonToTasks(json: String) -> [Task] {
         guard let data = json.data(using: .utf8) else {
             return []
         }
         var unknown_tasks: [UnknownTask] = []
         do {
-            unknown_tasks = try! JSONDecoder().decode([UnknownTask].self, from: data)
+            try
+            unknown_tasks = JSONDecoder().decode([UnknownTask].self, from: data)
+        }catch{
+            print("error decoding JSON:",json)
+            return[]
         }
         return unknown_tasks.map {(utask) -> Task in parseTask(unknownTask: utask)}
     }

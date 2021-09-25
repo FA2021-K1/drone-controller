@@ -28,7 +28,7 @@ class CoatyAPI{
         self.droneController = (container?.getController(name: "DroneController") as! DroneController)
         allTasksObservable = try? droneController?.communicationManager
             .observeAdvertise(withObjectType: "idrone.sync.task").map({ ev in
-                return try! Task.parseJsonToTasks(json: (ev.data.object as! TasksDetails).jsonDetails)
+                return try Task.parseJsonToTasks(json: (ev.data.object as! TasksDetails).jsonDetails)
             }).asObservable()
     }
 

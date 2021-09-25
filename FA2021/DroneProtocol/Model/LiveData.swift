@@ -12,7 +12,7 @@ final class LiveData: CoatyObject{
     
     // MARK: - Class registration.
     override class var objectType: String {
-        return register(objectType: "idrone.sync.live-data", with: self)
+        return register(objectType: "idrone.sync.livedata", with: self)
     }
     
     // MARK: - Properties.
@@ -25,9 +25,9 @@ final class LiveData: CoatyObject{
     init(json:String) {
         self.jsonDetails=json
         super.init(coreType: .CoatyObject,
-                   objectType: TasksDetails.objectType,
+                   objectType: LiveData.objectType,
                    objectId: .init(),
-                   name: "Task")
+                   name: "LiveData")
     }
     
     enum CodingKeys: String, CodingKey{
