@@ -10,7 +10,6 @@ import RxSwift
 
 /// A Coaty controller that invokes remote operations to control lights.
 class DroneController: Controller {
-    
     private var droneTableSync: Sync<TaskTable>?
     
     override func onInit() {
@@ -19,7 +18,7 @@ class DroneController: Controller {
         })
     }
     
-    func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = Date().timeIntervalSinceReferenceDate, state: TaskTable.TaskState){
-        droneTableSync?.localInstance.table[taskId] = TaskTable.DroneClaim(droneId: droneId, timestamp: timestamp, state: state)
+    func claimTask(taskId: String, droneId: String){
+        droneTableSync?.localInstance.changeTaskState(taskId: taskId, droneId: droneId, state: TaskTable.TaskState.claimed)
     }
 }
