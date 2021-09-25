@@ -23,7 +23,7 @@ class Task {
         }
     }
     
-    static func parseJsonToTasks(json: String) -> [Task] {
+    static func parseJsonToTasks(json: String) throws -> [Task] {
         guard let data = json.data(using: .utf8) else {
             return []
         }

@@ -8,6 +8,9 @@ class FirstComeFirstServe: TaskManager {
         self.droneId = droneId
         self.api = CoatyAPI()
         api.start()
+        api.allTasksObservable?.subscribe(onNext: { tasks in
+            print(tasks)
+        })
     }
     
     /**

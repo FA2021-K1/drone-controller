@@ -1,10 +1,11 @@
 import Foundation
 import CoatySwift
-
+import RxSwift
 class CoatyAPI{
 
     var container: Container?
     var droneController: DroneController?
+    var allTasksObservable:Observable<[Task]>?
     func start(){
         let components = Components(controllers: [
             "DroneController": DroneController.self
@@ -24,6 +25,10 @@ class CoatyAPI{
         self.container = Container.resolve(components: components,
                                            configuration: configuration)
         self.droneController = (container?.getController(name: "DroneController") as! DroneController)
+        allTasksObservable = try? droneController?.communicationManager
+            .observeAdvertise(withObjectType: "idrone.sync.task").map({ ev in
+                return try! Task.parseJsonToTasks(json: (ev.data.object as! TasksDetails).jsonDetails)
+            }).asObservable()
     }
 
     private func createDroneCoatyConfiguration() -> Configuration? {
