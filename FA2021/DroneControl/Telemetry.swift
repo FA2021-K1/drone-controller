@@ -47,7 +47,6 @@ class Telemetry {
                     """
                 }
                 task_json += "]"
-                print(task_json)
                 self.api.postLiveData(data: """
                     {
                         "position":{
