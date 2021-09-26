@@ -1,15 +1,16 @@
 import Foundation
 import RxSwift
 class FirstComeFirstServe: TaskManager {
-    
+    var taskContext: TaskContext
     var api: CoatyAPI
     var droneId: String
     var currentTasksId: Set<String>
     var finishedTasksId: Set<String>
 
-    init(api: CoatyAPI, droneId: String) {
+    init(api: CoatyAPI, droneId: String, taskContext: TaskContext) {
         self.droneId = droneId
         self.api = api
+        self.taskContext = taskContext
         api.start()
         currentTasksId = []
         finishedTasksId = []
@@ -65,6 +66,7 @@ class FirstComeFirstServe: TaskManager {
         currentTasksId.insert(taskId)
         
         // TODO: call drone team api to start task
+        taskContext.runSampleTask()
     }    
     
     func checkResponsibilityForTask(taskTable: TaskTable){

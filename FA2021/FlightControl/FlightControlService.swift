@@ -13,7 +13,7 @@ class FlightControlService {
     private var missionScheduler: MissionScheduler
     private var connectionManager: DroneConnectionManager
     private var droneController: AircraftController
-    private var taskContext: TaskContext
+    var taskContext: TaskContext
     
     init(log: Log) {
         self.log = log
