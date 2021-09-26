@@ -33,15 +33,18 @@ class FirstComeFirstServe: TaskManager {
      entry point
      */
     func scanForTask(){
-        
-        var unfinishedTaskIds: [String] = getUnfinishedTasksId()
-                
-        while (unfinishedTaskIds.isEmpty) {
-            sleep(1)
-            unfinishedTaskIds = getUnfinishedTasksId()
-        }
-        
-        claimTask(taskId: unfinishedTaskIds[0])
+        // TODO: Test this method.
+        api.droneController?.getDroneTableSync()?.getDataObservable()
+            .skipWhile({ table in
+                table.table.allSatisfy { entry in
+                    entry.value.state != TaskTable.TaskState.available
+                }
+            })
+            .take(1)
+            .subscribe(onNext: { table in
+                let unfinishedTaskIds = self.getUnfinishedTasksId()
+                self.claimTask(taskId: unfinishedTaskIds[0])
+            })
     }
     
     
