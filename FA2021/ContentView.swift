@@ -95,6 +95,7 @@ extension ContentView {
         }
         
         
+        
         func startTaskAssignmentThread(){
             /**
              start new Thread for TaskAssignment
