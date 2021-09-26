@@ -6,15 +6,17 @@ class CoatyAPI{
     var container: Container?
     var droneController: DroneController?
     var allTasksObservable:Observable<[Task]>?
+    
     func start(){
         let components = Components(controllers: [
             "DroneController": DroneController.self
         ],
-                                    objectTypes: [
+        objectTypes: [
             TasksDetails.self,
             SyncMessage<TaskTable>.self,
-                                        LiveData.self
+            LiveData.self
         ])
+        
         // Create a configuration.
         guard let configuration = createDroneCoatyConfiguration() else {
             print("Invalid configuration! Please check your options.")
@@ -28,14 +30,15 @@ class CoatyAPI{
         self.droneController = (container?.getController(name: "DroneController") as! DroneController)
         allTasksObservable = try? droneController?.communicationManager
             .observeAdvertise(withObjectType: "idrone.sync.task").map({ ev in
-                return try Task.parseJsonToTasks(json: (ev.data.object as! TasksDetails).jsonDetails)
+                return Task.parseJsonToTasks(json: (ev.data.object as! TasksDetails).jsonDetails)
             }).asObservable()
     }
 
     func postLiveData(data:String){
-        let ev=try! AdvertiseEvent.with(object: LiveData(json: data))
+        let ev = try! AdvertiseEvent.with(object: LiveData(json: data))
         container?.communicationManager?.publishAdvertise(ev)
     }
+    
     private func createDroneCoatyConfiguration() -> Configuration? {
         return try? .build { config in
             
