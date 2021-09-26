@@ -24,7 +24,7 @@ final class SyncMessage<T: Codable>: CoatyObject{
     init(_ object: T) {
         self.object = object
         super.init(coreType: .CoatyObject,
-                   objectType: TasksDetails.objectType,
+                   objectType: SyncMessage.objectType,
                    objectId: .init(),
                    name: "SyncMessage")
     }
