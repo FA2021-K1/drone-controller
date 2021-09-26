@@ -5,12 +5,14 @@ class FirstComeFirstServe: TaskManager {
     var api: CoatyAPI
     var droneId: String
     var currentTasksId: Set<String>
-    
+    var finishedTasksId: Set<String>
+
     init(api: CoatyAPI, droneId: String) {
         self.droneId = droneId
         self.api = api
         api.start()
         currentTasksId = []
+        finishedTasksId = []
         
         /**
          updateTaskTable everytime a new TaskList was received
@@ -57,7 +59,7 @@ class FirstComeFirstServe: TaskManager {
     
     func claimTask(taskId: String) {
         
-        print("claim Task")
+        print("Claim task, task_id: \(taskId)")
         
         api.droneController?.claimTask(taskId: taskId, droneId: droneId)
         currentTasksId.insert(taskId)
@@ -76,11 +78,15 @@ class FirstComeFirstServe: TaskManager {
                     try! print(JSONEncoder().encode(taskTable).prettyPrintedJSONString!)
                     return
                 }
+                
+                print("Giving up task \(taskId) to drone \(tableResult.droneId)")
             }
             
-            print("giving up task: " + taskId)
+            
             // TODO: call drone team api to abort Task with taskId
             currentTasksId.remove(taskId)
+            
+            // Scan needs to be started in another thread because this one doesn't belong to us but to the Sync control flow
             DispatchQueue.global().async {
                 self.scanForTask()
             }

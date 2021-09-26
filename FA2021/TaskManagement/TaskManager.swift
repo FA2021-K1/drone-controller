@@ -9,7 +9,9 @@ struct TaskRegistration {
 
 protocol TaskManager {
     var api: CoatyAPI { get }
+    var droneId: String { get }
     var currentTasksId: Set<String> { get }
+    var finishedTasksId: Set<String> { get }
 
     func scanForTask()
 }

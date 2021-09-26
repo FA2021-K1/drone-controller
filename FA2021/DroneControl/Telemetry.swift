@@ -10,9 +10,10 @@ import RxSwift
 
 class Telemetry {
     let api: CoatyAPI
+    let taskmanager: TaskManager
     
-    init(api: CoatyAPI){
-        
+    init(api: CoatyAPI, taskmanager: TaskManager){
+        self.taskmanager = taskmanager
         self.api = api
         
         // sending mock data currently
@@ -21,6 +22,31 @@ class Telemetry {
                     period: RxTimeInterval.seconds(1),
                     scheduler: MainScheduler.instance)
             .subscribe(onNext: { (i: Int) in
+                var task_json: String = "["
+                var json_needs_comma: Bool = false
+                for task_id in taskmanager.currentTasksId {
+                    if json_needs_comma {
+                        task_json += ","
+                    } else {json_needs_comma = true}
+                    task_json += """
+                    {
+                        "task_id": "\(task_id)",
+                        "status": "claimed"
+                    }
+                    """
+                }
+                for task_id in taskmanager.finishedTasksId {
+                    if !json_needs_comma {
+                        task_json += ","
+                    }
+                    task_json += """
+                    {
+                        "task_id": "\(task_id)",
+                        "status": "finished"
+                    }
+                    """
+                }
+                task_json += "]"
                 self.api.postLiveData(data: """
                     {
                         "position":{
@@ -30,17 +56,8 @@ class Telemetry {
                         },
                         "speed":5,
                         "batteryLevel":\(100-((i/4)%100)),
-                        "tasks":[
-                            {
-                                "task_id":"123",
-                                "status": "claimed"
-                            },
-                            {
-                                "task_id":"321",
-                                "status": "finished"
-                            }
-                        ],
-                        "drone_id": "123"
+                        "tasks":\(task_json),
+                        "drone_id": "\(taskmanager.droneId)"
                     }
                 """)
              })

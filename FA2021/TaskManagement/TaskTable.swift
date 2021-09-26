@@ -69,7 +69,7 @@ struct TaskTable: Codable, Equatable {
         
         var newTable = TaskTable(taskSet: newTasksSet, table: self.table)
         for task in newTasksSet {
-            print("add new task to tasktable")
+            print("Add task to TaskTable, task_id: \(task.id)")
             // TODO: initialize with something better
         
             newTable.table[task.id] = DroneClaim(droneId: "", timestamp: 0, state: TaskState.available)
