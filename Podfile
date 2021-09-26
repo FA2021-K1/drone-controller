@@ -10,6 +10,7 @@ target 'FA2021' do
   pod 'DJI-SDK-iOS', '~> 4.15.1'
   # for camera feed
   pod 'DJIWidget', '~> 1.6.2'
+  pod 'CoatySwift', '~> 2.0'
 
   target 'FA2021Tests' do
     inherit! :search_paths

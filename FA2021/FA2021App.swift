@@ -11,7 +11,13 @@ import SwiftUI
 struct FA2021App: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().onAppear {
+                DispatchQueue.global().async {
+                    // TODO: how to get droneId
+                    let firstComeFirstServe: TaskManager = FirstComeFirstServe(droneId: "placeholder")
+                    firstComeFirstServe.scanForTask()
+                }
+            }
         }
     }
 }
