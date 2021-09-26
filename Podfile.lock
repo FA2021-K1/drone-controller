@@ -8,6 +8,7 @@ PODS:
   - CocoaMQTT (1.2.5):
     - CocoaAsyncSocket (~> 7.6.3)
   - DJI-SDK-iOS (4.15.1)
+  - DJIWidget (1.6.5)
   - ObjcExceptionBridging (1.0.1):
     - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
   - ObjcExceptionBridging/ObjcExceptionBridging (1.0.1)
@@ -25,6 +26,7 @@ PODS:
 DEPENDENCIES:
   - CoatySwift (~> 2.0)
   - DJI-SDK-iOS (~> 4.15.1)
+  - DJIWidget (~> 1.6.2)
 
 SPEC REPOS:
   trunk:
@@ -32,6 +34,7 @@ SPEC REPOS:
     - CocoaAsyncSocket
     - CocoaMQTT
     - DJI-SDK-iOS
+    - DJIWidget
     - ObjcExceptionBridging
     - RxCocoa
     - RxRelay
@@ -43,12 +46,13 @@ SPEC CHECKSUMS:
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaMQTT: a61490ed3b328011c5d75169a77781983e2bb221
   DJI-SDK-iOS: f145618ee7727c4ef579b7293e5f805198463446
+  DJIWidget: c592143a31f182a7e97a894168c4363ad42c6ff2
   ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
   RxCocoa: e2ed092d5432e4296aa818021d27de4090ac0354
   RxRelay: 5a18c2eb2d68326ebaf0112f80d837ae41b92b97
   RxSwift: 915abbdfb62214aa89ccd0b194d44fb478019b27
   XCGLogger: 1943831ef907df55108b0b18657953f868de973b
 
-PODFILE CHECKSUM: e0acbc1662519dca9ea4be9e608dbabde2175b72
+PODFILE CHECKSUM: fa7957a6cf8240666135e1195dd271a4e5ae5930
 
 COCOAPODS: 1.11.2

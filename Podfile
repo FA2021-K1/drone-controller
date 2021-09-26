@@ -1,5 +1,9 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
+project 'FA2021.xcodeproj'
+
+# ignore all warnings from all pods
+inhibit_all_warnings!
 
 target 'FA2021' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -7,6 +11,8 @@ target 'FA2021' do
 
   # Pods for FA2021
   pod 'DJI-SDK-iOS', '~> 4.15.1'
+  # for camera feed
+  pod 'DJIWidget', '~> 1.6.2'
   pod 'CoatySwift', '~> 2.0'
 
   target 'FA2021Tests' do

@@ -7,65 +7,82 @@
 
 import SwiftUI
 import DJISDK
+import Combine
 
 struct ContentView: View {
-    var missionControl = MissionScheduler()
+    
+    @ObservedObject private var viewModel = ViewModel()
     
     var body: some View {
+        Text("Drone Controls")
+            .fontWeight(.semibold)
+            .foregroundColor(Color.init(red: 0, green: 101, blue: 189))
         
-        // app crashes if no product is connected
-        let connectedProduct = DJISDKManager.product()!
+        Divider()
         
-        Text("Connected aircraft:" + (connectedProduct.model!))
+        // logger
+        ScrollView {
+            VStack {
+                ForEach(viewModel.logEntries, id: \.self) { logEntry in
+                    Text(logEntry)
+                        .padding()
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
         
+        Divider()
+        
+        // steering
         List {
             Button {
-                DJISDKManager.missionControl()?.scheduleElement(DJITakeOffAction())
-                
-                DJISDKManager.missionControl()?.startTimeline()
-                
+                viewModel.flightControl.takeOff()
             } label: {
                 Text("Takeoff").padding(20)
             }.contentShape(Rectangle())
             
             Button {
-                guard let mission = missionControl.createDemoMission()
-                else {
-                    return
-                }
-                
-                DJISDKManager.missionControl()?.scheduleElement(mission)
-                
+                viewModel.flightControl.flyNorth(meters: 5)
             } label: {
-                Text("Start Mission").padding(20)
+                Text("Fly 5m North").padding(20)
             }.contentShape(Rectangle())
             
-            
             Button {
-                DJISDKManager.missionControl()?.scheduleElement(DJILandAction())
-                
-                DJISDKManager.missionControl()?.startTimeline()
-                
+                viewModel.flightControl.land()
             } label: {
                 Text("Land").padding(20)
             }.contentShape(Rectangle())
-            
-            
-            Button {
-                DJISDKManager.missionControl()?.unscheduleEverything()
-                DJISDKManager.missionControl()?.scheduleElement(DJILandAction())
-                
-                DJISDKManager.missionControl()?.startTimeline()
-                
-            } label: {
-                Text("Force Land").padding(20)
-            }.contentShape(Rectangle())
         }
+        
+        Divider()
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+extension ContentView {
+    class ViewModel: ObservableObject {
+        @Published
+        var logEntries = [String]()
+
+        let flightControl: FlightControlService
+        
+        private let log: Log
+        private var subscription: AnyCancellable?
+        
+        init() {
+            let log = Log()
+            self.log = log
+            self.flightControl = FlightControlService(log: log)
+            
+            subscription = log.$logEntries.sink(receiveValue: { entries in
+                self.logEntries = entries
+            })
+        }
+        
     }
 }
