@@ -11,8 +11,7 @@ class FirstComeFirstServe: TaskManager {
         self.api = api
         api.start()
         currentTasksId = []
-        api.allTasksObservable?.subscribe(onNext: { tasks in
-            print(tasks)
+        api.allTasksObservable?.subscribe(onNext: { tasks in                     api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskList: tasks))!)
         })
         api.droneController?.getDroneTableSync()?.getDataObservable().subscribe(onNext: {
                      table in self.checkResponsibilityForTask(taskTable: table)
@@ -24,13 +23,13 @@ class FirstComeFirstServe: TaskManager {
      */
     func scanForTask(){
         
-        /**
-         TODO: remove this
-         */
-        claimTask(taskId: "DOIT")
-        claimTask(taskId: "DOTHAT")
-        /**/
-        
+//        /**
+//         TODO: remove this
+//         */
+//        claimTask(taskId: "DOIT")
+//        claimTask(taskId: "DOTHAT")
+//        /**/
+//        
         
         var unfinishedTaskIds: [String] = getUnfinishedTasksId()
                 

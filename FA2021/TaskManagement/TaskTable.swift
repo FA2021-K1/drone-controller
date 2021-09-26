@@ -8,6 +8,9 @@
 import Foundation
 
 struct TaskTable: Codable, Equatable {
+    
+    var currentTaskSet: Set<Task>
+    
     enum TaskState: UInt8, Codable{
         case available
         case claimed
@@ -38,7 +41,37 @@ struct TaskTable: Codable, Equatable {
         return newTable
     }
     
-    init() {}
+    init() {
+        currentTaskSet = []
+    }
+    
+    mutating func setCurrentTasksSet(set: Set<Task>){
+        currentTaskSet = set
+    }
+    
+    func updateTaskTable(activeTaskList: [Task]) -> TaskTable {
+        
+        let activeTaskSet: Set<Task> = Set(activeTaskList.map { $0 })
+        var newTable = self
+        
+        let newTasksSet: Set<Task> = activeTaskSet.symmetricDifference(currentTaskSet)
+        
+        if (newTasksSet.isEmpty) {
+            return newTable
+        }
+        
+        newTable.setCurrentTasksSet(set: activeTaskSet)
+        
+        for task in newTasksSet {
+            print("add new task to tasktable")
+            // TODO: initialize with something better
+            
+            newTable.table[task.id] = DroneClaim(droneId: "", timestamp: 0, state: TaskState.available)
+        }
+        
+        return newTable
+        
+    }
     
     enum CodingKeys: String, CodingKey{
         case table
@@ -48,6 +81,7 @@ struct TaskTable: Codable, Equatable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.table = try container.decode([String : DroneClaim].self, forKey: .table)
+        currentTaskSet = []
     }
     
     func encode(to encoder: Encoder) throws {

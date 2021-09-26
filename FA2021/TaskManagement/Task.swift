@@ -4,7 +4,16 @@ enum TaskType: String, Decodable {
     case FlyTask, SearchTask, IdleTask, NonTerminalTask
 }
 
-class Task {
+class Task: Hashable, Equatable{
+    static func == (lhs: Task, rhs: Task) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(name)
+    }
+    
     let id: String
     let name: String
     
