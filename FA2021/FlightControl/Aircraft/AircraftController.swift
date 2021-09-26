@@ -11,7 +11,6 @@ import Combine
 
 class AircraftController {
     private var log: Log
-    private var aircraft: DJIAircraft?
     private var droneConnection: DroneConnectionManager
     private var state: DroneState
     
@@ -83,6 +82,12 @@ class AircraftController {
             }
             
             return gpsSignalLevel
+        }
+    }
+    
+    var isReady: Bool {
+        get {
+            return droneConnection.aircraft != nil
         }
     }
     
