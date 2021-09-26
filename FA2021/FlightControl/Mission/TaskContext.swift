@@ -10,13 +10,13 @@ import Foundation
 class TaskContext {
     private let missionScheduler: MissionScheduler
     private var currentStepIndex: Int = -1
-    private var steps = [Step]()
+    private var task = [Step]()
     private var currentStep: Step? {
         get {
-            if steps.isEmpty || currentStepIndex < 0 || currentStepIndex >= steps.endIndex {
+            if task.isEmpty || currentStepIndex < 0 || currentStepIndex >= task.endIndex {
                 return nil
             }
-            return steps[currentStepIndex]
+            return task[currentStepIndex]
         }
     }
     private let log: Log
@@ -37,7 +37,7 @@ class TaskContext {
      A step can be added even when a task has already started, but new steps are only executed if the task has not completed yet.
      */
     func add(step: Step) {
-        self.steps.append(step)
+        self.task.append(step)
     }
     
     /**
@@ -46,7 +46,7 @@ class TaskContext {
      A step can be added even when a task has already started, but new steps are only executed if the task has not completed yet.
      */
     func add(steps: [Step]) {
-        self.steps.append(contentsOf: steps)
+        self.task.append(contentsOf: steps)
     }
     
     /**
@@ -65,7 +65,7 @@ class TaskContext {
     
     func stopAndClearTask() {
         stopTask()
-        steps.removeAll()
+        task.removeAll()
     }
     
     /**
@@ -76,7 +76,7 @@ class TaskContext {
         log.add(message: "Resetting Task Steps")
         
         currentStepIndex = -1
-        for var step in steps {
+        for var step in task {
             step.done = false
         }
     }
