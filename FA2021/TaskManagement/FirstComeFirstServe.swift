@@ -57,7 +57,7 @@ class FirstComeFirstServe: TaskManager {
     
     func claimTask(taskId: String) {
         
-        print("claim Task")
+        print("Claim task, task_id: \(taskId)")
         
         api.droneController?.claimTask(taskId: taskId, droneId: droneId)
         currentTasksId.insert(taskId)
