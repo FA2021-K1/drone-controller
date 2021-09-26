@@ -1,11 +1,11 @@
 import Foundation
 import RxSwift
 class FirstComeFirstServe: TaskManager {
-
+    
     var api: CoatyAPI
     var droneId: String
     var currentTasksId: Set<String>
-
+    
     init(api: CoatyAPI, droneId: String) {
         self.droneId = droneId
         self.api = api
@@ -14,7 +14,7 @@ class FirstComeFirstServe: TaskManager {
         
         /**
          updateTaskTable everytime a new TaskList was received
-        */
+         */
         api.allTasksObservable?.subscribe(onNext: { tasks in                     api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskList: tasks))!)
         })
         
@@ -22,8 +22,8 @@ class FirstComeFirstServe: TaskManager {
          check if this drone is still responsible for all currentTasksId everytime a new TaskTable was received
          */
         api.droneController?.getDroneTableSync()?.getDataObservable().subscribe(onNext: {
-                     table in self.checkResponsibilityForTask(taskTable: table)
-                 })
+            table in self.checkResponsibilityForTask(taskTable: table)
+        })
     }
     
     /**
@@ -66,11 +66,11 @@ class FirstComeFirstServe: TaskManager {
     }    
     
     func checkResponsibilityForTask(taskTable: TaskTable){
-                
+        
         for taskId in currentTasksId {
-      
+            
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
-             
+                
                 if (tableResult.state == .available || tableResult.droneId == droneId) {
                     print("keep task: " + taskId)
                     try! print(JSONEncoder().encode(taskTable).prettyPrintedJSONString!)
@@ -81,7 +81,9 @@ class FirstComeFirstServe: TaskManager {
             print("giving up task: " + taskId)
             // TODO: call drone team api to abort Task with taskId
             currentTasksId.remove(taskId)
-            scanForTask()
+            DispatchQueue.global().async {
+                self.scanForTask()
+            }
         }
     }
 }
@@ -92,7 +94,7 @@ extension Data {
         guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
               let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
               let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else { return nil }
-
+        
         return prettyPrintedString
     }
 }
