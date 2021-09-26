@@ -11,6 +11,10 @@
 		6D9BF4AB80A9FE99FD3E2853 /* Pods_FA2021.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EC3695E6893B6CDA93F8FDBF /* Pods_FA2021.framework */; };
 		9604ADB56EE0EE8C19D7F2F8 /* Pods_FA2021_FA2021UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 881D1BD05DA9B1AC7688581A /* Pods_FA2021_FA2021UITests.framework */; };
 		CC397DF526FCDC4E00D5254D /* CameraFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DF426FCDC4E00D5254D /* CameraFeed.swift */; };
+		CC397DF726FF74BC00D5254D /* DroneConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DF626FF74BC00D5254D /* DroneConnectionManager.swift */; };
+		CC397DF926FF78F700D5254D /* FlightControlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DF826FF78F700D5254D /* FlightControlService.swift */; };
+		CC397DFB26FF7AF400D5254D /* DroneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DFA26FF7AF400D5254D /* DroneController.swift */; };
+		CC397DFD26FF7D6100D5254D /* NavigationUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DFC26FF7D6100D5254D /* NavigationUtilities.swift */; };
 		CC8E98F826F8E6670013973F /* MissionScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC8E98F726F8E6670013973F /* MissionScheduler.swift */; };
 		CCB6EAA026FB4D7700E94439 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCB6EA9F26FB4D7700E94439 /* Log.swift */; };
 		CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2593126F7E01A007AD953 /* FA2021App.swift */; };
@@ -46,6 +50,10 @@
 		99C637700C61468C49267E0A /* Pods_FA2021Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FA2021Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B38F08FEC7097825943B1F21 /* Pods-FA2021Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021Tests.release.xcconfig"; path = "Target Support Files/Pods-FA2021Tests/Pods-FA2021Tests.release.xcconfig"; sourceTree = "<group>"; };
 		CC397DF426FCDC4E00D5254D /* CameraFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraFeed.swift; sourceTree = "<group>"; };
+		CC397DF626FF74BC00D5254D /* DroneConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneConnectionManager.swift; sourceTree = "<group>"; };
+		CC397DF826FF78F700D5254D /* FlightControlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightControlService.swift; sourceTree = "<group>"; };
+		CC397DFA26FF7AF400D5254D /* DroneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneController.swift; sourceTree = "<group>"; };
+		CC397DFC26FF7D6100D5254D /* NavigationUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationUtilities.swift; sourceTree = "<group>"; };
 		CC8E98F726F8E6670013973F /* MissionScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionScheduler.swift; sourceTree = "<group>"; };
 		CCB6EA9F26FB4D7700E94439 /* Log.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		CCD2592E26F7E01A007AD953 /* FA2021.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FA2021.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -122,6 +130,10 @@
 				CC8E98F726F8E6670013973F /* MissionScheduler.swift */,
 				CC397DF426FCDC4E00D5254D /* CameraFeed.swift */,
 				CCB6EA9F26FB4D7700E94439 /* Log.swift */,
+				CC397DF626FF74BC00D5254D /* DroneConnectionManager.swift */,
+				CC397DF826FF78F700D5254D /* FlightControlService.swift */,
+				CC397DFA26FF7AF400D5254D /* DroneController.swift */,
+				CC397DFC26FF7D6100D5254D /* NavigationUtilities.swift */,
 			);
 			path = FlightControl;
 			sourceTree = "<group>";
@@ -424,11 +436,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC397DF726FF74BC00D5254D /* DroneConnectionManager.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
 				CC397DF526FCDC4E00D5254D /* CameraFeed.swift in Sources */,
 				CC8E98F826F8E6670013973F /* MissionScheduler.swift in Sources */,
+				CC397DFD26FF7D6100D5254D /* NavigationUtilities.swift in Sources */,
+				CC397DFB26FF7AF400D5254D /* DroneController.swift in Sources */,
 				CCB6EAA026FB4D7700E94439 /* Log.swift in Sources */,
 				CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */,
+				CC397DF926FF78F700D5254D /* FlightControlService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,7 +12,8 @@ class Log: ObservableObject {
     var logEntries = [String]()
     
     func add(message: String) {
-        logEntries.append(message)
+        logEntries.insert(message, at: 0)
+        self.objectWillChange.send()
     }
     
     func entries() -> [String] {

@@ -7,10 +7,11 @@
 
 import SwiftUI
 import DJISDK
+import Combine
 
 struct ContentView: View {
-    @StateObject
-    var missionScheduler = MissionScheduler()
+    
+    @ObservedObject private var viewModel = ViewModel()
     
     var body: some View {
         Text("Drone Controls")
@@ -22,7 +23,7 @@ struct ContentView: View {
         // logger
         ScrollView {
             VStack {
-                ForEach(missionScheduler.log.logEntries, id: \.self) { logEntry in
+                ForEach(viewModel.logEntries, id: \.self) { logEntry in
                     Text(logEntry)
                         .padding()
                         .fixedSize(horizontal: false, vertical: true)
@@ -35,26 +36,19 @@ struct ContentView: View {
         // steering
         List {
             Button {
-                missionScheduler.takeOff()
+                viewModel.flightControl.takeOff()
             } label: {
                 Text("Takeoff").padding(20)
             }.contentShape(Rectangle())
             
             Button {
-                missionScheduler.flyDirection(direction: .north, meters: 5)
+                viewModel.flightControl.flyNorth(meters: 5)
             } label: {
                 Text("Fly 5m North").padding(20)
             }.contentShape(Rectangle())
             
             Button {
-                missionScheduler.executeMission()
-            } label: {
-                Text("Start Mission").padding(20)
-            }.contentShape(Rectangle())
-            
-            
-            Button {
-                missionScheduler.land()
+                viewModel.flightControl.land()
             } label: {
                 Text("Land").padding(20)
             }.contentShape(Rectangle())
@@ -67,5 +61,28 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+extension ContentView {
+    class ViewModel: ObservableObject {
+        @Published
+        var logEntries = [String]()
+
+        let flightControl: FlightControlService
+        
+        private let log: Log
+        private var subscription: AnyCancellable?
+        
+        init() {
+            let log = Log()
+            self.log = log
+            self.flightControl = FlightControlService(log: log)
+            
+            subscription = log.$logEntries.sink(receiveValue: { entries in
+                self.logEntries = entries
+            })
+        }
+        
     }
 }
