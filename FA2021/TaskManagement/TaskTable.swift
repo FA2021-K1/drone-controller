@@ -9,7 +9,8 @@ import Foundation
 
 struct TaskTable: Codable, Equatable {
     
-    var currentTaskSet: Set<Task>
+    let taskSet: Set<Task>
+    var table: [String : DroneClaim]
     
     enum TaskState: UInt8, Codable{
         case available
@@ -23,8 +24,6 @@ struct TaskTable: Codable, Equatable {
         var timestamp: TimeInterval
         var state: TaskState
     }
-    
-    var table: [String : DroneClaim] = [String : DroneClaim]()
     
     func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = TimeUtil.getCurrentTime(), state: TaskTable.TaskState) -> TaskTable{
         // Dictionaries are structs and therefore copy by value
@@ -51,12 +50,9 @@ struct TaskTable: Codable, Equatable {
         return newTable
     }
     
-    init() {
-        currentTaskSet = []
-    }
-
-    mutating func setCurrentTasksSet(set: Set<Task>){
-        currentTaskSet = set
+    init(taskSet: Set<Task> = [], table: [String : DroneClaim] = [String : DroneClaim]()) {
+        self.taskSet = taskSet
+        self.table = table
     }
     
     /**
@@ -64,26 +60,22 @@ struct TaskTable: Codable, Equatable {
      */
     func updateTaskTable(activeTaskList: [Task]) -> TaskTable {
         
-        let activeTaskSet: Set<Task> = Set(activeTaskList.map { $0 })
-        var newTable = self
+        let activeTaskSet: Set<Task> = Set(activeTaskList)
+        let newTasksSet: Set<Task> = activeTaskSet.symmetricDifference(taskSet)
         
-        let newTasksSet: Set<Task> = activeTaskSet.symmetricDifference(currentTaskSet)
-        
-        if (newTasksSet.isEmpty) {
-            return newTable
+        if newTasksSet.isEmpty {
+            return self
         }
         
-        newTable.setCurrentTasksSet(set: activeTaskSet)
-        
+        var newTable = TaskTable(taskSet: newTasksSet, table: self.table)
         for task in newTasksSet {
             print("add new task to tasktable")
             // TODO: initialize with something better
-            
+        
             newTable.table[task.id] = DroneClaim(droneId: "", timestamp: 0, state: TaskState.available)
         }
         
         return newTable
-        
     }
     
     enum CodingKeys: String, CodingKey{
@@ -94,7 +86,7 @@ struct TaskTable: Codable, Equatable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.table = try container.decode([String : DroneClaim].self, forKey: .table)
-        currentTaskSet = []
+        taskSet = []
     }
     
     func encode(to encoder: Encoder) throws {

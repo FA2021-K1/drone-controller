@@ -32,15 +32,15 @@ class Telemetry {
                         "batteryLevel":\(100-((i/4)%100)),
                         "tasks":[
                             {
-                                "task_id":123,
+                                "task_id":"123",
                                 "status": "claimed"
                             },
                             {
-                                "task_id":321,
+                                "task_id":"321",
                                 "status": "finished"
                             }
                         ],
-                        "drone_id": 123
+                        "drone_id": "123"
                     }
                 """)
              })
