@@ -19,10 +19,10 @@ class MissionController: Controller {
     }
     
     func postNewMission(taskId: String){
-        droneTableSync?.localInstance.table[taskId] = TaskTable.DroneClaim(droneId: "", timestamp: TimeUtil.getCurrentTime(), state: TaskTable.TaskState.available)
+        droneTableSync?.setData(newData: droneTableSync!.value.changeTaskState(taskId: taskId, droneId: "", state: TaskTable.TaskState.available))
     }
     
     func dismissMission(taskId: String){
-        droneTableSync?.localInstance.changeTaskState(taskId: taskId, droneId: "", timestamp: 0, state: TaskTable.TaskState.finished)
+        droneTableSync?.setData(newData: droneTableSync!.value.changeTaskState(taskId: taskId, droneId: "", state: TaskTable.TaskState.finished))
     }
 }

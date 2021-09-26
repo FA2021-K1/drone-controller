@@ -22,6 +22,6 @@ class DroneController: Controller {
     }
     
     func claimTask(taskId: String, droneId: String){
-        droneTableSync?.localInstance.changeTaskState(taskId: taskId, droneId: droneId, state: TaskTable.TaskState.claimed)
+        droneTableSync?.setData(newData: droneTableSync!.value.changeTaskState(taskId: taskId, droneId: droneId, state: TaskTable.TaskState.claimed))
     }
 }
