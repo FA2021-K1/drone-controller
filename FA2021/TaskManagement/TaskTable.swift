@@ -34,10 +34,18 @@ struct TaskTable: Codable, Equatable {
     }
     
     func updateTable(otherTable: TaskTable) -> TaskTable {
+        
         var newTable = self
         newTable.table.merge(otherTable.table) { claimOne, claimTwo in
-            claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
+            if (claimOne.state == .available){
+                return claimTwo
+            }
+            if (claimTwo.state == .available) {
+                return claimOne
+            }
+            return claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
         }
+        
         return newTable
     }
     

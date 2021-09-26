@@ -67,21 +67,22 @@ class FirstComeFirstServe: TaskManager {
     }    
     
     func checkResponsibilityForTask(taskTable: TaskTable){
-        
-        try! print(String(data: JSONEncoder().encode(taskTable), encoding: .utf8))
-        
         for taskId in currentTasksId {
       
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
              
-                if (tableResult.droneId == droneId) {
+                if (tableResult.state == .available || tableResult.droneId == droneId) {
+                    print("keep task: " + taskId)
                     return
                 }
             }
             
+            print("giving up task: " + taskId)
             // TODO: call drone team api to abort Task with taskId
             currentTasksId.remove(taskId)
+            scanForTask()
         }
     }
-    
 }
+
+
