@@ -20,11 +20,12 @@ struct FA2021App: App {
                     
                     let coatyAPI: CoatyAPI = CoatyAPI()
                     
+                    // starts timer to send data in init()
+                    let _: Telemetry = Telemetry(api: coatyAPI)
+                    
                     let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString)
                     firstComeFirstServe.scanForTask()
                     
-                    // starts timer to send data in init()
-                    let _: Telemetry = Telemetry(api: coatyAPI)
                 }
             }
         }

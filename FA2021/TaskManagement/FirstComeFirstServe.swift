@@ -81,7 +81,11 @@ class FirstComeFirstServe: TaskManager {
             print("giving up task: " + taskId)
             // TODO: call drone team api to abort Task with taskId
             currentTasksId.remove(taskId)
-            scanForTask()
+            
+            // Scan needs to be started in another thread because this one doesn't belong to us but to the Sync control flow
+            DispatchQueue.global().async {
+                self.scanForTask()
+            }
         }
     }
 }
