@@ -5,12 +5,14 @@ class FirstComeFirstServe: TaskManager {
     var api: CoatyAPI
     var droneId: String
     var currentTasksId: Set<String>
+    var finishedTasksId: Set<String>
 
     init(api: CoatyAPI, droneId: String) {
         self.droneId = droneId
         self.api = api
         api.start()
         currentTasksId = []
+        finishedTasksId = []
         
         /**
          updateTaskTable everytime a new TaskList was received
