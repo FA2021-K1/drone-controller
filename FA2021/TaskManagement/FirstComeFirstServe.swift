@@ -67,6 +67,17 @@ class FirstComeFirstServe: TaskManager {
         
         // TODO: call drone team api to start task
         taskContext.runSampleTask()
+        
+        // TODO: remove this timer
+        // it is only for testing purpose
+        let _ = Timer.scheduledTimer(withTimeInterval: 45, repeats: false) {
+            _ in self.currentTasksId.remove(taskId)
+            print("timer ended")
+            DispatchQueue.global().async {
+                self.scanForTask()
+            }
+        }
+        RunLoop.current.run()
     }    
     
     func checkResponsibilityForTask(taskTable: TaskTable){
