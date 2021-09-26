@@ -76,9 +76,11 @@ class FirstComeFirstServe: TaskManager {
                     try! print(JSONEncoder().encode(taskTable).prettyPrintedJSONString!)
                     return
                 }
+                
+                print("Giving up task \(taskId) to drone \(tableResult.droneId)")
             }
             
-            print("giving up task: " + taskId)
+            
             // TODO: call drone team api to abort Task with taskId
             currentTasksId.remove(taskId)
             
