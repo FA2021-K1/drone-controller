@@ -13,9 +13,13 @@ struct FA2021App: App {
         WindowGroup {
             ContentView().onAppear {
                 DispatchQueue.global().async {
-                    // TODO: how to get droneId
-                    let firstComeFirstServe: TaskManager = FirstComeFirstServe(droneId: "placeholder")
+                    /*
+                     Potentialy the same iPhone could control different drones, meaning that the uuid of the iPhone might not always refer to the same drone.
+                     In our use case, each drone is assigned to one iPhone, so we can assume that the iPhones to not differ.
+                    */
+                    let firstComeFirstServe: TaskManager = FirstComeFirstServe(droneId: UIDevice.current.identifierForVendor!.uuidString)
                     firstComeFirstServe.scanForTask()
+                
                 }
             }
         }
