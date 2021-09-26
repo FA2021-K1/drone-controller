@@ -14,6 +14,9 @@ class FirstComeFirstServe: TaskManager {
         api.allTasksObservable?.subscribe(onNext: { tasks in
             print(tasks)
         })
+        api.droneController?.getDroneTableSync()?.getDataObservable().subscribe(onNext: {
+                     table in self.checkResponsibilityForTask(taskTable: table)
+                 })
         // TODO: Move this to a proper place
         _ = Observable
              .timer(RxTimeInterval.seconds(0),
@@ -50,6 +53,15 @@ class FirstComeFirstServe: TaskManager {
      entry point
      */
     func scanForTask(){
+        
+        /**
+         TODO: remove this
+         */
+        claimTask(taskId: "DOIT")
+        claimTask(taskId: "DOTHAT")
+        /**/
+        
+        
         var unfinishedTaskIds: [String] = getUnfinishedTasksId()
                 
         while (unfinishedTaskIds.isEmpty) {
