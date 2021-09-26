@@ -11,8 +11,16 @@ class FirstComeFirstServe: TaskManager {
         self.api = api
         api.start()
         currentTasksId = []
+        
+        /**
+         updateTaskTable everytime a new TaskList was received
+        */
         api.allTasksObservable?.subscribe(onNext: { tasks in                     api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskList: tasks))!)
         })
+        
+        /**
+         check if this drone is still responsible for all currentTasksId everytime a new TaskTable was received
+         */
         api.droneController?.getDroneTableSync()?.getDataObservable().subscribe(onNext: {
                      table in self.checkResponsibilityForTask(taskTable: table)
                  })
@@ -22,14 +30,6 @@ class FirstComeFirstServe: TaskManager {
      entry point
      */
     func scanForTask(){
-        
-//        /**
-//         TODO: remove this
-//         */
-//        claimTask(taskId: "DOIT")
-//        claimTask(taskId: "DOTHAT")
-//        /**/
-//        
         
         var unfinishedTaskIds: [String] = getUnfinishedTasksId()
                 
@@ -51,7 +51,6 @@ class FirstComeFirstServe: TaskManager {
     }
     
     func getTable() -> [String: TaskTable.DroneClaim] {
-        // TODO: insert semaphor or something similar
         return api.droneController?.getDroneTableSync()?.value.table ?? [:]
     }
     
@@ -67,12 +66,14 @@ class FirstComeFirstServe: TaskManager {
     }    
     
     func checkResponsibilityForTask(taskTable: TaskTable){
+                
         for taskId in currentTasksId {
       
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
              
                 if (tableResult.state == .available || tableResult.droneId == droneId) {
                     print("keep task: " + taskId)
+                    try! print(JSONEncoder().encode(taskTable).prettyPrintedJSONString!)
                     return
                 }
             }
@@ -86,3 +87,12 @@ class FirstComeFirstServe: TaskManager {
 }
 
 
+extension Data {
+    var prettyPrintedJSONString: NSString? { /// NSString gives us a nice sanitized debugDescription
+        guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
+              let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+              let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else { return nil }
+
+        return prettyPrintedString
+    }
+}

@@ -33,8 +33,10 @@ struct TaskTable: Codable, Equatable {
         return newTable
     }
     
+    /**
+     gets called when another TaskTable was received
+     */
     func updateTable(otherTable: TaskTable) -> TaskTable {
-        
         var newTable = self
         newTable.table.merge(otherTable.table) { claimOne, claimTwo in
             if (claimOne.state == .available){
@@ -52,11 +54,14 @@ struct TaskTable: Codable, Equatable {
     init() {
         currentTaskSet = []
     }
-    
+
     mutating func setCurrentTasksSet(set: Set<Task>){
         currentTaskSet = set
     }
     
+    /**
+     gets called when another TaskList was received
+     */
     func updateTaskTable(activeTaskList: [Task]) -> TaskTable {
         
         let activeTaskSet: Set<Task> = Set(activeTaskList.map { $0 })
