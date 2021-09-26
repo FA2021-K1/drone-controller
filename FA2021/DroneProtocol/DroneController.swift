@@ -11,13 +11,17 @@ import Foundation
 class DroneController: Controller {
     private var droneTableSync: Sync<TaskTable>?
     
+    func getDroneTableSync() -> Sync<TaskTable>? {
+        return droneTableSync
+    }
+        
     override func onInit() {
-        droneTableSync = Sync<TaskTable>(controller: self, initialValue: TaskTable(), mergeFunction: { local, other in
+        droneTableSync = Sync<TaskTable>(controller: self, initialValue: TaskTable(), updateIntervalSeconds: 5, mergeFunction: { local, other in
             local.updateTable(otherTable: other)
         })
     }
     
     func claimTask(taskId: String, droneId: String){
-        droneTableSync?.localInstance.changeTaskState(taskId: taskId, droneId: droneId, state: TaskTable.TaskState.claimed)
+        droneTableSync?.setData(newData: droneTableSync!.value.changeTaskState(taskId: taskId, droneId: droneId, state: TaskTable.TaskState.claimed))
     }
 }

@@ -1,45 +1,106 @@
 import Foundation
-
+import RxSwift
 class FirstComeFirstServe: TaskManager {
     
     var api: CoatyAPI
-    var currentTasks: [Task]
-    var droneId: String // TODO: find out from where to get droneId
-    
-    init(droneId: String) {
-        currentTasks = []
-        
+    var droneId: String
+    var currentTasksId: Set<String>
+    var finishedTasksId: Set<String>
+
+    init(api: CoatyAPI, droneId: String) {
         self.droneId = droneId
-        self.api = CoatyAPI()
+        self.api = api
         api.start()
+        currentTasksId = []
+        finishedTasksId = []
+        
+        /**
+         updateTaskTable everytime a new TaskList was received
+         */
+        api.allTasksObservable?.subscribe(onNext: { tasks in                     api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskList: tasks))!)
+        })
+        
+        /**
+         check if this drone is still responsible for all currentTasksId everytime a new TaskTable was received
+         */
+        api.droneController?.getDroneTableSync()?.getDataObservable().subscribe(onNext: {
+            table in self.checkResponsibilityForTask(taskTable: table)
+        })
     }
     
     /**
      entry point
      */
     func scanForTask(){
-            
-    }
-    
-
-    
-    /**
-     expected parameters:
-     -[{taskId, droneId, timestamp}] where taskId is always the same (the one we registered for)
-     --> we can filter for earliest timestamp, see if we currenlty to this task
-     */
-    func checkTaskResponsibility(taskRegistrations: [TaskRegistration]){
         
-    }
-    
-    func getEarliestTaskRegistration(taskRegistrations:[TaskRegistration]) -> TaskRegistration{
-        var earliestTaskRegistration: TaskRegistration = taskRegistrations[0]
-        for taskRegistration in taskRegistrations {
-            if (taskRegistration.timestamp < earliestTaskRegistration.timestamp){
-                earliestTaskRegistration = taskRegistration
-            }
+        var unfinishedTaskIds: [String] = getUnfinishedTasksId()
+                
+        while (unfinishedTaskIds.isEmpty) {
+            sleep(1)
+            unfinishedTaskIds = getUnfinishedTasksId()
         }
         
-        return earliestTaskRegistration
+        claimTask(taskId: unfinishedTaskIds[0])
+    }
+    
+    
+    /**
+     looks at current TaskTable
+     @return List of tasks that are available
+     */
+    func getUnfinishedTasksId() -> [String] {
+        return getTable().filter {$0.value.state == TaskTable.TaskState.available}.map {$0.key}
+    }
+    
+    func getTable() -> [String: TaskTable.DroneClaim] {
+        return api.droneController?.getDroneTableSync()?.value.table ?? [:]
+    }
+    
+    
+    func claimTask(taskId: String) {
+        
+        print("Claim task, task_id: \(taskId)")
+        
+        api.droneController?.claimTask(taskId: taskId, droneId: droneId)
+        currentTasksId.insert(taskId)
+        
+        // TODO: call drone team api to start task
+    }    
+    
+    func checkResponsibilityForTask(taskTable: TaskTable){
+        
+        for taskId in currentTasksId {
+            
+            if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
+                
+                if (tableResult.state == .available || tableResult.droneId == droneId) {
+                    print("keep task: " + taskId)
+                    try! print(JSONEncoder().encode(taskTable).prettyPrintedJSONString!)
+                    return
+                }
+                
+                print("Giving up task \(taskId) to drone \(tableResult.droneId)")
+            }
+            
+            
+            // TODO: call drone team api to abort Task with taskId
+            currentTasksId.remove(taskId)
+            
+            // Scan needs to be started in another thread because this one doesn't belong to us but to the Sync control flow
+            DispatchQueue.global().async {
+                self.scanForTask()
+            }
+        }
+    }
+}
+
+
+extension Data {
+    var prettyPrintedJSONString: NSString? { /// NSString gives us a nice sanitized debugDescription
+        guard let object = try? JSONSerialization.jsonObject(with: self, options: []),
+              let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
+              let prettyPrintedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue) else { return nil }
+        
+        return prettyPrintedString
     }
 }

@@ -4,7 +4,16 @@ enum TaskType: String, Decodable {
     case FlyTask, SearchTask, IdleTask, NonTerminalTask
 }
 
-class Task {
+class Task: Hashable, Equatable{
+    static func == (lhs: Task, rhs: Task) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(name)
+    }
+    
     let id: String
     let name: String
     
@@ -29,7 +38,11 @@ class Task {
         }
         var unknown_tasks: [UnknownTask] = []
         do {
-            unknown_tasks = try! JSONDecoder().decode([UnknownTask].self, from: data)
+            try
+            unknown_tasks = JSONDecoder().decode([UnknownTask].self, from: data)
+        }catch{
+            print("error decoding JSON:",json)
+            return[]
         }
         return unknown_tasks.map {(utask) -> Task in parseTask(unknownTask: utask)}
     }

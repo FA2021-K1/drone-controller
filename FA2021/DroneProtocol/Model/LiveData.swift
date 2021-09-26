@@ -1,49 +1,50 @@
 //
-//  TaskStatus.swift
-//  iDroneControl
+//  LiveData.swift
+//  FA2021
 //
-//  Created by FA21 on 22.09.21.
+//  Created by FA21 on 25.09.21.
 //
+
 import Foundation
 import CoatySwift
 
-final class SyncMessage<T: Codable>: CoatyObject{
+final class LiveData: CoatyObject{
     
     // MARK: - Class registration.
     override class var objectType: String {
-        return register(objectType: "idrone.sync.syncmessage", with: self)
+        return register(objectType: "idrone.sync.livedata", with: self)
     }
     
     // MARK: - Properties.
     
-    var object: T
+    var jsonDetails: String
     
     
     // MARK: - Initializers.
     
-    init(_ object: T) {
-        self.object = object
+    init(json:String) {
+        self.jsonDetails=json
         super.init(coreType: .CoatyObject,
-                   objectType: SyncMessage.objectType,
+                   objectType: LiveData.objectType,
                    objectId: .init(),
-                   name: "SyncMessage")
+                   name: "LiveData")
     }
     
     enum CodingKeys: String, CodingKey{
-        case object
+        case jsonDetails
     }
     
     // MARK: Codable methods.
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.object = try container.decode(T.self, forKey: .object)
+        self.jsonDetails = try container.decode(String.self, forKey: .jsonDetails)
         try super.init(from: decoder)
     }
     
     override func encode(to encoder: Encoder) throws {
         try super.encode(to: encoder)
         var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(object, forKey: .object)
+        try container.encode(jsonDetails, forKey: .jsonDetails)
     }
 }
