@@ -9,11 +9,11 @@ import Foundation
 import DJISDK
 
 class MissionScheduler: NSObject, ObservableObject {
-    private var droneController: AircraftController
+    private(set) var aircraftController: AircraftController
     private var log: Log
     
-    init(log: Log, droneController: AircraftController) {
-        self.droneController = droneController
+    init(log: Log, aircraftController: AircraftController) {
+        self.aircraftController = aircraftController
         self.log = log
         super.init()
         
@@ -50,7 +50,7 @@ class MissionScheduler: NSObject, ObservableObject {
     
     private func createWaypointMissionTo(coordinates: CLLocationCoordinate2D) -> DJIMissionControlTimelineElement? {
         let mission = NavigationUtilities.createDJIWaypointMission()
-        let currentCoor = droneController.aircraftPosition!
+        let currentCoor = aircraftController.aircraftPosition!
         
         if !CLLocationCoordinate2DIsValid(coordinates) || !CLLocationCoordinate2DIsValid(currentCoor) {
             log.add(message: "Invalid coordinates")
@@ -97,11 +97,11 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func takeOff() {
-        droneController.takeOff()
+        aircraftController.takeOff()
     }
     
     func land() {
-        droneController.land()
+        aircraftController.land()
     }
     
     func flyTo(altitude: Double) {
@@ -109,7 +109,7 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func flyDirection(direction: Direction, meters: Double) {
-        guard let pos = droneController.aircraftPosition
+        guard let pos = aircraftController.aircraftPosition
         else {
             return
         }
