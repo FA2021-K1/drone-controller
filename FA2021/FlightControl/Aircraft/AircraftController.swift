@@ -17,6 +17,24 @@ class AircraftController {
     
     private var droneConnectionCancellable: AnyCancellable?
     
+    var aircraftPosition: CLLocationCoordinate2D? {
+        get {
+            guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
+            else {
+                log.add(message: "Cannot retrieve current location: Missing Controller Key")
+                return nil
+            }
+            
+            let value = DJISDKManager.keyManager()?.getValueFor(key)
+            guard let location = value?.value as? CLLocation else {
+                log.add(message: "Cannot retrieve current location")
+                return nil
+            }
+            
+            return location.coordinate
+        }
+    }
+    
     init(log: Log, droneConnection: DroneConnectionManager) {
         self.log = log
         self.state = .onGround
@@ -38,17 +56,15 @@ class AircraftController {
     }
     
     func takeOff() {
-        log.add(message: "Taking off!")
         droneConnection.aircraft?.flightController?.startTakeoff {_ in
-            self.log.add(message: "Takeoff completed")
+            self.log.add(message: "Take off command sent")
             self.state = .inAir
         }
     }
     
     func land() {
-        log.add(message: "Landing")
         droneConnection.aircraft?.flightController?.startLanding {_ in
-            self.log.add(message: "Landing completed")
+            self.log.add(message: "Landing command sent")
             self.state = .onGround
         }
     }

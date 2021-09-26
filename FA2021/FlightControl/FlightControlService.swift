@@ -13,12 +13,14 @@ class FlightControlService {
     private var missionScheduler: MissionScheduler
     private var connectionManager: DroneConnectionManager
     private var droneController: AircraftController
+    private var taskContext: TaskContext
     
     init(log: Log) {
         self.log = log
         self.connectionManager = DroneConnectionManager(log: log)
         self.droneController = AircraftController(log: log, droneConnection: connectionManager)
         self.missionScheduler = MissionScheduler(log: log, droneController: droneController)
+        self.taskContext = TaskContext(log: log, aircraftController: droneController)
         log.add(message: "FlightControlService initialized")
     }
     
@@ -32,5 +34,9 @@ class FlightControlService {
     
     func flyNorth(meters: Double) {
         self.missionScheduler.flyDirection(direction: .north, meters: meters)
+    }
+    
+    func sampleTask() {
+        self.taskContext.runSampleTask()
     }
 }

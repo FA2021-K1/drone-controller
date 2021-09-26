@@ -52,6 +52,13 @@ struct ContentView: View {
             } label: {
                 Text("Land").padding(20)
             }.contentShape(Rectangle())
+            
+            
+            Button {
+                viewModel.flightControl.sampleTask()
+            } label: {
+                Text("Sample Task").padding(20)
+            }.contentShape(Rectangle())
         }
         
         Divider()
