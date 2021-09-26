@@ -22,7 +22,7 @@ class TaskContext {
     private let log: Log
     
     init(log: Log, aircraftController: AircraftController) {
-        self.missionScheduler = MissionScheduler(log: log, droneController: aircraftController)
+        self.missionScheduler = MissionScheduler(log: log, aircraftController: aircraftController)
         self.log = log
     }
     
@@ -53,6 +53,14 @@ class TaskContext {
      Sets the pointer to the first step of a Task and begins the execution of the task.
      */
     func startTask() {
+        if (!missionScheduler.aircraftController.isReady) {
+            self.log.add(message: "The aircraft is not ready yet, waiting 1s before retrying")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                self.startTask()
+            })
+            
+            return
+        }
         log.add(message: "Starting Task")
         reset()
         executeNextStep()
