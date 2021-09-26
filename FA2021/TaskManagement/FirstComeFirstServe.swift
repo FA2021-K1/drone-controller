@@ -34,11 +34,11 @@ class FirstComeFirstServe: TaskManager {
                         "batteryLevel":\(100-((i/4)%100)),
                         "tasks":[
                             {
-                                "task_id":22,
+                                "task_id":123,
                                 "status": "claimed"
                             },
                             {
-                                "task_id":28,
+                                "task_id":321,
                                 "status": "finished"
                             }
                         ],
@@ -83,7 +83,7 @@ class FirstComeFirstServe: TaskManager {
     
     func getTable() -> [String: TaskTable.DroneClaim] {
         // TODO: insert semaphor or something similar
-       return (api.droneController?.getDroneTableSync()?.localInstance.table)!
+        return api.droneController?.getDroneTableSync()?.value.table ?? [:]
     }
     
     

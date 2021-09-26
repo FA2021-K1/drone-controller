@@ -7,14 +7,14 @@
 
 import Foundation
 
-class TaskTable: Codable {
+struct TaskTable: Codable, Equatable {
     enum TaskState: UInt8, Codable{
         case available
         case claimed
         case finished
     }
     
-    struct DroneClaim: Codable
+    struct DroneClaim: Codable, Equatable
     {
         var droneId: String
         var timestamp: TimeInterval
@@ -23,15 +23,19 @@ class TaskTable: Codable {
     
     var table: [String : DroneClaim] = [String : DroneClaim]()
     
-    func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = TimeUtil.getCurrentTime(), state: TaskTable.TaskState){
-        table[taskId] = TaskTable.DroneClaim(droneId: droneId, timestamp: timestamp, state: state)
+    func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = TimeUtil.getCurrentTime(), state: TaskTable.TaskState) -> TaskTable{
+        // Dictionaries are structs and therefore copy by value
+        var newTable = self
+        newTable.table[taskId] = TaskTable.DroneClaim(droneId: droneId, timestamp: timestamp, state: state)
+        return newTable
     }
     
     func updateTable(otherTable: TaskTable) -> TaskTable {
-        table.merge(otherTable.table) { claimOne, claimTwo in
+        var newTable = self
+        newTable.table.merge(otherTable.table) { claimOne, claimTwo in
             claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
         }
-        return self
+        return newTable
     }
     
     init() {}
@@ -41,7 +45,7 @@ class TaskTable: Codable {
     }
     // MARK: Codable methods.
     
-    required init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.table = try container.decode([String : DroneClaim].self, forKey: .table)
     }
