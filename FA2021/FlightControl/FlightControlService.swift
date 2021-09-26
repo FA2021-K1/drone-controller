@@ -12,12 +12,12 @@ class FlightControlService {
     private var log: Log
     private var missionScheduler: MissionScheduler
     private var connectionManager: DroneConnectionManager
-    private var droneController: DroneController
+    private var droneController: AircraftController
     
     init(log: Log) {
         self.log = log
         self.connectionManager = DroneConnectionManager(log: log)
-        self.droneController = DroneController(log: log, droneConnection: connectionManager)
+        self.droneController = AircraftController(log: log, droneConnection: connectionManager)
         self.missionScheduler = MissionScheduler(log: log, droneController: droneController)
         log.add(message: "FlightControlService initialized")
     }

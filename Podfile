@@ -2,6 +2,9 @@
 # platform :ios, '9.0'
 project 'FA2021.xcodeproj'
 
+# ignore all warnings from all pods
+inhibit_all_warnings!
+
 target 'FA2021' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!

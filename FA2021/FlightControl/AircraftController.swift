@@ -9,7 +9,7 @@ import Foundation
 import DJISDK
 import Combine
 
-class DroneController {
+class AircraftController {
     private var log: Log
     private var aircraft: DJIAircraft?
     private var droneConnection: DroneConnectionManager

@@ -10,10 +10,10 @@ import DJISDK
 
 class MissionScheduler: NSObject, ObservableObject {
     private var missionSchedulerState: MissionSchedulerState
-    private var droneController: DroneController
+    private var droneController: AircraftController
     private var log: Log
     
-    init(log: Log, droneController: DroneController) {
+    init(log: Log, droneController: AircraftController) {
         self.missionSchedulerState = .ready
         self.droneController = droneController
         self.log = log
