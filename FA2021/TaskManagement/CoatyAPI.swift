@@ -1,18 +1,22 @@
 import Foundation
 import CoatySwift
-
+import RxSwift
 class CoatyAPI{
 
     var container: Container?
     var droneController: DroneController?
+    var allTasksObservable:Observable<[Task]>?
+    
     func start(){
         let components = Components(controllers: [
             "DroneController": DroneController.self
         ],
-                                    objectTypes: [
+        objectTypes: [
             TasksDetails.self,
-            SyncMessage<TaskTable>.self
+            SyncMessage<TaskTable>.self,
+            LiveData.self
         ])
+        
         // Create a configuration.
         guard let configuration = createDroneCoatyConfiguration() else {
             print("Invalid configuration! Please check your options.")
@@ -24,8 +28,17 @@ class CoatyAPI{
         self.container = Container.resolve(components: components,
                                            configuration: configuration)
         self.droneController = (container?.getController(name: "DroneController") as! DroneController)
+        allTasksObservable = try? droneController?.communicationManager
+            .observeAdvertise(withObjectType: "idrone.sync.task").map({ ev in
+                return Task.parseJsonToTasks(json: (ev.data.object as! TasksDetails).jsonDetails)
+            }).asObservable()
     }
 
+    func postLiveData(data:String){
+        let ev = try! AdvertiseEvent.with(object: LiveData(json: data))
+        container?.communicationManager?.publishAdvertise(ev)
+    }
+    
     private func createDroneCoatyConfiguration() -> Configuration? {
         return try? .build { config in
             
@@ -51,8 +64,8 @@ class CoatyAPI{
             //
             // Note: Keep alive for the broker connection has been reduced to 10secs to minimize
             // connectivity issues when running with a remote public broker.
-            let mqttClientOptions = MQTTClientOptions(host: "localhost",
-                                                      port: 8080,
+            let mqttClientOptions = MQTTClientOptions(host: "192.168.1.194",
+                                                      port: 1883,
                                                       keepAlive: 10)
             config.communication = CommunicationOptions(namespace: "coaty.examples.remoteops",
                                                         mqttClientOptions: mqttClientOptions,

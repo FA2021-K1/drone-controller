@@ -7,53 +7,86 @@
 
 import Foundation
 
-class TaskTable: Codable {
+struct TaskTable: Codable, Equatable {
+    
+    let taskSet: Set<Task>
+    var table: [String : DroneClaim]
+    
     enum TaskState: UInt8, Codable{
         case available
         case claimed
         case finished
     }
     
-    struct DroneClaim: Codable
+    struct DroneClaim: Codable, Equatable
     {
         var droneId: String
         var timestamp: TimeInterval
         var state: TaskState
     }
     
-    var table: [String : DroneClaim]
-    
-    init() {
-        table = [String : DroneClaim]()
+    func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = TimeUtil.getCurrentTime(), state: TaskTable.TaskState) -> TaskTable{
+        // Dictionaries are structs and therefore copy by value
+        var newTable = self
+        newTable.table[taskId] = TaskTable.DroneClaim(droneId: droneId, timestamp: timestamp, state: state)
+        return newTable
     }
     
-    func changeTaskState(taskId: String, droneId: String, timestamp: TimeInterval = TimeUtil.getCurrentTime(), state: TaskTable.TaskState){
-        table[taskId] = TaskTable.DroneClaim(droneId: droneId, timestamp: timestamp, state: state)
-    }
-    
+    /**
+     gets called when another TaskTable was received
+     */
     func updateTable(otherTable: TaskTable) -> TaskTable {
-        table.merge(otherTable.table) { claimOne, claimTwo in
-            let correctClaim = claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
-            onConflict(correctClaim: correctClaim)
-            return correctClaim
+        var newTable = self
+        newTable.table.merge(otherTable.table) { claimOne, claimTwo in
+            if (claimOne.state == .available){
+                return claimTwo
+            }
+            if (claimTwo.state == .available) {
+                return claimOne
+            }
+            return claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
         }
         
-        return self
+        return newTable
     }
     
-    func onConflict(correctClaim: DroneClaim){
-        //TODO...
+    init(taskSet: Set<Task> = [], table: [String : DroneClaim] = [String : DroneClaim]()) {
+        self.taskSet = taskSet
+        self.table = table
+    }
+    
+    /**
+     gets called when another TaskList was received
+     */
+    func updateTaskTable(activeTaskList: [Task]) -> TaskTable {
+        
+        let activeTaskSet: Set<Task> = Set(activeTaskList)
+        let newTasksSet: Set<Task> = activeTaskSet.symmetricDifference(taskSet)
+        
+        if newTasksSet.isEmpty {
+            return self
+        }
+        
+        var newTable = TaskTable(taskSet: newTasksSet, table: self.table)
+        for task in newTasksSet {
+            print("Add task to TaskTable, task_id: \(task.id)")
+            // TODO: initialize with something better
+        
+            newTable.table[task.id] = DroneClaim(droneId: "", timestamp: 0, state: TaskState.available)
+        }
+        
+        return newTable
     }
     
     enum CodingKeys: String, CodingKey{
         case table
     }
-    
     // MARK: Codable methods.
     
-    required init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.table = try container.decode([String : DroneClaim].self, forKey: .table)
+        taskSet = []
     }
     
     func encode(to encoder: Encoder) throws {
