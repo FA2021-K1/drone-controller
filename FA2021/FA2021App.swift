@@ -17,9 +17,14 @@ struct FA2021App: App {
                      Potentialy the same iPhone could control different drones, meaning that the uuid of the iPhone might not always refer to the same drone.
                      In our use case, each drone is assigned to one iPhone, so we can assume that the iPhones to not differ.
                     */
-                    let firstComeFirstServe: TaskManager = FirstComeFirstServe(droneId: UIDevice.current.identifierForVendor!.uuidString)
+                    
+                    let coatyAPI: CoatyAPI = CoatyAPI()
+                    
+                    let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString)
                     firstComeFirstServe.scanForTask()
-                
+                    
+                    // starts timer to send data in init()
+                    let _: Telemetry = Telemetry(api: coatyAPI)
                 }
             }
         }
