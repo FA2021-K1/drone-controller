@@ -18,9 +18,9 @@ class Telemetry {
         
         // sending mock data currently
         _ = Observable
-             .timer(RxTimeInterval.seconds(0),
-                    period: RxTimeInterval.seconds(1),
-                    scheduler: MainScheduler.instance)
+            .timer(RxTimeInterval.seconds(0),
+                   period: RxTimeInterval.seconds(1),
+                   scheduler: MainScheduler.instance)
             .subscribe(onNext: { (i: Int) in
                 var task_json: String = "["
                 var json_needs_comma: Bool = false
@@ -60,7 +60,6 @@ class Telemetry {
                         "drone_id": "\(taskmanager.droneId)"
                     }
                 """)
-             })
+            })
     }
 }
-
