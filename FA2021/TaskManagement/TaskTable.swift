@@ -56,18 +56,24 @@ struct TaskTable: Codable, Equatable {
     }
     
     /**
+     Returns a new TaskTable with the same table, but different TaskSet.
+     */
+    func withTaskSet(_ taskSet: Set<Task>) -> TaskTable{
+        return TaskTable(taskSet: taskSet, table: self.table)
+    }
+    
+    /**
      gets called when another TaskList was received
      */
     func updateTaskTable(activeTaskList: [Task]) -> TaskTable {
-        
-        let activeTaskSet: Set<Task> = Set(activeTaskList)
-        let newTasksSet: Set<Task> = activeTaskSet.symmetricDifference(taskSet)
+        let newTasksSet: Set<Task> = Set(activeTaskList).symmetricDifference(taskSet)
         
         if newTasksSet.isEmpty {
             return self
         }
         
-        var newTable = TaskTable(taskSet: newTasksSet, table: self.table)
+        var newTable = self.withTaskSet(newTasksSet)
+        
         for task in newTasksSet {
             print("Add task to TaskTable, task_id: \(task.id)")
             // TODO: initialize with something better

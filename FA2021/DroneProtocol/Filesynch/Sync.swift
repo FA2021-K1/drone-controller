@@ -15,7 +15,7 @@ class Sync<T: Codable & Equatable>{
     let mergeFunction: (T, T) -> T
     private var dataObservable: BehaviorRelay<T>
     
-    var value:T{
+    var value: T {
         get{
             return self.dataObservable.value
         }
