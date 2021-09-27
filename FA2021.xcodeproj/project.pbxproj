@@ -16,7 +16,6 @@
 		CC397DFB26FF7AF400D5254D /* AircraftController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DFA26FF7AF400D5254D /* AircraftController.swift */; };
 		CC397DFD26FF7D6100D5254D /* NavigationUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DFC26FF7D6100D5254D /* NavigationUtilities.swift */; };
 		CC3B490A2700F376008D491C /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3B49092700F376008D491C /* Telemetry.swift */; };
-		CC4A05F22700A805006FCAFA /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A05F02700A805006FCAFA /* Coordinate.swift */; };
 		CC4A05F32700A805006FCAFA /* FirstComeFirstServe.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A05F12700A805006FCAFA /* FirstComeFirstServe.swift */; };
 		CC4A05F82700B330006FCAFA /* TaskContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A05F72700B330006FCAFA /* TaskContext.swift */; };
 		CC4A05FA2700B367006FCAFA /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A05F92700B367006FCAFA /* Step.swift */; };
@@ -32,7 +31,6 @@
 		F85435A82701E8DD00748F1B /* ReactUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85435A72701E8DD00748F1B /* ReactUtil.swift */; };
 		F86307B426FF017B00A4E6BB /* Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B326FF017B00A4E6BB /* Sync.swift */; };
 		F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B526FF039900A4E6BB /* SyncMessage.swift */; };
-		F86307BA26FF460700A4E6BB /* FirstComeFirstServe.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */; };
 		F86307BC26FF468000A4E6BB /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BB26FF468000A4E6BB /* Coordinate.swift */; };
 		F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BD26FF5AC100A4E6BB /* LiveData.swift */; };
 		F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAA26FB130F00DAF66D /* TaskManager.swift */; };
@@ -394,7 +392,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1300;
 				TargetAttributes = {
 					CCD2592D26F7E01A007AD953 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -585,14 +583,12 @@
 				F86307B426FF017B00A4E6BB /* Sync.swift in Sources */,
 				F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */,
 				F85435A82701E8DD00748F1B /* ReactUtil.swift in Sources */,
-				F86307BA26FF460700A4E6BB /* FirstComeFirstServe.swift in Sources */,
 				F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */,
 				CC4A05FC2700B43D006FCAFA /* Idle.swift in Sources */,
 				CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */,
 				F86307BC26FF468000A4E6BB /* Coordinate.swift in Sources */,
 				CC397DF926FF78F700D5254D /* FlightControlService.swift in Sources */,
 				CC4A05F82700B330006FCAFA /* TaskContext.swift in Sources */,
-				CC4A05F22700A805006FCAFA /* Coordinate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
