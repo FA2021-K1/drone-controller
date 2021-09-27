@@ -18,7 +18,7 @@ class FirstComeFirstServe: TaskManager {
         /**
          updateTaskTable everytime a new TaskList was received
          */
-        api.allTasksObservable?.subscribe(onNext: { tasks in                     api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskList: tasks))!)
+        api.allTasksObservable?.subscribe(onNext: { tasks in api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskList: tasks))!)
         })
         
         /**
@@ -33,6 +33,7 @@ class FirstComeFirstServe: TaskManager {
      entry point
      */
     func scanForTask(){
+        print("Starting scan")
         // TODO: Test this method.
         api.droneController?.getDroneTableSync()?.getDataObservable()
             .skipWhile({ table in
@@ -44,7 +45,9 @@ class FirstComeFirstServe: TaskManager {
             .subscribe(onNext: { table in
                 let unfinishedTaskIds = self.getUnfinishedTasksId()
                 self.claimTask(taskId: unfinishedTaskIds[0])
+                print("Scan sub")
             })
+        print("Scan end")
     }
     
     

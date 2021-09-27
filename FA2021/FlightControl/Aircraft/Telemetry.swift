@@ -22,31 +22,12 @@ class Telemetry {
                    period: RxTimeInterval.seconds(1),
                    scheduler: MainScheduler.instance)
             .subscribe(onNext: { (i: Int) in
-                var task_json: String = "["
-                var json_needs_comma: Bool = false
-                for task_id in taskmanager.currentTasksId {
-                    if json_needs_comma {
-                        task_json += ","
-                    } else {json_needs_comma = true}
-                    task_json += """
-                    {
-                        "task_id": "\(task_id)",
-                        "status": "claimed"
-                    }
-                    """
-                }
-                for task_id in taskmanager.finishedTasksId {
-                    if !json_needs_comma {
-                        task_json += ","
-                    }
-                    task_json += """
-                    {
-                        "task_id": "\(task_id)",
-                        "status": "finished"
-                    }
-                    """
-                }
-                task_json += "]"
+                
+                // Convert and encode claimed and finished tasks into telemetry json format
+                var telemetry_tasks: [TaskTelemetry] = taskmanager.currentTasksId.map{task_id in TaskTelemetry(task_id: task_id, status: "claimed")}
+                telemetry_tasks += taskmanager.finishedTasksId.map{task_id in TaskTelemetry(task_id: task_id, status: "finished")}
+                let task_json_string = try! String(data: JSONEncoder().encode(telemetry_tasks), encoding: .utf8) ?? "[]"
+                
                 self.api.postLiveData(data: """
                     {
                         "position":{
@@ -56,10 +37,20 @@ class Telemetry {
                         },
                         "speed":5,
                         "batteryLevel":\(100-((i/4)%100)),
-                        "tasks":\(task_json),
+                        "tasks":\(task_json_string),
                         "drone_id": "\(taskmanager.droneId)"
                     }
                 """)
             })
+    }
+}
+
+class TaskTelemetry: Codable {
+    let task_id: String
+    let status: String
+    
+    init(task_id: String, status: String) {
+        self.task_id = task_id
+        self.status = status
     }
 }
