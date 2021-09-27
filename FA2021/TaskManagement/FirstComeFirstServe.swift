@@ -18,16 +18,16 @@ class FirstComeFirstServe: TaskManager {
         /**
          updateTaskTable everytime a new TaskList was received
          */
-        api.allTasksObservable?.subscribe(onNext: { tasks in api.droneController?.getDroneTableSync()?.updateData({ old in
-            old.updateTaskTable(activeTaskSet: Set(tasks))
-        })})
+        ReactTypeUtil<[Task]>.subAll( dispose: api.droneController?.disposeBag, observable: api.allTasksObservable){
+            tasks in api.droneController?.getDroneTableSync()?.updateData({ old in old.updateTaskTable(activeTaskSet: Set(tasks))})
+        }
         
         /**
          check if this drone is still responsible for all currentTasksId everytime a new TaskTable was received
          */
-        api.droneController?.getDroneTableSync()?.getDataObservable().subscribe(onNext: {
+        ReactTypeUtil<TaskTable>.subAll(dispose: api.droneController?.disposeBag, observable: api.droneController?.getDroneTableSync()?.getDataObservable()) {
             table in self.checkResponsibilityForTask(taskTable: table)
-        })
+        }
     }
     
     /**
@@ -35,7 +35,7 @@ class FirstComeFirstServe: TaskManager {
      */
     func scanForTask(){
         print("Starting scan")
-        // TODO: Test this method.
+        // TODO: Test this method
         api.droneController?.getDroneTableSync()?.getDataObservable()
             .skipWhile({ table in
                 table.table.allSatisfy { entry in
@@ -48,6 +48,7 @@ class FirstComeFirstServe: TaskManager {
                 self.claimTask(taskId: unfinishedTaskIds[0])
                 print("Scan sub")
             })
+            .disposed(by: api.droneController!.disposeBag)
         print("Scan end")
     }
     

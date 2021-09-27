@@ -29,15 +29,8 @@ class Sync<T: Codable & Equatable>{
         
         self.dataObservable = BehaviorRelay<T>(value: initialValue)
         
-        try! self.controller.communicationManager
-        .observeAdvertise(withObjectType: "idrone.sync.syncmessage")
-        .subscribe(onNext: { (advertiseEvent) in
-            if (advertiseEvent.data.object is SyncMessage<T>)
-            {
-                let eventMessage = advertiseEvent.data.object as! SyncMessage<T>
-                self.updateData { old in mergeFunction(old, eventMessage.object)}
-            }
-        }).disposed(by: controller.disposeBag)
+        ReactTypeUtil<SyncMessage<T>>.observeAdvertise(comManager: self.controller.communicationManager, dispose: controller.disposeBag, objectType: "idrone.sync.syncmessage") { eventMessage in self.updateData { old in mergeFunction(old, eventMessage.object)}
+        }
         
         // Start RxSwift timer to publish the TaskTable every 5 seconds.
         ReactUtil.infiniteTimer(interval: updateIntervalSeconds) { i in
@@ -61,10 +54,6 @@ class Sync<T: Codable & Equatable>{
     }
     
     func publishTaskDictionary(){
-        // Create the event.
-        let event = try! AdvertiseEvent.with(object: SyncMessage(self.dataObservable.value))
-
-        // Publish the event by the communication manager.
-        self.controller.communicationManager.publishAdvertise(event)
+        ReactUtil.advertise(comManager: self.controller.communicationManager, object: SyncMessage(self.dataObservable.value))
     }
 }

@@ -8,8 +8,9 @@
 import RxSwift
 import CoatySwift
 import Foundation
+import UIKit
 
-final class ReactUtil{
+final class ReactUtil {
     static func infiniteTimer(interval: Int = 5, timerTask: @escaping ((Int) -> Void)) {
         _ = Observable
              .timer(RxTimeInterval.seconds(0),
@@ -19,5 +20,44 @@ final class ReactUtil{
                 timerTask(i)
              })
         // No need to dispose here as the timer runs infinitely
+    }
+    
+    static func advertise(comManager: CommunicationManager?, object: CoatyObject){
+        // Create the event.
+        let event = try! AdvertiseEvent.with(object: object)
+
+        // Publish the event by the communication manager.
+        comManager?.publishAdvertise(event)
+    }
+}
+
+final class ReactTypeUtil<T> {
+    static func subAll(dispose: DisposeBag?, observable: Observable<T>?, onNext: @escaping ((T) -> Void)){
+        // Prevent memory leaks
+        guard let disposeBag = dispose else {
+            print("Could not subscribe to observable as the given DisposeBag was nil.")
+            return
+        }
+        
+        observable?.subscribe(onNext: { t in
+            onNext(t)
+        })
+        .disposed(by: disposeBag)
+    }
+    
+    static func observeAdvertise(comManager: CommunicationManager, dispose: DisposeBag?, objectType: String, onNext: @escaping ((T) -> Void)) {
+        // Prevent memory leaks
+        guard let disposeBag = dispose else {
+            print("Could not observe advertisements as the given DisposeBag was nil.")
+            return
+        }
+        
+        try! comManager
+        .observeAdvertise(withObjectType: objectType)
+        .filter({ event in event.data.object is T })
+        .subscribe(onNext: { (advertiseEvent) in
+            let eventMessage = advertiseEvent.data.object as! T
+            onNext(eventMessage)
+        }).disposed(by: disposeBag)
     }
 }
