@@ -29,6 +29,7 @@
 		CCD2593926F7E01E007AD953 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCD2593826F7E01E007AD953 /* Preview Assets.xcassets */; };
 		CCD2594426F7E01E007AD953 /* FA2021Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594326F7E01E007AD953 /* FA2021Tests.swift */; };
 		CCD2594F26F7E01E007AD953 /* FA2021UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594E26F7E01E007AD953 /* FA2021UITests.swift */; };
+		F85435A82701E8DD00748F1B /* ReactUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85435A72701E8DD00748F1B /* ReactUtil.swift */; };
 		F86307B426FF017B00A4E6BB /* Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B326FF017B00A4E6BB /* Sync.swift */; };
 		F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B526FF039900A4E6BB /* SyncMessage.swift */; };
 		F86307BA26FF460700A4E6BB /* FirstComeFirstServe.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */; };
@@ -97,6 +98,7 @@
 		EE625DF92F5ADBC9EA56A09A /* Pods-FA2021Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021Tests.release.xcconfig"; path = "Target Support Files/Pods-FA2021Tests/Pods-FA2021Tests.release.xcconfig"; sourceTree = "<group>"; };
 		F2D70995382F90FBC042598D /* Pods_FA2021.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FA2021.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5F5C4D7DDBC4EB8B93DFD59 /* Pods-FA2021.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021.debug.xcconfig"; path = "Target Support Files/Pods-FA2021/Pods-FA2021.debug.xcconfig"; sourceTree = "<group>"; };
+		F85435A72701E8DD00748F1B /* ReactUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactUtil.swift; sourceTree = "<group>"; };
 		F86307B326FF017B00A4E6BB /* Sync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sync.swift; sourceTree = "<group>"; };
 		F86307B526FF039900A4E6BB /* SyncMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMessage.swift; sourceTree = "<group>"; };
 		F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstComeFirstServe.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 			children = (
 				F890A06C26FC78BF000906AA /* TimeUtil.swift */,
 				F894E69C26FF72D200EEA43D /* JSONSerializer.swift */,
+				F85435A72701E8DD00748F1B /* ReactUtil.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -581,6 +584,7 @@
 				F8826AAD26FB130F00DAF66D /* Task.swift in Sources */,
 				F86307B426FF017B00A4E6BB /* Sync.swift in Sources */,
 				F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */,
+				F85435A82701E8DD00748F1B /* ReactUtil.swift in Sources */,
 				F86307BA26FF460700A4E6BB /* FirstComeFirstServe.swift in Sources */,
 				F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */,
 				CC4A05FC2700B43D006FCAFA /* Idle.swift in Sources */,

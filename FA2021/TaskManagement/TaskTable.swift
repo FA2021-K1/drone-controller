@@ -65,8 +65,8 @@ struct TaskTable: Codable, Equatable {
     /**
      gets called when another TaskList was received
      */
-    func updateTaskTable(activeTaskList: [Task]) -> TaskTable {
-        let newTasksSet: Set<Task> = Set(activeTaskList).symmetricDifference(taskSet)
+    func updateTaskTable(activeTaskSet: Set<Task>) -> TaskTable {
+        let newTasksSet: Set<Task> = activeTaskSet.symmetricDifference(taskSet)
         
         if newTasksSet.isEmpty {
             return self

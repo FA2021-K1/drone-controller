@@ -18,7 +18,7 @@ class FirstComeFirstServe: TaskManager {
         /**
          updateTaskTable everytime a new TaskList was received
          */
-        api.allTasksObservable?.subscribe(onNext: { tasks in api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskList: tasks))!)
+        api.allTasksObservable?.subscribe(onNext: { tasks in api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskSet: Set(tasks)))!)
         })
         
         /**
@@ -87,11 +87,8 @@ class FirstComeFirstServe: TaskManager {
     }    
     
     func checkResponsibilityForTask(taskTable: TaskTable){
-        
         for taskId in currentTasksId {
-            
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
-                
                 if (tableResult.state == .available || tableResult.droneId == droneId) {
                     print("keep task: " + taskId)
                     try! print(JSONEncoder().encode(taskTable).prettyPrintedJSONString!)
