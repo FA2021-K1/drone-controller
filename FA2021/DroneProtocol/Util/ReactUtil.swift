@@ -45,19 +45,19 @@ final class ReactTypeUtil<T> {
         .disposed(by: disposeBag)
     }
     
-    static func observeAdvertise(comManager: CommunicationManager, dispose: DisposeBag?, objectType: String, onNext: @escaping ((T) -> Void)) {
+    static func observeAdvertise(controller: Controller?, objectType: String, onNext: @escaping ((T) -> Void)) {
         // Prevent memory leaks
-        guard let disposeBag = dispose else {
-            print("Could not observe advertisements as the given DisposeBag was nil.")
+        guard let control = controller else {
+            print("Could not observe advertisements as the given Controller was nil.")
             return
         }
         
-        try! comManager
+        try! control.communicationManager
         .observeAdvertise(withObjectType: objectType)
         .filter({ event in event.data.object is T })
         .subscribe(onNext: { (advertiseEvent) in
             let eventMessage = advertiseEvent.data.object as! T
             onNext(eventMessage)
-        }).disposed(by: disposeBag)
+        }).disposed(by: control.disposeBag)
     }
 }
