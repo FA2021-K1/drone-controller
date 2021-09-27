@@ -18,8 +18,9 @@ class FirstComeFirstServe: TaskManager {
         /**
          updateTaskTable everytime a new TaskList was received
          */
-        api.allTasksObservable?.subscribe(onNext: { tasks in api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskSet: Set(tasks)))!)
-        })
+        api.allTasksObservable?.subscribe(onNext: { tasks in api.droneController?.getDroneTableSync()?.updateData({ old in
+            old.updateTaskTable(activeTaskSet: Set(tasks))
+        })})
         
         /**
          check if this drone is still responsible for all currentTasksId everytime a new TaskTable was received

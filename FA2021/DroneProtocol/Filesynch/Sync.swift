@@ -35,7 +35,7 @@ class Sync<T: Codable & Equatable>{
             if (advertiseEvent.data.object is SyncMessage<T>)
             {
                 let eventMessage = advertiseEvent.data.object as! SyncMessage<T>
-                self.setData(newData: mergeFunction(self.dataObservable.value, eventMessage.object))
+                self.updateData { old in mergeFunction(old, eventMessage.object)}
             }
         }).disposed(by: controller.disposeBag)
         
@@ -43,6 +43,11 @@ class Sync<T: Codable & Equatable>{
         ReactUtil.infiniteTimer(interval: updateIntervalSeconds) { i in
             self.publishTaskDictionary()
         }
+    }
+    
+    func updateData(_ updateFunction:((_ old: T) -> T)){
+        let newData = updateFunction(self.dataObservable.value)
+        setData(newData: newData)
     }
     
     func setData(newData: T){

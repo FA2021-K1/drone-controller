@@ -19,10 +19,10 @@ class MissionController: Controller {
     }
     
     func postNewMission(taskId: String){
-        droneTableSync?.setData(newData: droneTableSync!.value.changeTaskState(taskId: taskId, droneId: "", state: TaskTable.TaskState.available))
+        droneTableSync?.updateData({old in old.changeTaskState(taskId: taskId, droneId: "", state: TaskTable.TaskState.available)})
     }
     
     func dismissMission(taskId: String){
-        droneTableSync?.setData(newData: droneTableSync!.value.changeTaskState(taskId: taskId, droneId: "", state: TaskTable.TaskState.finished))
+        droneTableSync?.updateData({old in old.changeTaskState(taskId: taskId, droneId: "", state: TaskTable.TaskState.finished)})
     }
 }
