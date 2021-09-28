@@ -10,7 +10,6 @@
 		3F5B8DCC1976318AE6E64414 /* Pods_FA2021.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D70995382F90FBC042598D /* Pods_FA2021.framework */; };
 		489D8B88FAA7E892F4F71B8D /* Pods_FA2021_FA2021UITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 135CD0D2C78E1B29CC88A69A /* Pods_FA2021_FA2021UITests.framework */; };
 		B829C5617612315E6DDDF719 /* Pods_FA2021Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 713610E8276AD51D12A228E7 /* Pods_FA2021Tests.framework */; };
-		CC397DF526FCDC4E00D5254D /* CameraFeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DF426FCDC4E00D5254D /* CameraFeed.swift */; };
 		CC397DF726FF74BC00D5254D /* DroneConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DF626FF74BC00D5254D /* DroneConnectionManager.swift */; };
 		CC397DF926FF78F700D5254D /* FlightControlService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DF826FF78F700D5254D /* FlightControlService.swift */; };
 		CC397DFB26FF7AF400D5254D /* AircraftController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DFA26FF7AF400D5254D /* AircraftController.swift */; };
@@ -34,6 +33,9 @@
 		F86307BA26FF460700A4E6BB /* FirstComeFirstServe.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */; };
 		F86307BC26FF468000A4E6BB /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BB26FF468000A4E6BB /* Coordinate.swift */; };
 		F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BD26FF5AC100A4E6BB /* LiveData.swift */; };
+		F87628202702F7CB00B05CCC /* CameraFPVViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F876281D2702F7CB00B05CCC /* CameraFPVViewController.swift */; };
+		F87628212702F7CB00B05CCC /* VideoPreviewerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F876281E2702F7CB00B05CCC /* VideoPreviewerAdapter.swift */; };
+		F87628222702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F876281F2702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift */; };
 		F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAA26FB130F00DAF66D /* TaskManager.swift */; };
 		F8826AAD26FB130F00DAF66D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAB26FB130F00DAF66D /* Task.swift */; };
 		F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A03F26FB9405000906AA /* CoatyAPI.swift */; };
@@ -68,7 +70,6 @@
 		4B86A356455BB28D30344D4B /* Pods-FA2021-FA2021UITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021-FA2021UITests.release.xcconfig"; path = "Target Support Files/Pods-FA2021-FA2021UITests/Pods-FA2021-FA2021UITests.release.xcconfig"; sourceTree = "<group>"; };
 		713610E8276AD51D12A228E7 /* Pods_FA2021Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FA2021Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C413F49BD8D2E5EF26A82AF0 /* Pods-FA2021.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021.release.xcconfig"; path = "Target Support Files/Pods-FA2021/Pods-FA2021.release.xcconfig"; sourceTree = "<group>"; };
-		CC397DF426FCDC4E00D5254D /* CameraFeed.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraFeed.swift; sourceTree = "<group>"; };
 		CC397DF626FF74BC00D5254D /* DroneConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneConnectionManager.swift; sourceTree = "<group>"; };
 		CC397DF826FF78F700D5254D /* FlightControlService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlightControlService.swift; sourceTree = "<group>"; };
 		CC397DFA26FF7AF400D5254D /* AircraftController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AircraftController.swift; sourceTree = "<group>"; };
@@ -102,6 +103,9 @@
 		F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstComeFirstServe.swift; sourceTree = "<group>"; };
 		F86307BB26FF468000A4E6BB /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		F86307BD26FF5AC100A4E6BB /* LiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveData.swift; sourceTree = "<group>"; };
+		F876281D2702F7CB00B05CCC /* CameraFPVViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraFPVViewController.swift; sourceTree = "<group>"; };
+		F876281E2702F7CB00B05CCC /* VideoPreviewerAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPreviewerAdapter.swift; sourceTree = "<group>"; };
+		F876281F2702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodeImageCalibrateLogic.swift; sourceTree = "<group>"; };
 		F8826AAA26FB130F00DAF66D /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		F8826AAB26FB130F00DAF66D /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		F890A03F26FB9405000906AA /* CoatyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoatyAPI.swift; sourceTree = "<group>"; };
@@ -186,9 +190,9 @@
 		CC8E98F626F8E61A0013973F /* FlightControl */ = {
 			isa = PBXGroup;
 			children = (
+				F876281B2702F7CB00B05CCC /* CameraSample */,
 				CC4A05F52700B2D1006FCAFA /* Aircraft */,
 				CC4A05F42700B29A006FCAFA /* Mission */,
-				CC397DF426FCDC4E00D5254D /* CameraFeed.swift */,
 				CCB6EA9F26FB4D7700E94439 /* Log.swift */,
 				CC397DF826FF78F700D5254D /* FlightControlService.swift */,
 				CC397DFC26FF7D6100D5254D /* NavigationUtilities.swift */,
@@ -276,6 +280,24 @@
 				F86307B526FF039900A4E6BB /* SyncMessage.swift */,
 			);
 			path = Filesynch;
+			sourceTree = "<group>";
+		};
+		F876281B2702F7CB00B05CCC /* CameraSample */ = {
+			isa = PBXGroup;
+			children = (
+				F876281C2702F7CB00B05CCC /* fpv */,
+				F876281E2702F7CB00B05CCC /* VideoPreviewerAdapter.swift */,
+				F876281F2702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift */,
+			);
+			path = CameraSample;
+			sourceTree = "<group>";
+		};
+		F876281C2702F7CB00B05CCC /* fpv */ = {
+			isa = PBXGroup;
+			children = (
+				F876281D2702F7CB00B05CCC /* CameraFPVViewController.swift */,
+			);
+			path = fpv;
 			sourceTree = "<group>";
 		};
 		F8826AA926FB130F00DAF66D /* TaskManagement */ = {
@@ -561,12 +583,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC397DF726FF74BC00D5254D /* DroneConnectionManager.swift in Sources */,
+				F87628212702F7CB00B05CCC /* VideoPreviewerAdapter.swift in Sources */,
 				F890A06B26FC78A0000906AA /* MissionController.swift in Sources */,
 				F890A07726FCA067000906AA /* TaskTable.swift in Sources */,
+				F87628222702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
 				F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */,
 				CC4A05F32700A805006FCAFA /* FirstComeFirstServe.swift in Sources */,
-				CC397DF526FCDC4E00D5254D /* CameraFeed.swift in Sources */,
 				F890A06926FC787D000906AA /* DroneController.swift in Sources */,
 				CC4A05FA2700B367006FCAFA /* Step.swift in Sources */,
 				F890A07126FC78FA000906AA /* TasksDetails.swift in Sources */,
@@ -586,6 +609,7 @@
 				CC4A05FC2700B43D006FCAFA /* Idle.swift in Sources */,
 				CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */,
 				F86307BC26FF468000A4E6BB /* Coordinate.swift in Sources */,
+				F87628202702F7CB00B05CCC /* CameraFPVViewController.swift in Sources */,
 				CC397DF926FF78F700D5254D /* FlightControlService.swift in Sources */,
 				CC4A05F82700B330006FCAFA /* TaskContext.swift in Sources */,
 				CC4A05F22700A805006FCAFA /* Coordinate.swift in Sources */,
