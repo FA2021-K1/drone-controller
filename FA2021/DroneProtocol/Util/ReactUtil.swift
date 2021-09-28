@@ -47,17 +47,17 @@ final class ReactTypeUtil<T> {
     
     static func observeAdvertise(controller: Controller?, objectType: String, onNext: @escaping ((T) -> Void)) {
         // Prevent memory leaks
-        guard let control = controller else {
+        guard let controller = controller else {
             print("Could not observe advertisements as the given Controller was nil.")
             return
         }
         
-        try! control.communicationManager
+        try! controller.communicationManager
         .observeAdvertise(withObjectType: objectType)
         .filter({ event in event.data.object is T })
         .subscribe(onNext: { (advertiseEvent) in
             let eventMessage = advertiseEvent.data.object as! T
             onNext(eventMessage)
-        }).disposed(by: control.disposeBag)
+        }).disposed(by: controller.disposeBag)
     }
 }

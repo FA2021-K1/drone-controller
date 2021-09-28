@@ -269,13 +269,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F86307B026FEFC3400A4E6BB /* Filesynch */ = {
+		F86307B026FEFC3400A4E6BB /* Filesync */ = {
 			isa = PBXGroup;
 			children = (
 				F86307B326FF017B00A4E6BB /* Sync.swift */,
 				F86307B526FF039900A4E6BB /* SyncMessage.swift */,
 			);
-			path = Filesynch;
+			path = Filesync;
 			sourceTree = "<group>";
 		};
 		F8826AA926FB130F00DAF66D /* TaskManagement */ = {
@@ -296,7 +296,7 @@
 		F890A05726FC7675000906AA /* DroneProtocol */ = {
 			isa = PBXGroup;
 			children = (
-				F86307B026FEFC3400A4E6BB /* Filesynch */,
+				F86307B026FEFC3400A4E6BB /* Filesync */,
 				F890A06526FC76CC000906AA /* Util */,
 				F890A05E26FC76B5000906AA /* Model */,
 				F890A06826FC787D000906AA /* DroneController.swift */,
