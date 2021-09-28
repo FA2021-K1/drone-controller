@@ -28,8 +28,8 @@ struct ContentView: View {
         
         if coatyStarted {
             HStack {
-                Text("IP: 111.222.333.444").font(.subheadline)
-                Text("Port: 1234").font(.subheadline)
+                Text("IP: \(ip)").font(.subheadline)
+                Text("Port: \(portString)").font(.subheadline)
             }
         }
         
@@ -134,9 +134,8 @@ struct ContentView: View {
     }
     
     init() {
-        ip = defaults.string(forKey: "coaty_ip") ?? ""
-        portString = defaults.string(forKey: "coaty_port") ?? ""
-        print("Loaded ip: \(ip)")
+        _ip = State(initialValue: defaults.string(forKey: "coaty_ip") ?? "")
+        _portString = State(initialValue: defaults.string(forKey: "coaty_port") ?? "")
     }
     
 }
