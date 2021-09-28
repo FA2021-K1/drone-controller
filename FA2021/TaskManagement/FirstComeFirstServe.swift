@@ -34,7 +34,6 @@ class FirstComeFirstServe: TaskManager {
      entry point
      */
     func scanForTask(){
-        print("Starting scan")
         // TODO: Test this method
         api.droneController?.getDroneTableSync()?.getDataObservable()
             .skipWhile({ table in
@@ -47,12 +46,12 @@ class FirstComeFirstServe: TaskManager {
                 if (!self.currentTasksId.isEmpty){
                     return
                 }
-                let unfinishedTaskIds = self.getUnfinishedTasksId()
-                self.claimTask(taskId: unfinishedTaskIds[0])
-                print("Scan sub")
+                DispatchQueue.global().async {
+                    let unfinishedTaskIds = self.getUnfinishedTasksId()
+                    self.claimTask(taskId: unfinishedTaskIds[0])
+                }
             })
             .disposed(by: api.droneController!.disposeBag)
-        print("Scan end")
     }
     
     
@@ -73,8 +72,8 @@ class FirstComeFirstServe: TaskManager {
         
         print("Claim task, task_id: \(taskId)")
         
-        api.droneController?.claimTask(taskId: taskId, droneId: droneId)
         currentTasksId.insert(taskId)
+        api.droneController?.claimTask(taskId: taskId, droneId: droneId)
         
         // TODO: call drone team api to start task
         taskContext.runSampleTask()
@@ -85,7 +84,6 @@ class FirstComeFirstServe: TaskManager {
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
                 if (tableResult.state == .available || tableResult.droneId == droneId) {
                     print("keep task: " + taskId)
-                    try! print(JSONEncoder().encode(taskTable).prettyPrintedJSONString!)
                     return
                 }
                 
@@ -95,12 +93,6 @@ class FirstComeFirstServe: TaskManager {
             
             // TODO: call drone team api to abort Task with taskId
             currentTasksId.remove(taskId)
-            
-            // TODO: check if this is a good idea!
-            // Scan needs to be started in another thread because this one doesn't belong to us but to the Sync control flow
-            DispatchQueue.global().async {
-                self.scanForTask()
-            }
         }
     }
 }
