@@ -27,12 +27,12 @@ class Idling: Step {
 }
 
 class TakingOff: Step {
-    private var altitude: Double
+    private var altitude: Float
     
     let description: String = "Taking Off Step"
     internal var done: Bool = false
     
-    init(altitude: Double) {
+    init(altitude: Float) {
         self.altitude = altitude
     }
     

@@ -9,10 +9,10 @@ import Foundation
 import DJISDK
 import Combine
 
-class AircraftController {
+class AircraftController: ObservableObject {
     private var log: Log
     private var droneConnection: DroneConnectionManager
-    private var state: DroneState
+    @Published private(set) var state: DroneState
     
     private var droneConnectionCancellable: AnyCancellable?
     
@@ -97,10 +97,11 @@ class AircraftController {
         self.droneConnection = droneConnection
     }
     
-    func takeOff() {
+    func takeOff(completion: @escaping () -> Void) {
         droneConnection.aircraft?.flightController?.startTakeoff {_ in
             self.log.add(message: "Take off command sent")
             self.state = .inAir
+            completion()
         }
     }
     

@@ -25,7 +25,9 @@ class FlightControlService {
     }
     
     func takeOff() {
-        self.aircraftController.takeOff()
+        self.aircraftController.takeOff {
+            self.log.add(message: "FlightControlService reported takeoff")
+        }
     }
     
     func land() {
@@ -33,7 +35,7 @@ class FlightControlService {
     }
     
     func flyNorth(meters: Double) {
-        self.missionScheduler.flyDirection(direction: .north, meters: meters)
+        self.missionScheduler.flyTo(direction: .north, meters: meters)
     }
     
     func sampleTask() {

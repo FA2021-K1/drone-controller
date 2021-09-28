@@ -28,6 +28,7 @@ class TaskContext {
     
     func runSampleTask() {
         self.add(steps: [TakingOff(altitude: 5), Idling(duration: 8), Landing()])
+        print("start sample task")
         self.startTask()
     }
     
@@ -53,14 +54,19 @@ class TaskContext {
      Sets the pointer to the first step of a Task and begins the execution of the task.
      */
     func startTask() {
-        if (!missionScheduler.aircraftController.isReady) {
+        if !missionScheduler.aircraftController.isReady {
             self.log.add(message: "The aircraft is not ready yet, waiting 1s before retrying")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 self.startTask()
             })
             
             return
         }
+        if missionScheduler.missionActive {
+            self.log.add(message: "The aircraft is already executing a mission")
+            return
+        }
+        
         log.add(message: "Starting Task")
         reset()
         executeNextStep()
