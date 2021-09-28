@@ -86,33 +86,26 @@ extension ContentView {
             let log = Log()
             self.log = log
             self.flightControl = FlightControlService(log: log)
-            
-            DispatchQueue.main.async {
+
                 self.subscription = log.$logEntries.sink(receiveValue: { entries in
                     self.logEntries = entries
                 })
-            }
-        }
-        
-        func startTaskAssignmentThread(){
-            /**
-             start new Thread for TaskAssignment
+            
+            /*
+             Potentialy the same iPhone could control different drones, meaning that the uuid of the iPhone might not always refer to the same drone.
+             In our use case, each drone is assigned to one iPhone, so we can assume that the iPhones to not differ.
              */
-            DispatchQueue.global().async {
-                /*
-                 Potentialy the same iPhone could control different drones, meaning that the uuid of the iPhone might not always refer to the same drone.
-                 In our use case, each drone is assigned to one iPhone, so we can assume that the iPhones to not differ.
-                 */
-                
-                let coatyAPI: CoatyAPI = CoatyAPI()
-                let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString, taskContext: self.flightControl.taskContext)
-                
-                // starts timer to send data in init()
-                let _: Telemetry = Telemetry(api: coatyAPI, taskmanager: firstComeFirstServe)
-                
-                
-                firstComeFirstServe.scanForTask()
-            }
+            
+            let coatyAPI: CoatyAPI = CoatyAPI()
+            let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString, taskContext: self.flightControl.taskContext)
+            
+            // starts timer to send data in init()
+            let _: Telemetry = Telemetry(api: coatyAPI, taskmanager: firstComeFirstServe)
+            
+            
+            firstComeFirstServe.scanForTask()
+            
         }
+
     }
 }

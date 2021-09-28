@@ -76,8 +76,15 @@ class FirstComeFirstServe: TaskManager {
         api.droneController?.claimTask(taskId: taskId, droneId: droneId)
         
         // TODO: call drone team api to start task
-        taskContext.runSampleTask()
-    }    
+        let taskSet = api.droneController?.getDroneTableSync()?.value.taskSet
+        let taskClaimed = taskSet?.filter({
+            task in
+            task.id == taskId
+        }).first
+        let steps = taskClaimed?.getTerminalTasksList()
+//        taskContext.add(steps: steps)
+        taskContext.startTask()
+    }
     
     func checkResponsibilityForTask(taskTable: TaskTable){
         for taskId in currentTasksId {
