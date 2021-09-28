@@ -16,7 +16,7 @@ class FirstComeFirstServe: TaskManager {
         finishedTasksId = []
         
         /**
-         updateTaskTable everytime a new TaskList was received
+         updateTaskTable everytime a new TaskList was received (server sends TaskList every 10 secconds or so)
          */
         ReactTypeUtil<[Task]>.subAll( dispose: api.droneController?.disposeBag, observable: api.allTasksObservable){
             tasks in api.droneController?.getDroneTableSync()?.updateData({ old in old.updateTaskTable(activeTaskSet: Set(tasks))})
@@ -96,9 +96,11 @@ class FirstComeFirstServe: TaskManager {
                 print("Giving up task \(taskId) to drone \(tableResult.droneId)")
             }
             
-            
-            // TODO: call drone team api to abort Task with taskId
+            // abort task and land
             currentTasksId.remove(taskId)
+            taskContext.stopAndClearTask()
+            taskContext.add(step: Landing())
+            taskContext.startTask()
         }
     }
 }

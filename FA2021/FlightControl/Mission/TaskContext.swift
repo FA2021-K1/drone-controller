@@ -11,7 +11,7 @@ class TaskContext {
     private let missionScheduler: MissionScheduler
     private var currentStepIndex: Int = -1
     private var task = [Step]()
-    private var currentStep: Step? {
+    var currentStep: Step? {
         get {
             if task.isEmpty || currentStepIndex < 0 || currentStepIndex >= task.endIndex {
                 return nil
