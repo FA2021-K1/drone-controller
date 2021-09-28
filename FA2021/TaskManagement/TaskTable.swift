@@ -46,7 +46,7 @@ struct TaskTable: Codable, Equatable {
             }
             return claimOne.timestamp < claimTwo.timestamp ? claimOne : claimTwo
         }
-        try! print(JSONEncoder().encode(newTable).prettyPrintedJSONString!)
+//        try! print(JSONEncoder().encode(newTable).prettyPrintedJSONString!)
         return newTable
     }
     

@@ -30,12 +30,10 @@ class FirstComeFirstServe: TaskManager {
         }
     }
     
-    /**
-     entry point
-     */
     func scanForTask(){
         // TODO: Test this method
         api.droneController?.getDroneTableSync()?.getDataObservable()
+            .observeOn(MainScheduler.asyncInstance)
             .skipWhile({ table in
                 table.table.allSatisfy { entry in
                     entry.value.state != TaskTable.TaskState.available
@@ -46,10 +44,10 @@ class FirstComeFirstServe: TaskManager {
                 if (!self.currentTasksId.isEmpty){
                     return
                 }
-                DispatchQueue.global().async {
-                    let unfinishedTaskIds = self.getUnfinishedTasksId()
-                    self.claimTask(taskId: unfinishedTaskIds[0])
-                }
+                
+                let unfinishedTaskIds = self.getUnfinishedTasksId()
+                self.claimTask(taskId: unfinishedTaskIds[0])
+                
             })
             .disposed(by: api.droneController!.disposeBag)
     }
@@ -72,9 +70,9 @@ class FirstComeFirstServe: TaskManager {
         
         print("Claim task, task_id: \(taskId)")
         
-        currentTasksId.insert(taskId)
-        api.droneController?.claimTask(taskId: taskId, droneId: droneId)
-        
+            self.currentTasksId.insert(taskId)
+            self.api.droneController?.claimTask(taskId: taskId, droneId: self.droneId)
+
         // TODO: call drone team api to start task
         let taskSet = api.droneController?.getDroneTableSync()?.value.taskSet
         let taskClaimed = taskSet?.filter({
