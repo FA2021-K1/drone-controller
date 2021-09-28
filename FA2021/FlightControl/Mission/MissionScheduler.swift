@@ -114,18 +114,22 @@ class MissionScheduler: NSObject, ObservableObject {
             return
         }
         
-        let coordinates : CLLocationCoordinate2D
+        var metersLat = 0
+        var metersLng = 0
         
         switch direction {
         case Direction.north:
-            coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: meters, latitude: pos.latitude, metersLng: 0, longitude: pos.longitude)
+            metersLat = meters
         case Direction.south:
-            coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: (-1) * meters, latitude: pos.latitude, metersLng: 0, longitude: pos.longitude)
+            metersLat = (-1) * meters
         case Direction.east:
-            coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: 0, latitude: pos.latitude, metersLng: meters, longitude: pos.longitude)
+            metersLng = meters
         case Direction.west:
-            coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: 0, latitude: pos.latitude, metersLng: (-1) * meters, longitude: pos.longitude)
+            metersLng = (-1) * meters
         }
+        
+        let coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: metersLat, latitude: pos.latitude,
+                                                                     metersLng: metersLng, longitude: pos.longitude)
         
         guard let action = createWaypointMissionTo(coordinates: coordinates)
         else {
