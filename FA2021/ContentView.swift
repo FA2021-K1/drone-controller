@@ -63,6 +63,7 @@ struct ContentView: View {
         
         Divider()
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

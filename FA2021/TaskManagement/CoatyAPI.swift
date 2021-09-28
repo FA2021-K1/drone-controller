@@ -5,7 +5,7 @@ class CoatyAPI{
 
     var container: Container?
     var droneController: DroneController?
-    var allTasksObservable:Observable<[Task]>?
+    var allTasksObservable: Observable<[Task]>?
     
     func start(){
         let components = Components(controllers: [
@@ -29,14 +29,14 @@ class CoatyAPI{
                                            configuration: configuration)
         self.droneController = (container?.getController(name: "DroneController") as! DroneController)
         allTasksObservable = try? droneController?.communicationManager
-            .observeAdvertise(withObjectType: "idrone.sync.task").map({ ev in
+            .observeAdvertise(withObjectType: "idrone.sync.task")
+            .map({ ev in
                 return Task.parseJsonToTasks(json: (ev.data.object as! TasksDetails).jsonDetails)
             }).asObservable()
     }
 
     func postLiveData(data:String){
-        let ev = try! AdvertiseEvent.with(object: LiveData(json: data))
-        container?.communicationManager?.publishAdvertise(ev)
+        ReactUtil.advertise(comManager: container?.communicationManager, object: LiveData(json: data))
     }
     
     private func createDroneCoatyConfiguration() -> Configuration? {

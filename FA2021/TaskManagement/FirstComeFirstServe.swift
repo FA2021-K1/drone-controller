@@ -1,15 +1,16 @@
 import Foundation
 import RxSwift
 class FirstComeFirstServe: TaskManager {
-    
+    var taskContext: TaskContext
     var api: CoatyAPI
     var droneId: String
     var currentTasksId: Set<String>
     var finishedTasksId: Set<String>
 
-    init(api: CoatyAPI, droneId: String) {
+    init(api: CoatyAPI, droneId: String, taskContext: TaskContext) {
         self.droneId = droneId
         self.api = api
+        self.taskContext = taskContext
         api.start()
         currentTasksId = []
         finishedTasksId = []
@@ -17,30 +18,40 @@ class FirstComeFirstServe: TaskManager {
         /**
          updateTaskTable everytime a new TaskList was received
          */
-        api.allTasksObservable?.subscribe(onNext: { tasks in                     api.droneController?.getDroneTableSync()?.setData(newData:  (api.droneController?.getDroneTableSync()?.value.updateTaskTable(activeTaskList: tasks))!)
-        })
+        ReactTypeUtil<[Task]>.subAll( dispose: api.droneController?.disposeBag, observable: api.allTasksObservable){
+            tasks in api.droneController?.getDroneTableSync()?.updateData({ old in old.updateTaskTable(activeTaskSet: Set(tasks))})
+        }
         
         /**
          check if this drone is still responsible for all currentTasksId everytime a new TaskTable was received
          */
-        api.droneController?.getDroneTableSync()?.getDataObservable().subscribe(onNext: {
+        ReactTypeUtil<TaskTable>.subAll(dispose: api.droneController?.disposeBag, observable: api.droneController?.getDroneTableSync()?.getDataObservable()) {
             table in self.checkResponsibilityForTask(taskTable: table)
-        })
+        }
     }
     
     /**
      entry point
      */
     func scanForTask(){
-        
-        var unfinishedTaskIds: [String] = getUnfinishedTasksId()
-                
-        while (unfinishedTaskIds.isEmpty) {
-            sleep(1)
-            unfinishedTaskIds = getUnfinishedTasksId()
-        }
-        
-        claimTask(taskId: unfinishedTaskIds[0])
+        // TODO: Test this method
+        api.droneController?.getDroneTableSync()?.getDataObservable()
+            .skipWhile({ table in
+                table.table.allSatisfy { entry in
+                    entry.value.state != TaskTable.TaskState.available
+                }
+            })
+            .take(1)
+            .subscribe(onNext: { table in
+                if (!self.currentTasksId.isEmpty){
+                    return
+                }
+                DispatchQueue.global().async {
+                    let unfinishedTaskIds = self.getUnfinishedTasksId()
+                    self.claimTask(taskId: unfinishedTaskIds[0])
+                }
+            })
+            .disposed(by: api.droneController!.disposeBag)
     }
     
     
@@ -61,21 +72,18 @@ class FirstComeFirstServe: TaskManager {
         
         print("Claim task, task_id: \(taskId)")
         
-        api.droneController?.claimTask(taskId: taskId, droneId: droneId)
         currentTasksId.insert(taskId)
+        api.droneController?.claimTask(taskId: taskId, droneId: droneId)
         
         // TODO: call drone team api to start task
+        taskContext.runSampleTask()
     }    
     
     func checkResponsibilityForTask(taskTable: TaskTable){
-        
         for taskId in currentTasksId {
-            
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
-                
                 if (tableResult.state == .available || tableResult.droneId == droneId) {
                     print("keep task: " + taskId)
-                    try! print(JSONEncoder().encode(taskTable).prettyPrintedJSONString!)
                     return
                 }
                 
@@ -85,11 +93,6 @@ class FirstComeFirstServe: TaskManager {
             
             // TODO: call drone team api to abort Task with taskId
             currentTasksId.remove(taskId)
-            
-            // Scan needs to be started in another thread because this one doesn't belong to us but to the Sync control flow
-            DispatchQueue.global().async {
-                self.scanForTask()
-            }
         }
     }
 }

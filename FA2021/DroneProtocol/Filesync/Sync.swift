@@ -15,7 +15,7 @@ class Sync<T: Codable & Equatable>{
     let mergeFunction: (T, T) -> T
     private var dataObservable: BehaviorRelay<T>
     
-    var value:T{
+    var value: T {
         get{
             return self.dataObservable.value
         }
@@ -29,25 +29,19 @@ class Sync<T: Codable & Equatable>{
         
         self.dataObservable = BehaviorRelay<T>(value: initialValue)
         
-        try! self.controller.communicationManager
-        .observeAdvertise(withObjectType: "idrone.sync.syncmessage")
-        .subscribe(onNext: { (advertiseEvent) in
-            if (advertiseEvent.data.object is SyncMessage<T>)
-            {
-                let eventMessage = advertiseEvent.data.object as! SyncMessage<T>
-                self.setData(newData: mergeFunction(self.dataObservable.value, eventMessage.object))
-            }
-        }).disposed(by: controller.disposeBag)
+        ReactTypeUtil<SyncMessage<T>>.observeAdvertise(controller: self.controller, objectType: "idrone.sync.syncmessage") { eventMessage in
+            self.updateData { old in mergeFunction(old, eventMessage.object)}
+        }
         
         // Start RxSwift timer to publish the TaskTable every 5 seconds.
-        _ = Observable
-             .timer(RxTimeInterval.seconds(0),
-                    period: RxTimeInterval.seconds(updateIntervalSeconds),
-                    scheduler: MainScheduler.instance)
-            .subscribe(onNext: { (i: Int) in
-                self.publishTaskDictionary()
-             })
-            .disposed(by: controller.disposeBag)
+        ReactUtil.infiniteTimer(interval: updateIntervalSeconds) { i in
+            self.publishTaskDictionary()
+        }
+    }
+    
+    func updateData(_ updateFunction:((_ old: T) -> T)){
+        let newData = updateFunction(self.dataObservable.value)
+        setData(newData: newData)
     }
     
     func setData(newData: T){
@@ -61,10 +55,6 @@ class Sync<T: Codable & Equatable>{
     }
     
     func publishTaskDictionary(){
-        // Create the event.
-        let event = try! AdvertiseEvent.with(object: SyncMessage(self.dataObservable.value))
-
-        // Publish the event by the communication manager.
-        self.controller.communicationManager.publishAdvertise(event)
+        ReactUtil.advertise(comManager: self.controller.communicationManager, object: SyncMessage(self.dataObservable.value))
     }
 }
