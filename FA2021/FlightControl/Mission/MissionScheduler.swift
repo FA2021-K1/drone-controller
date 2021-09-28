@@ -51,7 +51,7 @@ class MissionScheduler: NSObject, ObservableObject {
         
         DispatchQueue.main.async {
             if missionControl.isTimelineRunning {
-                self.stopMissionIfRunning()
+                self.stopAndClearMissionIfRunning()
                 self.retryAfter(seconds: 1) {
                     self.clearScheduleAndExecute(actions: actions)
                 }
@@ -90,7 +90,7 @@ class MissionScheduler: NSObject, ObservableObject {
         DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: task)
     }
     
-    func stopMissionIfRunning() {
+    func stopAndClearMissionIfRunning() {
         guard let missionControl = DJISDKManager.missionControl()
         else {
             log.add(message: "Failed to stop mission: Mission Control is unavailable")
@@ -106,9 +106,12 @@ class MissionScheduler: NSObject, ObservableObject {
         }
     }
     
-    func takeOff() {
+    func takeOff(altitude: Float) {
         aircraftController.takeOff {
             self.log.add(message: "Mission Control reported Take off")
+            self.retryAfter(seconds: 4, task: {
+                self.flyTo(altitude: altitude)
+            })
         }
     }
     
@@ -117,17 +120,21 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func flyTo(altitude: Float) {
+        self.log.add(message: "Flying to altitude \(altitude)")
         let mission = NavigationUtilities.createDJIWaypointMission()
         let currentPosition = aircraftController.aircraftPosition!
+        let currentAltitude = aircraftController.aircraftAltitude!
         
         if !CLLocationCoordinate2DIsValid(currentPosition) {
             log.add(message: "Invalid coordinates")
             return
         }
         
-        let waypoint = NavigationUtilities.createWaypoint(coordinates: currentPosition, altitude: altitude)
+        let waypointStart = NavigationUtilities.createWaypoint(coordinates: currentPosition, altitude: Float(currentAltitude))
+        let waypointDestination = NavigationUtilities.createWaypoint(coordinates: currentPosition, altitude: altitude)
         
-        mission.add(waypoint)
+        mission.add(waypointStart)
+        mission.add(waypointDestination)
         clearScheduleAndExecute(mission: mission)
     }
     

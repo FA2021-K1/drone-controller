@@ -74,7 +74,7 @@ class TaskContext {
     }
     
     func stopTask() {
-        missionScheduler.stopMissionIfRunning()
+        missionScheduler.stopAndClearMissionIfRunning()
         reset()
     }
     

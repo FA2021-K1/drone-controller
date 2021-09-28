@@ -38,9 +38,9 @@ class TakingOff: Step {
     
     func execute(missionScheduler: MissionScheduler) {
         DispatchQueue.main.async {
-            missionScheduler.takeOff()
+            missionScheduler.takeOff(altitude: self.altitude)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 6, execute: {
             self.done = true
         })
     }
