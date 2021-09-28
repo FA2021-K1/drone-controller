@@ -9,18 +9,40 @@ import Foundation
 import DJISDK
 
 class MissionScheduler: NSObject, ObservableObject {
-    private var droneController: AircraftController
+    private(set) var aircraftController: AircraftController
     private var log: Log
     
-    init(log: Log, droneController: AircraftController) {
-        self.droneController = droneController
+    var missionActive: Bool {
+        get {
+            guard let missionControl = DJISDKManager.missionControl()
+            else {
+                log.add(message: "Warning: Mission Control is unavailable! Could not safely determine mission state!")
+                return false
+            }
+            
+            return missionControl.isTimelineRunning
+        }
+    }
+    
+    var aircraftState: DroneState {
+        get {
+            return aircraftController.state
+        }
+    }
+    
+    init(log: Log, aircraftController: AircraftController) {
+        self.aircraftController = aircraftController
         self.log = log
         super.init()
         
         setupListeners()
     }
     
-    private func clearScheduleAndExecute(actions: [DJIMissionControlTimelineElement]) {
+    func clearScheduleAndExecute(mission: DJIWaypointMission) {
+        clearScheduleAndExecute(actions: [mission])
+    }
+    
+    func clearScheduleAndExecute(actions: [DJIMissionControlTimelineElement]) {
         guard let missionControl = DJISDKManager.missionControl()
         else {
             log.add(message: "Failed to schedule: Mission Control is unavailable")
@@ -30,14 +52,16 @@ class MissionScheduler: NSObject, ObservableObject {
         DispatchQueue.main.async {
             if missionControl.isTimelineRunning {
                 self.stopMissionIfRunning()
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                self.retryAfter(seconds: 1) {
                     self.clearScheduleAndExecute(actions: actions)
                 }
                 
             } else {
                 if let error = missionControl.scheduleElements(actions) {
                     self.log.add(message: "Failed to schedule: \(String(describing: error))")
+                    self.retryAfter(seconds: 1, task: {
+                        self.clearScheduleAndExecute(actions: actions)
+                    })
                     return
                 }
                 
@@ -48,26 +72,22 @@ class MissionScheduler: NSObject, ObservableObject {
         }
     }
     
-    private func createWaypointMissionTo(coordinates: CLLocationCoordinate2D) -> DJIMissionControlTimelineElement? {
+    private func createWaypointMissionTo(coordinates: CLLocationCoordinate2D) -> DJIWaypointMission? {
         let mission = NavigationUtilities.createDJIWaypointMission()
-        let currentCoor = droneController.aircraftPosition!
-        
-        if !CLLocationCoordinate2DIsValid(coordinates) || !CLLocationCoordinate2DIsValid(currentCoor) {
+
+        if !CLLocationCoordinate2DIsValid(coordinates) {
             log.add(message: "Invalid coordinates")
             return nil
         }
         
         let waypoint = NavigationUtilities.createWaypoint(coordinates: coordinates, altitude: 15)
-        let waypoint2 = NavigationUtilities.createWaypoint(coordinates: coordinates, altitude: 6)
-        let starting = NavigationUtilities.createWaypoint(coordinates: currentCoor, altitude: 15)
-        
-        mission.add(starting)
         mission.add(waypoint)
-        mission.add(waypoint2)
-        mission.add(waypoint)
-        mission.add(starting)
         
         return DJIWaypointMission(mission: mission)
+    }
+    
+    private func retryAfter(seconds: Double, task: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + seconds, execute: task)
     }
     
     func stopMissionIfRunning() {
@@ -77,8 +97,7 @@ class MissionScheduler: NSObject, ObservableObject {
             return
         }
         
-        
-        if missionControl.isTimelineRunning {
+        if missionActive {
             self.log.add(message: "Stopping current mission and unscheduling everything...")
             missionControl.stopTimeline()
             missionControl.unscheduleEverything()
@@ -87,56 +106,56 @@ class MissionScheduler: NSObject, ObservableObject {
         }
     }
     
-    func missionIsActive() -> Bool? {
-        guard let missionControl = DJISDKManager.missionControl()
-        else {
-            return nil
-        }
-        
-        return missionControl.isTimelineRunning
-    }
-    
     func takeOff() {
-        droneController.takeOff()
+        aircraftController.takeOff {
+            self.log.add(message: "Mission Control reported Take off")
+        }
     }
     
     func land() {
-        droneController.land()
+        aircraftController.land()
     }
     
-    func flyTo(altitude: Double) {
+    func flyTo(altitude: Float) {
+        let mission = NavigationUtilities.createDJIWaypointMission()
+        let currentPosition = aircraftController.aircraftPosition!
         
+        if !CLLocationCoordinate2DIsValid(currentPosition) {
+            log.add(message: "Invalid coordinates")
+            return
+        }
+        
+        let waypoint = NavigationUtilities.createWaypoint(coordinates: currentPosition, altitude: altitude)
+        
+        mission.add(waypoint)
+        clearScheduleAndExecute(mission: mission)
     }
     
-    func flyDirection(direction: Direction, meters: Double) {
-        guard let pos = droneController.aircraftPosition
+    func flyTo(direction: Direction, meters: Double) {
+        guard let position = aircraftController.aircraftPosition
         else {
             return
         }
         
-        var metersLat = 0
-        var metersLng = 0
+        let coordinates : CLLocationCoordinate2D
         
         switch direction {
-        case Direction.north:
-            metersLat = meters
-        case Direction.south:
-            metersLat = (-1) * meters
-        case Direction.east:
-            metersLng = meters
-        case Direction.west:
-            metersLng = (-1) * meters
+        case .north:
+            coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: meters, latitude: position.latitude, metersLng: 0, longitude: position.longitude)
+        case .south:
+            coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: (-1) * meters, latitude: position.latitude, metersLng: 0, longitude: position.longitude)
+        case .east:
+            coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: 0, latitude: position.latitude, metersLng: meters, longitude: position.longitude)
+        case .west:
+            coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: 0, latitude: position.latitude, metersLng: (-1) * meters, longitude: position.longitude)
         }
         
-        let coordinates = NavigationUtilities.addMetersToCoordinates(metersLat: metersLat, latitude: pos.latitude,
-                                                                     metersLng: metersLng, longitude: pos.longitude)
-        
-        guard let action = createWaypointMissionTo(coordinates: coordinates)
+        guard let mission = createWaypointMissionTo(coordinates: coordinates)
         else {
             log.add(message: "Mission is nil. Abort.")
             return
         }
-        clearScheduleAndExecute(actions: [action])
+        clearScheduleAndExecute(mission: mission)
     }
     
 }

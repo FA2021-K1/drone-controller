@@ -15,7 +15,6 @@
 		CC397DFB26FF7AF400D5254D /* AircraftController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DFA26FF7AF400D5254D /* AircraftController.swift */; };
 		CC397DFD26FF7D6100D5254D /* NavigationUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC397DFC26FF7D6100D5254D /* NavigationUtilities.swift */; };
 		CC3B490A2700F376008D491C /* Telemetry.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3B49092700F376008D491C /* Telemetry.swift */; };
-		CC4A05F22700A805006FCAFA /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A05F02700A805006FCAFA /* Coordinate.swift */; };
 		CC4A05F32700A805006FCAFA /* FirstComeFirstServe.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A05F12700A805006FCAFA /* FirstComeFirstServe.swift */; };
 		CC4A05F82700B330006FCAFA /* TaskContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A05F72700B330006FCAFA /* TaskContext.swift */; };
 		CC4A05FA2700B367006FCAFA /* Step.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC4A05F92700B367006FCAFA /* Step.swift */; };
@@ -28,14 +27,11 @@
 		CCD2593926F7E01E007AD953 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CCD2593826F7E01E007AD953 /* Preview Assets.xcassets */; };
 		CCD2594426F7E01E007AD953 /* FA2021Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594326F7E01E007AD953 /* FA2021Tests.swift */; };
 		CCD2594F26F7E01E007AD953 /* FA2021UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCD2594E26F7E01E007AD953 /* FA2021UITests.swift */; };
+		F85435A82701E8DD00748F1B /* ReactUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = F85435A72701E8DD00748F1B /* ReactUtil.swift */; };
 		F86307B426FF017B00A4E6BB /* Sync.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B326FF017B00A4E6BB /* Sync.swift */; };
 		F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B526FF039900A4E6BB /* SyncMessage.swift */; };
-		F86307BA26FF460700A4E6BB /* FirstComeFirstServe.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */; };
 		F86307BC26FF468000A4E6BB /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BB26FF468000A4E6BB /* Coordinate.swift */; };
 		F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BD26FF5AC100A4E6BB /* LiveData.swift */; };
-		F87628202702F7CB00B05CCC /* CameraFPVViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F876281D2702F7CB00B05CCC /* CameraFPVViewController.swift */; };
-		F87628212702F7CB00B05CCC /* VideoPreviewerAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F876281E2702F7CB00B05CCC /* VideoPreviewerAdapter.swift */; };
-		F87628222702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = F876281F2702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift */; };
 		F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAA26FB130F00DAF66D /* TaskManager.swift */; };
 		F8826AAD26FB130F00DAF66D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAB26FB130F00DAF66D /* Task.swift */; };
 		F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A03F26FB9405000906AA /* CoatyAPI.swift */; };
@@ -98,14 +94,12 @@
 		EE625DF92F5ADBC9EA56A09A /* Pods-FA2021Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021Tests.release.xcconfig"; path = "Target Support Files/Pods-FA2021Tests/Pods-FA2021Tests.release.xcconfig"; sourceTree = "<group>"; };
 		F2D70995382F90FBC042598D /* Pods_FA2021.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FA2021.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F5F5C4D7DDBC4EB8B93DFD59 /* Pods-FA2021.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FA2021.debug.xcconfig"; path = "Target Support Files/Pods-FA2021/Pods-FA2021.debug.xcconfig"; sourceTree = "<group>"; };
+		F85435A72701E8DD00748F1B /* ReactUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactUtil.swift; sourceTree = "<group>"; };
 		F86307B326FF017B00A4E6BB /* Sync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sync.swift; sourceTree = "<group>"; };
 		F86307B526FF039900A4E6BB /* SyncMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMessage.swift; sourceTree = "<group>"; };
 		F86307B926FF460700A4E6BB /* FirstComeFirstServe.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstComeFirstServe.swift; sourceTree = "<group>"; };
 		F86307BB26FF468000A4E6BB /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		F86307BD26FF5AC100A4E6BB /* LiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveData.swift; sourceTree = "<group>"; };
-		F876281D2702F7CB00B05CCC /* CameraFPVViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraFPVViewController.swift; sourceTree = "<group>"; };
-		F876281E2702F7CB00B05CCC /* VideoPreviewerAdapter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPreviewerAdapter.swift; sourceTree = "<group>"; };
-		F876281F2702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodeImageCalibrateLogic.swift; sourceTree = "<group>"; };
 		F8826AAA26FB130F00DAF66D /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		F8826AAB26FB130F00DAF66D /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		F890A03F26FB9405000906AA /* CoatyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoatyAPI.swift; sourceTree = "<group>"; };
@@ -190,7 +184,6 @@
 		CC8E98F626F8E61A0013973F /* FlightControl */ = {
 			isa = PBXGroup;
 			children = (
-				F876281B2702F7CB00B05CCC /* CameraSample */,
 				CC4A05F52700B2D1006FCAFA /* Aircraft */,
 				CC4A05F42700B29A006FCAFA /* Mission */,
 				CCB6EA9F26FB4D7700E94439 /* Log.swift */,
@@ -273,31 +266,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F86307B026FEFC3400A4E6BB /* Filesynch */ = {
+		F86307B026FEFC3400A4E6BB /* Filesync */ = {
 			isa = PBXGroup;
 			children = (
 				F86307B326FF017B00A4E6BB /* Sync.swift */,
 				F86307B526FF039900A4E6BB /* SyncMessage.swift */,
 			);
-			path = Filesynch;
-			sourceTree = "<group>";
-		};
-		F876281B2702F7CB00B05CCC /* CameraSample */ = {
-			isa = PBXGroup;
-			children = (
-				F876281C2702F7CB00B05CCC /* fpv */,
-				F876281E2702F7CB00B05CCC /* VideoPreviewerAdapter.swift */,
-				F876281F2702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift */,
-			);
-			path = CameraSample;
-			sourceTree = "<group>";
-		};
-		F876281C2702F7CB00B05CCC /* fpv */ = {
-			isa = PBXGroup;
-			children = (
-				F876281D2702F7CB00B05CCC /* CameraFPVViewController.swift */,
-			);
-			path = fpv;
+			path = Filesync;
 			sourceTree = "<group>";
 		};
 		F8826AA926FB130F00DAF66D /* TaskManagement */ = {
@@ -318,7 +293,7 @@
 		F890A05726FC7675000906AA /* DroneProtocol */ = {
 			isa = PBXGroup;
 			children = (
-				F86307B026FEFC3400A4E6BB /* Filesynch */,
+				F86307B026FEFC3400A4E6BB /* Filesync */,
 				F890A06526FC76CC000906AA /* Util */,
 				F890A05E26FC76B5000906AA /* Model */,
 				F890A06826FC787D000906AA /* DroneController.swift */,
@@ -341,6 +316,7 @@
 			children = (
 				F890A06C26FC78BF000906AA /* TimeUtil.swift */,
 				F894E69C26FF72D200EEA43D /* JSONSerializer.swift */,
+				F85435A72701E8DD00748F1B /* ReactUtil.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -413,7 +389,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1300;
 				TargetAttributes = {
 					CCD2592D26F7E01A007AD953 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -583,10 +559,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC397DF726FF74BC00D5254D /* DroneConnectionManager.swift in Sources */,
-				F87628212702F7CB00B05CCC /* VideoPreviewerAdapter.swift in Sources */,
 				F890A06B26FC78A0000906AA /* MissionController.swift in Sources */,
 				F890A07726FCA067000906AA /* TaskTable.swift in Sources */,
-				F87628222702F7CB00B05CCC /* DecodeImageCalibrateLogic.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
 				F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */,
 				CC4A05F32700A805006FCAFA /* FirstComeFirstServe.swift in Sources */,
@@ -604,15 +578,13 @@
 				F8826AAD26FB130F00DAF66D /* Task.swift in Sources */,
 				F86307B426FF017B00A4E6BB /* Sync.swift in Sources */,
 				F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */,
-				F86307BA26FF460700A4E6BB /* FirstComeFirstServe.swift in Sources */,
+				F85435A82701E8DD00748F1B /* ReactUtil.swift in Sources */,
 				F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */,
 				CC4A05FC2700B43D006FCAFA /* Idle.swift in Sources */,
 				CCD2593226F7E01A007AD953 /* FA2021App.swift in Sources */,
 				F86307BC26FF468000A4E6BB /* Coordinate.swift in Sources */,
-				F87628202702F7CB00B05CCC /* CameraFPVViewController.swift in Sources */,
 				CC397DF926FF78F700D5254D /* FlightControlService.swift in Sources */,
 				CC4A05F82700B330006FCAFA /* TaskContext.swift in Sources */,
-				CC4A05F22700A805006FCAFA /* Coordinate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

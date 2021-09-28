@@ -10,25 +10,28 @@ import Foundation
 class TaskContext {
     private let missionScheduler: MissionScheduler
     private var currentStepIndex: Int = -1
-    private var steps = [Step]()
+    private var task = [Step]()
     private var currentStep: Step? {
         get {
-            if steps.isEmpty || currentStepIndex < 0 || currentStepIndex >= steps.endIndex {
+            if task.isEmpty || currentStepIndex < 0 || currentStepIndex >= task.endIndex {
                 return nil
             }
-            return steps[currentStepIndex]
+            return task[currentStepIndex]
         }
     }
     private let log: Log
     
     init(log: Log, aircraftController: AircraftController) {
-        self.missionScheduler = MissionScheduler(log: log, droneController: aircraftController)
+        self.missionScheduler = MissionScheduler(log: log, aircraftController: aircraftController)
         self.log = log
     }
     
     func runSampleTask() {
+        print("start sample task")
         self.add(steps: [TakingOff(altitude: 5), Idling(duration: 8), Landing()])
+        print("start sample task")
         self.startTask()
+        print("started sample task")
     }
     
     /**
@@ -37,7 +40,7 @@ class TaskContext {
      A step can be added even when a task has already started, but new steps are only executed if the task has not completed yet.
      */
     func add(step: Step) {
-        self.steps.append(step)
+        self.task.append(step)
     }
     
     /**
@@ -46,13 +49,26 @@ class TaskContext {
      A step can be added even when a task has already started, but new steps are only executed if the task has not completed yet.
      */
     func add(steps: [Step]) {
-        self.steps.append(contentsOf: steps)
+        self.task.append(contentsOf: steps)
     }
     
     /**
      Sets the pointer to the first step of a Task and begins the execution of the task.
      */
     func startTask() {
+        if !missionScheduler.aircraftController.isReady {
+            self.log.add(message: "The aircraft is not ready yet, waiting 1s before retrying")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                self.startTask()
+            })
+            
+            return
+        }
+        if missionScheduler.missionActive {
+            self.log.add(message: "The aircraft is already executing a mission")
+            return
+        }
+        
         log.add(message: "Starting Task")
         reset()
         executeNextStep()
@@ -65,7 +81,7 @@ class TaskContext {
     
     func stopAndClearTask() {
         stopTask()
-        steps.removeAll()
+        task.removeAll()
     }
     
     /**
@@ -76,7 +92,7 @@ class TaskContext {
         log.add(message: "Resetting Task Steps")
         
         currentStepIndex = -1
-        for var step in steps {
+        for var step in task {
             step.done = false
         }
     }
