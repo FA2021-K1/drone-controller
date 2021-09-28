@@ -44,6 +44,9 @@ class FirstComeFirstServe: TaskManager {
             })
             .take(1)
             .subscribe(onNext: { table in
+                if (!self.currentTasksId.isEmpty){
+                    return
+                }
                 let unfinishedTaskIds = self.getUnfinishedTasksId()
                 self.claimTask(taskId: unfinishedTaskIds[0])
                 print("Scan sub")
@@ -93,6 +96,7 @@ class FirstComeFirstServe: TaskManager {
             // TODO: call drone team api to abort Task with taskId
             currentTasksId.remove(taskId)
             
+            // TODO: check if this is a good idea!
             // Scan needs to be started in another thread because this one doesn't belong to us but to the Sync control flow
             DispatchQueue.global().async {
                 self.scanForTask()
