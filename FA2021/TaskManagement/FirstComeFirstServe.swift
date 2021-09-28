@@ -83,7 +83,8 @@ class FirstComeFirstServe: TaskManager {
         }).first
         let steps = taskClaimed?.getTerminalTasksList()
 //        taskContext.add(steps: steps)
-        taskContext.startTask()
+//        taskContext.startTask()
+        taskContext.runSampleTask()
     }
     
     func checkResponsibilityForTask(taskTable: TaskTable){
