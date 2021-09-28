@@ -6,6 +6,13 @@ class CoatyAPI{
     var container: Container?
     var droneController: DroneController?
     var allTasksObservable: Observable<[Task]>?
+    let host_ip: String
+    let port: UInt16
+    
+    init(host_ip: String, port: UInt16) {
+        self.host_ip = host_ip
+        self.port = port
+    }
     
     func start(){
         let components = Components(controllers: [
@@ -64,8 +71,8 @@ class CoatyAPI{
             //
             // Note: Keep alive for the broker connection has been reduced to 10secs to minimize
             // connectivity issues when running with a remote public broker.
-            let mqttClientOptions = MQTTClientOptions(host: "192.168.1.194",
-                                                      port: 1883,
+            let mqttClientOptions = MQTTClientOptions(host: host_ip,
+                                                      port: port,
                                                       keepAlive: 10)
             config.communication = CommunicationOptions(namespace: "coaty.examples.remoteops",
                                                         mqttClientOptions: mqttClientOptions,

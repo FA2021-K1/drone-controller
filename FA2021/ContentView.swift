@@ -87,9 +87,9 @@ extension ContentView {
             self.log = log
             self.flightControl = FlightControlService(log: log)
 
-            self.subscription = log.$logEntries.sink(receiveValue: { entries in
-                self.logEntries = entries
-            })
+                self.subscription = log.$logEntries.sink(receiveValue: { entries in
+                    self.logEntries = entries
+                })
             
             /*
              Potentialy the same iPhone could control different drones, meaning that the uuid of the iPhone might not always refer to the same drone.
@@ -106,5 +106,6 @@ extension ContentView {
             firstComeFirstServe.scanForTask()
             
         }
+
     }
 }
