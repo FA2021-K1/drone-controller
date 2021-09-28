@@ -11,7 +11,7 @@ class TaskContext {
     private let missionScheduler: MissionScheduler
     private var currentStepIndex: Int = -1
     private var task = [Step]()
-    private var currentStep: Step? {
+    var currentStep: Step? {
         get {
             if task.isEmpty || currentStepIndex < 0 || currentStepIndex >= task.endIndex {
                 return nil
@@ -29,7 +29,6 @@ class TaskContext {
     func runSampleTask() {
         print("start sample task")
         self.add(steps: [TakingOff(altitude: 5), Idling(duration: 8), Landing()])
-        print("start sample task")
         self.startTask()
         print("started sample task")
     }
@@ -75,7 +74,7 @@ class TaskContext {
     }
     
     func stopTask() {
-        missionScheduler.stopMissionIfRunning()
+        missionScheduler.stopAndClearMissionIfRunning()
         reset()
     }
     

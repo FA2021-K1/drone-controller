@@ -16,7 +16,7 @@ class FirstComeFirstServe: TaskManager {
         finishedTasksId = []
         
         /**
-         updateTaskTable everytime a new TaskList was received
+         updateTaskTable everytime a new TaskList was received (server sends TaskList every 10 secconds or so)
          */
         ReactTypeUtil<[Task]>.subAll( dispose: api.droneController?.disposeBag, observable: api.allTasksObservable){
             tasks in api.droneController?.getDroneTableSync()?.updateData({ old in old.updateTaskTable(activeTaskSet: Set(tasks))})
@@ -30,12 +30,10 @@ class FirstComeFirstServe: TaskManager {
         }
     }
     
-    /**
-     entry point
-     */
     func scanForTask(){
         // TODO: Test this method
         api.droneController?.getDroneTableSync()?.getDataObservable()
+            .observeOn(MainScheduler.asyncInstance)
             .skipWhile({ table in
                 table.table.allSatisfy { entry in
                     entry.value.state != TaskTable.TaskState.available
@@ -46,10 +44,10 @@ class FirstComeFirstServe: TaskManager {
                 if (!self.currentTasksId.isEmpty){
                     return
                 }
-                DispatchQueue.global().async {
-                    let unfinishedTaskIds = self.getUnfinishedTasksId()
-                    self.claimTask(taskId: unfinishedTaskIds[0])
-                }
+                
+                let unfinishedTaskIds = self.getUnfinishedTasksId()
+                self.claimTask(taskId: unfinishedTaskIds[0])
+                
             })
             .disposed(by: api.droneController!.disposeBag)
     }
@@ -72,9 +70,9 @@ class FirstComeFirstServe: TaskManager {
         
         print("Claim task, task_id: \(taskId)")
         
-        currentTasksId.insert(taskId)
-        api.droneController?.claimTask(taskId: taskId, droneId: droneId)
-        
+            self.currentTasksId.insert(taskId)
+            self.api.droneController?.claimTask(taskId: taskId, droneId: self.droneId)
+
         // TODO: call drone team api to start task
         let taskSet = api.droneController?.getDroneTableSync()?.value.taskSet
         let taskClaimed = taskSet?.filter({
@@ -83,7 +81,8 @@ class FirstComeFirstServe: TaskManager {
         }).first
         let steps = taskClaimed?.getTerminalTasksList()
 //        taskContext.add(steps: steps)
-        taskContext.startTask()
+//        taskContext.startTask()
+        taskContext.runSampleTask()
     }
     
     func checkResponsibilityForTask(taskTable: TaskTable){
@@ -97,9 +96,11 @@ class FirstComeFirstServe: TaskManager {
                 print("Giving up task \(taskId) to drone \(tableResult.droneId)")
             }
             
-            
-            // TODO: call drone team api to abort Task with taskId
+            // abort task and land
             currentTasksId.remove(taskId)
+            taskContext.stopAndClearTask()
+            taskContext.add(step: Landing())
+            taskContext.startTask()
         }
     }
 }
