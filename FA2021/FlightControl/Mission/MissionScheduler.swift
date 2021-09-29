@@ -10,13 +10,12 @@ import DJISDK
 
 class MissionScheduler: NSObject, ObservableObject {
     private(set) var aircraftController: AircraftController
-    private var log: Log
     
     var missionActive: Bool {
         get {
             guard let missionControl = DJISDKManager.missionControl()
             else {
-                log.add(message: "Warning: Mission Control is unavailable! Could not safely determine mission state!")
+                Logger.getInstance().add(message: "Warning: Mission Control is unavailable! Could not safely determine mission state!")
                 return false
             }
             
@@ -30,9 +29,8 @@ class MissionScheduler: NSObject, ObservableObject {
         }
     }
     
-    init(log: Log, aircraftController: AircraftController) {
+    init(aircraftController: AircraftController) {
         self.aircraftController = aircraftController
-        self.log = log
         super.init()
         
         setupListeners()
@@ -45,7 +43,7 @@ class MissionScheduler: NSObject, ObservableObject {
     func clearScheduleAndExecute(actions: [DJIMissionControlTimelineElement]) {
         guard let missionControl = DJISDKManager.missionControl()
         else {
-            log.add(message: "Failed to schedule: Mission Control is unavailable")
+            Logger.getInstance().add(message: "Failed to schedule: Mission Control is unavailable")
             return
         }
         
@@ -58,14 +56,14 @@ class MissionScheduler: NSObject, ObservableObject {
                 
             } else {
                 if let error = missionControl.scheduleElements(actions) {
-                    self.log.add(message: "Failed to schedule: \(String(describing: error))")
+                    Logger.getInstance().add(message: "Failed to schedule: \(String(describing: error))")
                     self.retryAfter(seconds: 1, task: {
                         self.clearScheduleAndExecute(actions: actions)
                     })
                     return
                 }
                 
-                self.log.add(message: "Starting timeline")
+                Logger.getInstance().add(message: "Starting timeline")
                 missionControl.currentTimelineMarker = 0
                 missionControl.startTimeline()
             }
@@ -76,7 +74,7 @@ class MissionScheduler: NSObject, ObservableObject {
         let mission = NavigationUtilities.createDJIWaypointMission()
 
         if !CLLocationCoordinate2DIsValid(coordinates) {
-            log.add(message: "Invalid coordinates")
+            Logger.getInstance().add(message: "Invalid coordinates")
             return nil
         }
         
@@ -93,22 +91,22 @@ class MissionScheduler: NSObject, ObservableObject {
     func stopAndClearMissionIfRunning() {
         guard let missionControl = DJISDKManager.missionControl()
         else {
-            log.add(message: "Failed to stop mission: Mission Control is unavailable")
+            Logger.getInstance().add(message: "Failed to stop mission: Mission Control is unavailable")
             return
         }
         
         if missionActive {
-            self.log.add(message: "Stopping current mission and unscheduling everything...")
+            Logger.getInstance().add(message: "Stopping current mission and unscheduling everything...")
             missionControl.stopTimeline()
             missionControl.unscheduleEverything()
         } else {
-            self.log.add(message: "No mission to stop")
+            Logger.getInstance().add(message: "No mission to stop")
         }
     }
     
     func takeOff(altitude: Float) {
         aircraftController.takeOff {
-            self.log.add(message: "Mission Control reported Take off")
+            Logger.getInstance().add(message: "Mission Control reported Take off")
             self.retryAfter(seconds: 4, task: {
                 self.flyTo(altitude: altitude)
             })
@@ -120,13 +118,13 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func flyTo(altitude: Float) {
-        self.log.add(message: "Flying to altitude \(altitude)")
+        Logger.getInstance().add(message: "Flying to altitude \(altitude)")
         let mission = NavigationUtilities.createDJIWaypointMission()
         let currentPosition = aircraftController.aircraftPosition!
         let currentAltitude = aircraftController.aircraftAltitude!
         
         if !CLLocationCoordinate2DIsValid(currentPosition) {
-            log.add(message: "Invalid coordinates")
+            Logger.getInstance().add(message: "Invalid coordinates")
             return
         }
         
@@ -159,7 +157,7 @@ class MissionScheduler: NSObject, ObservableObject {
         
         guard let mission = createWaypointMissionTo(coordinates: coordinates)
         else {
-            log.add(message: "Mission is nil. Abort.")
+            Logger.getInstance().add(message: "Mission is nil. Abort.")
             return
         }
         clearScheduleAndExecute(mission: mission)
@@ -172,7 +170,7 @@ extension MissionScheduler {
         DJISDKManager.missionControl()?.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
             
             if error != nil {
-                self.log.add(message: error!.localizedDescription)
+                Logger.getInstance().add(message: error!.localizedDescription)
             }
             
             // https://github.com/dji-sdk/Mobile-SDK-iOS/issues/161#issuecomment-330616112
@@ -186,26 +184,26 @@ extension MissionScheduler {
             case .resumed:
                 self.didResume()
             default:
-                self.log.add(message: "DJIMissionControl reported Event \(event.self)")
+                Logger.getInstance().add(message: "DJIMissionControl reported Event \(event.self)")
                 break
             }
         })
     }
     
     private func didStart() {
-        self.log.add(message: "Mission Scheduler started mission")
+        Logger.getInstance().add(message: "Mission Scheduler started mission")
     }
     
     private func didStop() {
-        self.log.add(message: "Mission Scheduler is ready")
+        Logger.getInstance().add(message: "Mission Scheduler is ready")
     }
     
     private func didPause() {
-        self.log.add(message: "Mission Scheduler paused mission")
+        Logger.getInstance().add(message: "Mission Scheduler paused mission")
     }
     
     private func didResume() {
-        self.log.add(message: "Mission Scheduler resumed mission")
+        Logger.getInstance().add(message: "Mission Scheduler resumed mission")
     }
 }
 

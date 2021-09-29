@@ -9,24 +9,22 @@ import Foundation
 import Combine
 
 class FlightControlService {
-    private var log: Log
     private var missionScheduler: MissionScheduler
     private var connectionManager: DroneConnectionManager
     private var aircraftController: AircraftController
     private(set) var taskContext: TaskContext
     
-    init(log: Log) {
-        self.log = log
-        self.connectionManager = DroneConnectionManager(log: log)
-        self.aircraftController = AircraftController(log: log, droneConnection: connectionManager)
-        self.missionScheduler = MissionScheduler(log: log, aircraftController: aircraftController)
-        self.taskContext = TaskContext(log: log, aircraftController: aircraftController)
-        log.add(message: "FlightControlService initialized")
+    init() {
+        self.connectionManager = DroneConnectionManager()
+        self.aircraftController = AircraftController(droneConnection: connectionManager)
+        self.missionScheduler = MissionScheduler(aircraftController: aircraftController)
+        self.taskContext = TaskContext(aircraftController: aircraftController)
+        Logger.getInstance().add(message: "FlightControlService initialized")
     }
     
     func takeOff() {
         self.aircraftController.takeOff {
-            self.log.add(message: "FlightControlService reported takeoff")
+            Logger.getInstance().add(message: "FlightControlService reported takeoff")
         }
     }
     

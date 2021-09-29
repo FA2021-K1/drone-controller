@@ -10,7 +10,6 @@ import DJISDK
 import Combine
 
 class AircraftController: ObservableObject {
-    private var log: Log
     private var droneConnection: DroneConnectionManager
     @Published private(set) var state: DroneState
     
@@ -25,13 +24,13 @@ class AircraftController: ObservableObject {
         get {
             guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
             else {
-                log.add(message: "Cannot retrieve current location: Missing Controller Key")
+                Logger.getInstance().add(message: "Cannot retrieve current location: Missing Controller Key")
                 return nil
             }
             
             let value = DJISDKManager.keyManager()?.getValueFor(key)
             guard let location = value?.value as? CLLocation else {
-                log.add(message: "Cannot retrieve current location")
+                Logger.getInstance().add(message: "Cannot retrieve current location")
                 return nil
             }
             
@@ -48,13 +47,13 @@ class AircraftController: ObservableObject {
         get {
             guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAltitudeInMeters)
             else {
-                log.add(message: "Cannot retrieve current altitude: Missing Controller Key")
+                Logger.getInstance().add(message: "Cannot retrieve current altitude: Missing Controller Key")
                 return nil
             }
             
             let value = DJISDKManager.keyManager()?.getValueFor(key)
             guard let altitude = value?.value as? Double else {
-                log.add(message: "Cannot retrieve current altitude")
+                Logger.getInstance().add(message: "Cannot retrieve current altitude")
                 return nil
             }
             
@@ -71,13 +70,13 @@ class AircraftController: ObservableObject {
         get {
             guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamGPSSignalStatus)
             else {
-                log.add(message: "Cannot retrieve current GPS Signal Level: Missing Controller Key")
+                Logger.getInstance().add(message: "Cannot retrieve current GPS Signal Level: Missing Controller Key")
                 return nil
             }
             
             let value = DJISDKManager.keyManager()?.getValueFor(key)
             guard let gpsSignalLevel = value?.value as? DJIGPSSignalLevel else {
-                log.add(message: "Cannot retrieve current GPS Signal Level")
+                Logger.getInstance().add(message: "Cannot retrieve current GPS Signal Level")
                 return nil
             }
             
@@ -91,15 +90,14 @@ class AircraftController: ObservableObject {
         }
     }
     
-    init(log: Log, droneConnection: DroneConnectionManager) {
-        self.log = log
+    init(droneConnection: DroneConnectionManager) {
         self.state = .onGround
         self.droneConnection = droneConnection
     }
     
     func takeOff(completion: @escaping () -> Void) {
         droneConnection.aircraft?.flightController?.startTakeoff {_ in
-            self.log.add(message: "Take off command sent")
+            Logger.getInstance().add(message: "Take off command sent")
             self.state = .inAir
             completion()
         }
@@ -107,7 +105,7 @@ class AircraftController: ObservableObject {
     
     func land() {
         droneConnection.aircraft?.flightController?.startLanding {_ in
-            self.log.add(message: "Landing command sent")
+            Logger.getInstance().add(message: "Landing command sent")
             self.state = .onGround
         }
     }

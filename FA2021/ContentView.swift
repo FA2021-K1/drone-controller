@@ -68,7 +68,7 @@ struct ContentView: View {
                          */
                         
                         let coatyAPI: CoatyAPI = CoatyAPI(host_ip: ip, port: port)
-                        let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString, taskContext: viewModel.flightControl.taskContext)
+                        let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString, taskContext: viewModel.flightControl.taskContext, waitBeforeStarting: true)
 
                         // starts timer to send data in init()
                         let _: Telemetry = Telemetry(api: coatyAPI, taskmanager: firstComeFirstServe)
@@ -157,15 +157,12 @@ extension ContentView {
         
         let flightControl: FlightControlService
         
-        private let log: Log
         private var subscription: AnyCancellable?
         
         init() {
-            let log = Log()
-            self.log = log
-            self.flightControl = FlightControlService(log: log)
+            self.flightControl = FlightControlService()
 
-            self.subscription = log.$logEntries.sink(receiveValue: { entries in
+            self.subscription = Logger.getInstance().$logEntries.sink(receiveValue: { entries in
                 self.logEntries = entries
             })
             

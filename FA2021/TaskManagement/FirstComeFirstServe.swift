@@ -6,14 +6,16 @@ class FirstComeFirstServe: TaskManager {
     var droneId: String
     var currentTasksId: Set<String>
     var finishedTasksId: Set<String>
+    var waitBeforeStarting: Bool
 
-    init(api: CoatyAPI, droneId: String, taskContext: TaskContext) {
+    init(api: CoatyAPI, droneId: String, taskContext: TaskContext, waitBeforeStarting: Bool) {
         self.droneId = droneId
         self.api = api
         self.taskContext = taskContext
         api.start()
         currentTasksId = []
         finishedTasksId = []
+        self.waitBeforeStarting = waitBeforeStarting
         
         /**
          updateTaskTable everytime a new TaskList was received (server sends TaskList every 10 secconds or so)
@@ -68,7 +70,7 @@ class FirstComeFirstServe: TaskManager {
     
     func claimTask(taskId: String) {
         
-        print("Claim task, task_id: \(taskId)")
+        Logger.getInstance().add(message: "Claim task, task_id: \(taskId)")
         
             self.currentTasksId.insert(taskId)
             self.api.droneController?.claimTask(taskId: taskId, droneId: self.droneId)
@@ -82,18 +84,31 @@ class FirstComeFirstServe: TaskManager {
         let steps = taskClaimed?.getTerminalTasksList()
 //        taskContext.add(steps: steps)
 //        taskContext.startTask()
-        taskContext.runSampleTask()
+        
+        if(waitBeforeStarting){
+            // wait 5 seconds in order to prevent drones from starting simultaniously
+            let seconds = 5.0
+            DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
+                if (!self.currentTasksId.isEmpty){
+                    self.taskContext.runSampleTask()
+                }else{
+                    Logger.getInstance().add(message: "don't start task \(taskId) because too late")
+                }
+            }
+        }else {
+            self.taskContext.runSampleTask()
+        }
     }
     
     func checkResponsibilityForTask(taskTable: TaskTable){
         for taskId in currentTasksId {
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
                 if (tableResult.state == .available || tableResult.droneId == droneId) {
-                    print("keep task: " + taskId)
+                    Logger.getInstance().add(message: "keep task: " + taskId)
                     return
                 }
                 
-                print("Giving up task \(taskId) to drone \(tableResult.droneId)")
+                Logger.getInstance().add(message: "Giving up task \(taskId) to drone \(tableResult.droneId)")
             }
             
             // abort task and land
