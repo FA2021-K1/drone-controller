@@ -25,10 +25,9 @@ class TaskContext {
     }
     
     func runSampleTask() {
-        print("start sample task")
+        Logger.getInstance().add(message: "start sample task")
         self.add(steps: [TakingOff(altitude: 5), Idling(duration: 8), Landing()])
         self.startTask()
-        print("started sample task")
     }
     
     /**

@@ -98,7 +98,6 @@ class FirstComeFirstServe: TaskManager {
         }else {
             self.taskContext.runSampleTask()
         }
-        
     }
     
     func checkResponsibilityForTask(taskTable: TaskTable){
