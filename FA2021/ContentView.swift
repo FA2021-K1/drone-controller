@@ -43,16 +43,18 @@ struct ContentView: View {
                         Text("IP:").frame(width: width, alignment: .center)
                         TextField("123.456.789.123", text: $ip)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.horizontal)
                     }
                     HStack {
                         Text("Port:").frame(width: width, alignment: .center)
                         TextField("1234", text: $portString)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .padding(.horizontal)
                     }
-                    
                 }
                 Button {
-                    if let port: UInt16 = UInt16(portString) {
+                    if !coatyStarted {
+                        if let port: UInt16 = UInt16(portString) {
                         withAnimation {
                             coatyStarted.toggle()
                         }
@@ -76,6 +78,8 @@ struct ContentView: View {
                         
                     } else {
                         showingInvalidPortAlert = true
+                    }
+                        
                     }
                     
                 } label: {
