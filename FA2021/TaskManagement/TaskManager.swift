@@ -12,7 +12,6 @@ protocol TaskManager {
     var droneId: String { get }
     var currentTasksId: Set<String> { get }
     var finishedTasksId: Set<String> { get }
-    var taskContext: TaskContext { get }
 
     func scanForTask()
 }

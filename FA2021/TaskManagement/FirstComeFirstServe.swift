@@ -1,17 +1,15 @@
 import Foundation
 import RxSwift
 class FirstComeFirstServe: TaskManager {
-    var taskContext: TaskContext
     var api: CoatyAPI
     var droneId: String
     var currentTasksId: Set<String>
     var finishedTasksId: Set<String>
     var waitBeforeStarting: Bool
 
-    init(api: CoatyAPI, droneId: String, taskContext: TaskContext, waitBeforeStarting: Bool) {
+    init(api: CoatyAPI, droneId: String, waitBeforeStarting: Bool) {
         self.droneId = droneId
         self.api = api
-        self.taskContext = taskContext
         api.start()
         currentTasksId = []
         finishedTasksId = []
@@ -90,13 +88,13 @@ class FirstComeFirstServe: TaskManager {
             let seconds = 5.0
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                 if (!self.currentTasksId.isEmpty){
-                    self.taskContext.runSampleTask()
+                    
                 }else{
                     Logger.getInstance().add(message: "don't start task \(taskId) because too late")
                 }
             }
         }else {
-            self.taskContext.runSampleTask()
+            
         }
     }
     
@@ -113,9 +111,6 @@ class FirstComeFirstServe: TaskManager {
             
             // abort task and land
             currentTasksId.remove(taskId)
-            taskContext.stopAndClearTask()
-            taskContext.add(step: Landing())
-            taskContext.startTask()
         }
     }
 }

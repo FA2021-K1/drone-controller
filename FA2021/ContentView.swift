@@ -68,8 +68,8 @@ struct ContentView: View {
                          */
                         
                         let coatyAPI: CoatyAPI = CoatyAPI(host_ip: ip, port: port)
-                        let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString, taskContext: viewModel.flightControl.taskContext, waitBeforeStarting: true)
-
+                        let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString,
+                                                                                waitBeforeStarting: true)
                         // starts timer to send data in init()
                         let _: Telemetry = Telemetry(api: coatyAPI, taskmanager: firstComeFirstServe)
 
@@ -109,29 +109,9 @@ struct ContentView: View {
         // steering
         List {
             Button {
-                viewModel.flightControl.takeOff()
             } label: {
                 Text("Takeoff").padding(20)
             }.contentShape(Rectangle())
-            
-            Button {
-                viewModel.flightControl.flyNorth(meters: 5)
-            } label: {
-                Text("Fly 5m North").padding(20)
-            }.contentShape(Rectangle())
-            
-            Button {
-                viewModel.flightControl.land()
-            } label: {
-                Text("Land").padding(20)
-            }.contentShape(Rectangle())
-            
-            Button {
-                viewModel.flightControl.sampleTask()
-            } label: {
-                Text("Sample Task").padding(20)
-            }.contentShape(Rectangle())
-            
         }
         
         Divider()
