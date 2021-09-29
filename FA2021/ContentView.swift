@@ -164,11 +164,12 @@ extension ContentView {
 
             self.subscription = Logger.getInstance().$logEntries.sink(receiveValue: { entries in
                 self.logEntries = entries
+                
+                let toRemove = self.logEntries.count - 100
+                if (toRemove > 0){
+                    self.logEntries.removeLast(toRemove)
+                }
             })
-            
-            
-            
         }
-
     }
 }

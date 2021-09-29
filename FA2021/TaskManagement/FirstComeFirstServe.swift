@@ -104,7 +104,7 @@ class FirstComeFirstServe: TaskManager {
         for taskId in currentTasksId {
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
                 if (tableResult.state == .available || tableResult.droneId == droneId) {
-                    Logger.getInstance().add(message: "keep task: " + taskId)
+                    Logger.getInstance().add(message: "keep task: \(taskId)")
                     return
                 }
                 
