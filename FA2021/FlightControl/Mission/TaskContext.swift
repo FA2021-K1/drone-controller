@@ -28,7 +28,7 @@ class TaskContext {
     
     func runSampleTask() {
         print("start sample task")
-        self.add(steps: [TakingOff(altitude: 5), Idling(duration: 8), Landing()])
+        self.add(steps: [TakingOff(altitude: 10), Idling(duration: 8), Landing()])
         self.startTask()
         print("started sample task")
     }
@@ -112,6 +112,7 @@ class TaskContext {
     }
     
     private func checkDone() {
+        log.add(message: "Check done")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             if self.currentStep == nil {
                 return

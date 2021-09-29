@@ -43,6 +43,10 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func clearScheduleAndExecute(actions: [DJIMissionControlTimelineElement]) {
+        log.add(message: "clear schedule and execute")
+        actions.forEach { action in
+            log.add(message: "Action: \(action.debugDescription ?? "[No debug description]")")
+        }
         guard let missionControl = DJISDKManager.missionControl()
         else {
             log.add(message: "Failed to schedule: Mission Control is unavailable")
@@ -51,6 +55,7 @@ class MissionScheduler: NSObject, ObservableObject {
         
         DispatchQueue.main.async {
             if missionControl.isTimelineRunning {
+                self.log.add(message: "Timeline is already running, retrying in 1 second")
                 self.stopAndClearMissionIfRunning()
                 self.retryAfter(seconds: 1) {
                     self.clearScheduleAndExecute(actions: actions)
@@ -91,6 +96,7 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func stopAndClearMissionIfRunning() {
+        log.add(message: "Stop and clear mission if running")
         guard let missionControl = DJISDKManager.missionControl()
         else {
             log.add(message: "Failed to stop mission: Mission Control is unavailable")
@@ -107,6 +113,7 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func takeOff(altitude: Float) {
+        log.add(message: "Ordered takeoff")
         aircraftController.takeOff {
             self.log.add(message: "Mission Control reported Take off")
             self.retryAfter(seconds: 4, task: {
@@ -116,6 +123,7 @@ class MissionScheduler: NSObject, ObservableObject {
     }
     
     func land() {
+        log.add(message: "Ordered land")
         aircraftController.land()
     }
     
@@ -124,6 +132,7 @@ class MissionScheduler: NSObject, ObservableObject {
         let mission = NavigationUtilities.createDJIWaypointMission()
         let currentPosition = aircraftController.aircraftPosition!
         let currentAltitude = aircraftController.aircraftAltitude!
+        self.log.add(message: "Current position: \(currentPosition), current altitude: \(currentAltitude)")
         
         if !CLLocationCoordinate2DIsValid(currentPosition) {
             log.add(message: "Invalid coordinates")
