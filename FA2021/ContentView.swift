@@ -155,12 +155,9 @@ extension ContentView {
         @Published
         var logEntries = [String]()
         
-        let flightControl: FlightControlService
-        
         private var subscription: AnyCancellable?
         
         init() {
-            self.flightControl = FlightControlService()
 
             self.subscription = Logger.getInstance().$logEntries.sink(receiveValue: { entries in
                 self.logEntries = entries
