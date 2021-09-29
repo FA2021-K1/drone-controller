@@ -66,7 +66,7 @@ struct ContentView: View {
                          */
                         
                         let coatyAPI: CoatyAPI = CoatyAPI(host_ip: ip, port: port)
-                        let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString, taskContext: viewModel.flightControl.taskContext)
+                        let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString, taskContext: viewModel.flightControl.taskContext, waitBeforeStarting: true)
 
                         // starts timer to send data in init()
                         let _: Telemetry = Telemetry(api: coatyAPI, taskmanager: firstComeFirstServe)
