@@ -56,7 +56,7 @@ class MissionScheduler: NSObject, ObservableObject {
                 
             } else {
                 if let error = missionControl.scheduleElements(actions) {
-                    Logger.getInstance().add(message: "Failed to schedule: \(String(describing: error))")
+                    Logger.getInstance().add(message: "Failed to schedule: \(error.localizedDescription)")
                     self.retryAfter(seconds: 1, task: {
                         self.clearScheduleAndExecute(actions: actions)
                     })
