@@ -9,14 +9,12 @@ import Foundation
 import DJISDK
 
 class DroneConnectionManager: NSObject, ObservableObject {
-    private var log: Log
     @Published var product: DJIBaseProduct?
     @Published var aircraft: DJIAircraft?
     @Published var missionControl: DJIMissionControl?
     private var state: DroneControllerState
     
-    init(log: Log) {
-        self.log = log
+    override init() {
         self.state = .initialized
         super.init()
         
@@ -26,13 +24,13 @@ class DroneConnectionManager: NSObject, ObservableObject {
     
     private func connectProductAndAnnounce() {
         self.state = .connecting
-        self.log.add(message: "Connecting to product")
+        Logger.getInstance().add(message: "Connecting to product")
         
         DJISDKManager.startConnectionToProduct()
         
-        self.log.add(message: "Creating connected key")
+        Logger.getInstance().add(message: "Creating connected key")
         guard let connectedKey = DJIProductKey(param: DJIParamConnection) else {
-            self.log.add(message: "Error creating the connectedKey")
+            Logger.getInstance().add(message: "Error creating the connectedKey")
             return;
         }
         
@@ -66,13 +64,13 @@ class DroneConnectionManager: NSObject, ObservableObject {
         self.state = .connected
         guard let newProduct = DJISDKManager.product() else {
             // Product is connected but DJISDKManager.product is nil -> something is wrong
-            self.log.add(message: "Status: Identifying product.")
+            Logger.getInstance().add(message: "Status: Identifying product.")
             self.connectProductAndAnnounce()
             return
         }
         
         // Announce the product's model
-        self.log.add(message: "Status: Connected. Model: \((newProduct.model)!)")
+        Logger.getInstance().add(message: "Status: Connected. Model: \((newProduct.model)!)")
         
         product = newProduct
         
@@ -89,13 +87,13 @@ class DroneConnectionManager: NSObject, ObservableObject {
 
 extension DroneConnectionManager: DJISDKManagerDelegate {
     private func registerSDK() {
-        log.add(message: "Registering SDK")
+        Logger.getInstance().add(message: "Registering SDK")
         state = .sdkRegistration
         
         let appKey = Bundle.main.object(forInfoDictionaryKey: SDK_APP_KEY_INFO_PLIST_KEY) as? String
         
         guard appKey != nil && appKey!.isEmpty == false else {
-            log.add(message: "Please enter your app key in the info.plist")
+            Logger.getInstance().add(message: "Please enter your app key in the info.plist")
             return
         }
         DJISDKManager.registerApp(with: self)
@@ -104,10 +102,10 @@ extension DroneConnectionManager: DJISDKManagerDelegate {
     func appRegisteredWithError(_ error: Error?) {
         if (error != nil) {
             state = .error(problem: error.debugDescription)
-            log.add(message: "Registering SDK failed")
+            Logger.getInstance().add(message: "Registering SDK failed")
         } else {
             state = .sdkRegistered
-            log.add(message: "Registering SDK successful")
+            Logger.getInstance().add(message: "Registering SDK successful")
         }
     }
     

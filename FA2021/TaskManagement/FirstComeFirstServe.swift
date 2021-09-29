@@ -70,7 +70,7 @@ class FirstComeFirstServe: TaskManager {
     
     func claimTask(taskId: String) {
         
-        print("Claim task, task_id: \(taskId)")
+        Logger.getInstance().add(message: "Claim task, task_id: \(taskId)")
         
             self.currentTasksId.insert(taskId)
             self.api.droneController?.claimTask(taskId: taskId, droneId: self.droneId)
@@ -92,7 +92,7 @@ class FirstComeFirstServe: TaskManager {
                 if (!self.currentTasksId.isEmpty){
                     self.taskContext.runSampleTask()
                 }else{
-                    print("don't start because too late")
+                    Logger.getInstance().add(message: "don't start task \(taskId) because too late")
                 }
             }
         }else {
@@ -105,11 +105,11 @@ class FirstComeFirstServe: TaskManager {
         for taskId in currentTasksId {
             if let tableResult: TaskTable.DroneClaim = taskTable.table[taskId] {
                 if (tableResult.state == .available || tableResult.droneId == droneId) {
-                    print("keep task: " + taskId)
+                    Logger.getInstance().add(message: "keep task: " + taskId)
                     return
                 }
                 
-                print("Giving up task \(taskId) to drone \(tableResult.droneId)")
+                Logger.getInstance().add(message: "Giving up task \(taskId) to drone \(tableResult.droneId)")
             }
             
             // abort task and land

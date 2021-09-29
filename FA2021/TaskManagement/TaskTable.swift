@@ -75,7 +75,7 @@ struct TaskTable: Codable, Equatable {
         var newTable = self.withTaskSet(newTasksSet)
         
         for task in newTasksSet {
-            print("Add task to TaskTable, task_id: \(task.id)")
+            Logger.getInstance().add(message: "Add task to TaskTable, task_id: \(task.id)")
             // TODO: initialize with something better
         
             newTable.table[task.id] = DroneClaim(droneId: "", timestamp: 0, state: TaskState.available)

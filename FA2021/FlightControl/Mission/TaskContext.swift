@@ -19,11 +19,9 @@ class TaskContext {
             return task[currentStepIndex]
         }
     }
-    private let log: Log
     
-    init(log: Log, aircraftController: AircraftController) {
-        self.missionScheduler = MissionScheduler(log: log, aircraftController: aircraftController)
-        self.log = log
+    init(aircraftController: AircraftController) {
+        self.missionScheduler = MissionScheduler(aircraftController: aircraftController)
     }
     
     func runSampleTask() {
@@ -56,7 +54,7 @@ class TaskContext {
      */
     func startTask() {
         if !missionScheduler.aircraftController.isReady {
-            self.log.add(message: "The aircraft is not ready yet, waiting 1s before retrying")
+            Logger.getInstance().add(message: "The aircraft is not ready yet, waiting 1s before retrying")
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 self.startTask()
             })
@@ -64,11 +62,11 @@ class TaskContext {
             return
         }
         if missionScheduler.missionActive {
-            self.log.add(message: "The aircraft is already executing a mission")
+            Logger.getInstance().add(message: "The aircraft is already executing a mission")
             return
         }
         
-        log.add(message: "Starting Task")
+        Logger.getInstance().add(message: "Starting Task")
         reset()
         executeNextStep()
     }
@@ -88,7 +86,7 @@ class TaskContext {
      Call stopTask() instead.
      */
     private func reset() {
-        log.add(message: "Resetting Task Steps")
+        Logger.getInstance().add(message: "Resetting Task Steps")
         
         currentStepIndex = -1
         for var step in task {
@@ -97,16 +95,16 @@ class TaskContext {
     }
     
     private func executeNextStep() {
-        log.add(message: "Incrementing step counter")
+        Logger.getInstance().add(message: "Incrementing step counter")
         currentStepIndex += 1
         
         guard let currentStep = currentStep
         else {
-            log.add(message: "No step to execute")
+            Logger.getInstance().add(message: "No step to execute")
             return
         }
         
-        log.add(message: currentStep.description)
+        Logger.getInstance().add(message: currentStep.description)
         currentStep.execute(missionScheduler: missionScheduler)
         checkDone()
     }
