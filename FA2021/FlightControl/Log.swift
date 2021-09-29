@@ -15,6 +15,10 @@ class Log: ObservableObject {
     
     func add(message: String) {
         logEntries.insert("[\(timestamp.currentTimestamp())] \(message)", at: 0)
+        if logEntries.count > 100 {
+            logEntries.removeLast()
+        }
+        
         self.objectWillChange.send()
     }
     
