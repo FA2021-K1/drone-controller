@@ -141,6 +141,9 @@ extension ContentView {
             self.subscription = Logger.getInstance().$logEntries.sink(receiveValue: { entries in
                 self.logEntries = entries
             })
+            
+            let aircraft = Aircraft()
+            let connection = AircraftConnection()
         }
     }
 }

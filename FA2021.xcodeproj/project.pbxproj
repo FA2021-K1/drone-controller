@@ -26,6 +26,8 @@
 		F86307B626FF039900A4E6BB /* SyncMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307B526FF039900A4E6BB /* SyncMessage.swift */; };
 		F86307BC26FF468000A4E6BB /* Coordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BB26FF468000A4E6BB /* Coordinate.swift */; };
 		F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = F86307BD26FF5AC100A4E6BB /* LiveData.swift */; };
+		F864614B2704E54A00ED703A /* Aircraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = F864614A2704E54A00ED703A /* Aircraft.swift */; };
+		F864614D2704F14000ED703A /* AircraftConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F864614C2704F14000ED703A /* AircraftConnection.swift */; };
 		F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAA26FB130F00DAF66D /* TaskManager.swift */; };
 		F8826AAD26FB130F00DAF66D /* Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8826AAB26FB130F00DAF66D /* Task.swift */; };
 		F890A04026FB9405000906AA /* CoatyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F890A03F26FB9405000906AA /* CoatyAPI.swift */; };
@@ -87,6 +89,8 @@
 		F86307B526FF039900A4E6BB /* SyncMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncMessage.swift; sourceTree = "<group>"; };
 		F86307BB26FF468000A4E6BB /* Coordinate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Coordinate.swift; sourceTree = "<group>"; };
 		F86307BD26FF5AC100A4E6BB /* LiveData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveData.swift; sourceTree = "<group>"; };
+		F864614A2704E54A00ED703A /* Aircraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aircraft.swift; sourceTree = "<group>"; };
+		F864614C2704F14000ED703A /* AircraftConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AircraftConnection.swift; sourceTree = "<group>"; };
 		F8826AAA26FB130F00DAF66D /* TaskManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskManager.swift; sourceTree = "<group>"; };
 		F8826AAB26FB130F00DAF66D /* Task.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		F890A03F26FB9405000906AA /* CoatyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoatyAPI.swift; sourceTree = "<group>"; };
@@ -143,6 +147,8 @@
 			isa = PBXGroup;
 			children = (
 				CC3B49092700F376008D491C /* Telemetry.swift */,
+				F864614A2704E54A00ED703A /* Aircraft.swift */,
+				F864614C2704F14000ED703A /* AircraftConnection.swift */,
 			);
 			path = Aircraft;
 			sourceTree = "<group>";
@@ -525,6 +531,7 @@
 				F890A06B26FC78A0000906AA /* MissionController.swift in Sources */,
 				F890A07726FCA067000906AA /* TaskTable.swift in Sources */,
 				CCD2593426F7E01A007AD953 /* ContentView.swift in Sources */,
+				F864614B2704E54A00ED703A /* Aircraft.swift in Sources */,
 				F86307BE26FF5AC100A4E6BB /* LiveData.swift in Sources */,
 				F817DF112704451C00AD576E /* Logger.swift in Sources */,
 				CC4A05F32700A805006FCAFA /* FirstComeFirstServe.swift in Sources */,
@@ -537,6 +544,7 @@
 				CCB6EAA026FB4D7700E94439 /* Log.swift in Sources */,
 				F890A06D26FC78BF000906AA /* TimeUtil.swift in Sources */,
 				F8826AAD26FB130F00DAF66D /* Task.swift in Sources */,
+				F864614D2704F14000ED703A /* AircraftConnection.swift in Sources */,
 				F86307B426FF017B00A4E6BB /* Sync.swift in Sources */,
 				F8826AAC26FB130F00DAF66D /* TaskManager.swift in Sources */,
 				F85435A82701E8DD00748F1B /* ReactUtil.swift in Sources */,
