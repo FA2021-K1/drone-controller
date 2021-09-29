@@ -102,7 +102,7 @@ extension DroneConnectionManager: DJISDKManagerDelegate {
     func appRegisteredWithError(_ error: Error?) {
         if (error != nil) {
             state = .error(problem: error.debugDescription)
-            Logger.getInstance().add(message: "Registering SDK failed")
+            Logger.getInstance().add(message: "Registering SDK failed " + error.debugDescription)
         } else {
             state = .sdkRegistered
             Logger.getInstance().add(message: "Registering SDK successful")
