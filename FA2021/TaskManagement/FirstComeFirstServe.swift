@@ -41,7 +41,6 @@ class FirstComeFirstServe: TaskManager {
                     entry.value.state != TaskTable.TaskState.available
                 }
             })
-            .take(1)
             .subscribe(onNext: { table in
                 if (!self.currentTasksId.isEmpty){
                     return
