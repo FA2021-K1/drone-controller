@@ -117,9 +117,6 @@ class MissionScheduler: NSObject, ObservableObject {
         log.add(message: "Ordered takeoff")
         aircraftController.takeOff {
             self.log.add(message: "Mission Control reported Take off")
-            self.retryAfter(seconds: 10/*4*/, task: {
-                self.flyTo(latitude: 0.0, longitude: 0.0, altitude: altitude, onFinished: onFinished)
-            })
         }
     }
     
@@ -128,7 +125,7 @@ class MissionScheduler: NSObject, ObservableObject {
         aircraftController.land()
     }
     
-    func flyTo(latitude: Double, longitude: Double, altitude: Float, onFinished: @escaping () -> Void) {
+    func flyTo(latitude: [Double], longitude: [Double], altitude: [Float], wait: [Int], onFinished: @escaping () -> Void) {
         finished_task_callback = onFinished
         self.log.add(message: "Flying to latitude \(latitude), longitude \(longitude), altitude \(altitude)")
         let mission = NavigationUtilities.createDJIWaypointMission()
@@ -141,20 +138,21 @@ class MissionScheduler: NSObject, ObservableObject {
             return
         }
         
-        let latitude1 = currentPosition.latitude
-        let longitude1 = currentPosition.longitude
-        
-        let destinationCoordinate = CLLocationCoordinate2DMake(CLLocationDegrees(latitude1 - 0.0001), CLLocationDegrees(longitude1 - 0.0002))
-        let destinationCoordinate2 = CLLocationCoordinate2DMake(CLLocationDegrees(latitude1 + 0.0002), CLLocationDegrees(longitude1 + 0.0005))
-
         
         let waypointStart = NavigationUtilities.createWaypoint(coordinates: currentPosition, altitude: 10.0)
-        let waypointDestination = NavigationUtilities.createWaypoint(coordinates: destinationCoordinate, altitude: altitude)
-        let waypoint3 = NavigationUtilities.createWaypoint(coordinates: destinationCoordinate2, altitude: altitude)
-        
         mission.add(waypointStart)
-        mission.add(waypointDestination)
-        mission.add(waypoint3)
+        
+        for i in 0..<latitude.endIndex {
+            let waypointCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: CLLocationDegrees(latitude[i]), longitude: CLLocationDegrees(longitude[i]))
+            let waypointDestination = NavigationUtilities.createWaypoint(coordinates: waypointCoordinate, altitude: altitude[i])
+            
+            if wait[i] > 0 {
+                waypointDestination.add(DJIWaypointAction.init(actionType: .stay, param: Int16(1000 * wait[i])))
+            }
+            mission.add(waypointDestination)
+
+        }
+        
         clearScheduleAndExecute(mission: mission)
     }
     

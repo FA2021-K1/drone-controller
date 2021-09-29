@@ -27,8 +27,14 @@ class TaskContext {
     }
     
     func runSampleTask() {
+        let latitudes: [Double] = [46.74605780354491,46.74617979657177,46.74653357442833,46.74646037763764,46.74610660044984]
+        let longitudes: [Double] = [11.358515723354026,11.358072872389046,11.358226424637898,11.358704885078991,11.358531301375377]
+        let altitudes: [Float] = [10,10,10,10,10]
+        let waits: [Int] = [0,0,10,0,0]
+        
+        
         print("start sample task")
-        self.add(steps: [TakingOff(altitude: 10), Idling(duration: 8), Landing()])
+        self.add(steps: [TakingOff(altitude: 10), FlyTo(latitudes: latitudes, longitudes: longitudes, altitudes: altitudes, waits: waits), Landing()])
         self.startTask()
         print("started sample task")
     }

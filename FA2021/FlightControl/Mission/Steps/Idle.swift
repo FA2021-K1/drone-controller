@@ -26,6 +26,30 @@ class Idling: Step {
     
 }
 
+class FlyTo: Step {
+    func execute(missionScheduler: MissionScheduler) {
+        DispatchQueue.main.async {
+            missionScheduler.flyTo(latitude: self.latitudes, longitude: self.longitudes, altitude: self.altitudes, wait: self.waits) {
+                self.done = true
+            }
+        }
+    }
+    
+    let description: String = "Fly To Step"
+    internal var done: Bool = false
+    let latitudes: [Double]
+    let longitudes: [Double]
+    let altitudes: [Float]
+    let waits: [Int]
+    
+    init(latitudes: [Double], longitudes: [Double], altitudes: [Float], waits: [Int]) {
+        self.latitudes = latitudes
+        self.longitudes = longitudes
+        self.altitudes = altitudes
+        self.waits = waits
+    }
+}
+
 class TakingOff: Step {
     private var altitude: Float
     
@@ -42,9 +66,9 @@ class TakingOff: Step {
                 self.done = true
             }
         }
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 15/*6*/, execute: {
-//            self.done = true
-//        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15/*6*/, execute: {
+            self.done = true
+        })
     }
 }
 

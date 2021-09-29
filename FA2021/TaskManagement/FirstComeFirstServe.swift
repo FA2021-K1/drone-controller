@@ -79,9 +79,30 @@ class FirstComeFirstServe: TaskManager {
             task in
             task.id == taskId
         }).first
-        let steps = taskClaimed?.getTerminalTasksList()
-//        taskContext.add(steps: steps)
-//        taskContext.startTask()
+        let tasks = taskClaimed?.getTerminalTasksList() ?? []
+        
+        var latitudes: [Double] = []//[46.74605780354491,46.74617979657177,46.74653357442833,46.74646037763764,46.74610660044984]
+        var longitudes: [Double] = []//[11.358515723354026,11.358072872389046,11.358226424637898,11.358704885078991,11.358531301375377]
+        var altitudes: [Float] = []//[10,10,10,10,10]
+        var waits: [Int] = []//[0,0,10,0,0]
+        
+        for task: Task in tasks {
+            if task is FlyTask {
+                let flyTask = task as! FlyTask
+                latitudes.append(flyTask.coordinate.latitude)
+                longitudes.append(flyTask.coordinate.longitude)
+                altitudes.append(Float(flyTask.coordinate.altitude))
+                waits.append(0)
+            } else if task is IdleTask {
+                let idleTask = task as! IdleTask
+                if let _: Int = waits.last {
+                    waits[waits.endIndex-1] += Int(idleTask.delay)
+                }
+            }
+        }
+        
+        taskContext.add(steps: [TakingOff(altitude: 10), FlyTo(latitudes: latitudes, longitudes: longitudes, altitudes: altitudes, waits: waits), Landing()])
+        taskContext.startTask()
         taskContext.runSampleTask()
     }
     
