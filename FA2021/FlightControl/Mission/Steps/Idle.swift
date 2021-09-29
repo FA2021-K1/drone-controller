@@ -38,11 +38,13 @@ class TakingOff: Step {
     
     func execute(missionScheduler: MissionScheduler) {
         DispatchQueue.main.async {
-            missionScheduler.takeOff(altitude: self.altitude)
+            missionScheduler.takeOff(altitude: self.altitude) {
+                self.done = true
+            }
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 15/*6*/, execute: {
-            self.done = true
-        })
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 15/*6*/, execute: {
+//            self.done = true
+//        })
     }
 }
 
@@ -55,7 +57,7 @@ class Landing: Step {
         DispatchQueue.main.async {
             missionScheduler.land()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 15/*5*/, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 30/*5*/, execute: {
             self.done = true
         })
     }

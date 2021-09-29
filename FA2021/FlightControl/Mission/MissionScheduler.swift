@@ -11,6 +11,7 @@ import DJISDK
 class MissionScheduler: NSObject, ObservableObject {
     private(set) var aircraftController: AircraftController
     private var log: Log
+    private var finished_task_callback: () -> Void = {}
     
     var missionActive: Bool {
         get {
@@ -112,12 +113,12 @@ class MissionScheduler: NSObject, ObservableObject {
         }
     }
     
-    func takeOff(altitude: Float) {
+    func takeOff(altitude: Float, onFinished: @escaping () -> Void) {
         log.add(message: "Ordered takeoff")
         aircraftController.takeOff {
             self.log.add(message: "Mission Control reported Take off")
             self.retryAfter(seconds: 10/*4*/, task: {
-                self.flyTo(altitude: altitude)
+                self.flyTo(altitude: altitude, onFinished: onFinished)
             })
         }
     }
@@ -127,7 +128,31 @@ class MissionScheduler: NSObject, ObservableObject {
         aircraftController.land()
     }
     
-    func flyTo(altitude: Float) {
+    func flyTo(latitude: Double, longitude: Double, altitude: Float, onFinished: @escaping () -> Void) {
+        finished_task_callback = onFinished
+        self.log.add(message: "Flying to latitude \(latitude), longitude \(longitude), altitude \(altitude)")
+        let mission = NavigationUtilities.createDJIWaypointMission()
+        let currentPosition = aircraftController.aircraftPosition!
+        let currentAltitude = aircraftController.aircraftAltitude!
+        self.log.add(message: "Current position: \(currentPosition), current altitude: \(currentAltitude)")
+        
+        if !CLLocationCoordinate2DIsValid(currentPosition) {
+            log.add(message: "Invalid coordinates")
+            return
+        }
+        
+        let destinationCoordinate = CLLocationCoordinate2DMake(CLLocationDegrees(latitude), CLLocationDegrees(longitude))
+        
+        let waypointStart = NavigationUtilities.createWaypoint(coordinates: currentPosition, altitude: Float(currentAltitude))
+        let waypointDestination = NavigationUtilities.createWaypoint(coordinates: destinationCoordinate, altitude: altitude)
+        
+        mission.add(waypointStart)
+        mission.add(waypointDestination)
+        clearScheduleAndExecute(mission: mission)
+    }
+    
+    func flyTo(altitude: Float, onFinished: @escaping () -> Void) {
+        finished_task_callback = onFinished
         self.log.add(message: "Flying to altitude \(altitude)")
         let mission = NavigationUtilities.createDJIWaypointMission()
         let currentPosition = aircraftController.aircraftPosition!
@@ -147,7 +172,8 @@ class MissionScheduler: NSObject, ObservableObject {
         clearScheduleAndExecute(mission: mission)
     }
     
-    func flyTo(direction: Direction, meters: Double) {
+    func flyTo(direction: Direction, meters: Double, onFinished: @escaping () -> Void) {
+        finished_task_callback = onFinished
         guard let position = aircraftController.aircraftPosition
         else {
             return
@@ -194,8 +220,17 @@ extension MissionScheduler {
                 self.didPause()
             case .resumed:
                 self.didResume()
+            case .finished:
+                self.log.add(message: "Mission Scheduler finished a mission \(String(describing: element))")
+                self.finished_task_callback()
+            case .unknown:
+                self.log.add(message: "DJIMissionControl reported an unknown event")
+            case .progressed:
+                break
+            case .startError, .pauseError, .resumeError, .stopError:
+                self.log.add(message: "DJIMissionControl reported an error event")
             default:
-                self.log.add(message: "DJIMissionControl reported event \(event.self), Type: \(type(of: event))")
+                self.log.add(message: "DJIMissionControl reported an event not included in the enum")
                 break
             }
         })
