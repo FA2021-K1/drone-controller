@@ -40,7 +40,7 @@ class TakingOff: Step {
         DispatchQueue.main.async {
             missionScheduler.takeOff(altitude: self.altitude)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 6, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15/*6*/, execute: {
             self.done = true
         })
     }
@@ -55,7 +55,7 @@ class Landing: Step {
         DispatchQueue.main.async {
             missionScheduler.land()
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15/*5*/, execute: {
             self.done = true
         })
     }

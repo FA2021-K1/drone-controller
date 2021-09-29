@@ -112,13 +112,14 @@ class TaskContext {
     }
     
     private func checkDone() {
-        log.add(message: "Check done")
+        //log.add(message: "Check done")
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
             if self.currentStep == nil {
                 return
             }
             
             if self.currentStep!.done {
+                self.log.add(message: "Check done successful.")
                 self.executeNextStep()
             }
             self.checkDone()

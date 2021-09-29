@@ -116,7 +116,7 @@ class MissionScheduler: NSObject, ObservableObject {
         log.add(message: "Ordered takeoff")
         aircraftController.takeOff {
             self.log.add(message: "Mission Control reported Take off")
-            self.retryAfter(seconds: 4, task: {
+            self.retryAfter(seconds: 10/*4*/, task: {
                 self.flyTo(altitude: altitude)
             })
         }
@@ -195,7 +195,7 @@ extension MissionScheduler {
             case .resumed:
                 self.didResume()
             default:
-                self.log.add(message: "DJIMissionControl reported Event \(event.self)")
+                self.log.add(message: "DJIMissionControl reported event \(event.self), Type: \(type(of: event))")
                 break
             }
         })
