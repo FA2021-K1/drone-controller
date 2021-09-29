@@ -118,7 +118,7 @@ class MissionScheduler: NSObject, ObservableObject {
         aircraftController.takeOff {
             self.log.add(message: "Mission Control reported Take off")
             self.retryAfter(seconds: 10/*4*/, task: {
-                self.flyTo(altitude: altitude, onFinished: onFinished)
+                self.flyTo(latitude: 0.0, longitude: 0.0, altitude: altitude, onFinished: onFinished)
             })
         }
     }
@@ -141,13 +141,20 @@ class MissionScheduler: NSObject, ObservableObject {
             return
         }
         
-        let destinationCoordinate = CLLocationCoordinate2DMake(CLLocationDegrees(latitude), CLLocationDegrees(longitude))
+        let latitude1 = currentPosition.latitude
+        let longitude1 = currentPosition.longitude
         
-        let waypointStart = NavigationUtilities.createWaypoint(coordinates: currentPosition, altitude: Float(currentAltitude))
+        let destinationCoordinate = CLLocationCoordinate2DMake(CLLocationDegrees(latitude1 - 0.0001), CLLocationDegrees(longitude1 - 0.0002))
+        let destinationCoordinate2 = CLLocationCoordinate2DMake(CLLocationDegrees(latitude1 + 0.0002), CLLocationDegrees(longitude1 + 0.0005))
+
+        
+        let waypointStart = NavigationUtilities.createWaypoint(coordinates: currentPosition, altitude: 10.0)
         let waypointDestination = NavigationUtilities.createWaypoint(coordinates: destinationCoordinate, altitude: altitude)
+        let waypoint3 = NavigationUtilities.createWaypoint(coordinates: destinationCoordinate2, altitude: altitude)
         
         mission.add(waypointStart)
         mission.add(waypointDestination)
+        mission.add(waypoint3)
         clearScheduleAndExecute(mission: mission)
     }
     
@@ -172,8 +179,7 @@ class MissionScheduler: NSObject, ObservableObject {
         clearScheduleAndExecute(mission: mission)
     }
     
-    func flyTo(direction: Direction, meters: Double, onFinished: @escaping () -> Void) {
-        finished_task_callback = onFinished
+    func flyTo(direction: Direction, meters: Double) {
         guard let position = aircraftController.aircraftPosition
         else {
             return
