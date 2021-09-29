@@ -142,8 +142,8 @@ extension ContentView {
                 self.logEntries = entries
             })
             
-            let aircraft = Aircraft()
             let connection = AircraftConnection()
+            let aircraft = Aircraft()
         }
     }
 }
