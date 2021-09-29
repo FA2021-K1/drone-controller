@@ -48,8 +48,9 @@ class FirstComeFirstServe: TaskManager {
                 }
                 
                 let unfinishedTaskIds = self.getUnfinishedTasksId()
-                self.claimTask(taskId: unfinishedTaskIds[0])
-                
+                if !unfinishedTaskIds.isEmpty {
+                    self.claimTask(taskId: unfinishedTaskIds[0])
+                }
             })
             .disposed(by: api.droneController!.disposeBag)
     }
