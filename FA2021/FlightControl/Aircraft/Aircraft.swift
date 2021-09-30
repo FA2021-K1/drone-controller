@@ -9,12 +9,13 @@ import Foundation
 import DJISDK
 
 final class Aircraft: NSObject {
+    
+    
     /**
      The current location of the aircraft as a coordinate. `nil` if the location is invalid.
      
      [DJI SDK Documentation](https://developer.dji.com/api-reference/ios-api/Components/FlightController/DJIFlightController_DJIFlightControllerCurrentState.html#djiflightcontroller_djiflightcontrollercurrentstate_aircraftlocation_inline)
      */
-    
     func getCurrentPosition() -> CLLocation? {
         guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
         else {
@@ -29,6 +30,22 @@ final class Aircraft: NSObject {
         }
         
         return location
+    }
+    
+    func isFlying() -> Bool? {
+        guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamIsFlying)
+        else {
+            Logger.getInstance().add(message: "Cannot retrieve current flying status: Missing Controller Key")
+            return nil
+        }
+        
+        let value = DJISDKManager.keyManager()?.getValueFor(key)
+        guard let isFlying = value?.value as? Bool else {
+            Logger.getInstance().add(message: "Cannot retrieve current flying status")
+            return nil
+        }
+        
+        return isFlying
     }
 
     
@@ -64,6 +81,8 @@ final class Aircraft: NSObject {
             return
         }
         
+        stopAndClearMission()
+        
         mission.finishedAction = .noAction
         mission.autoFlightSpeed = 2
         mission.maxFlightSpeed = 4
@@ -91,7 +110,11 @@ final class Aircraft: NSObject {
         land.autoConfirmLandingEnabled = true
         
         var elements = [DJIMissionControlTimelineElement]()
-        elements.append(takeOff)
+        
+        if (self.isFlying() ?? false){
+            elements.append(takeOff)
+        }
+        
         elements.append(mission)
         elements.append(goHome)
         elements.append(land)
@@ -111,12 +134,14 @@ final class Aircraft: NSObject {
         missionControl.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
             if element == nil && event == .finished {
                 Logger.getInstance().add(message: "FINISHED")
-                missionControl.stopTimeline()
-                missionControl.unscheduleEverything()
-                missionControl.scheduleElements(elements)
-                missionControl.startTimeline()
+                self.stopAndClearMission()
             }
         })
+    }
+    
+    func stopAndClearMission() {
+        DJISDKManager.missionControl()?.stopTimeline()
+        DJISDKManager.missionControl()?.unscheduleEverything()
     }
     
     private func setupTimelineListeners(for missionControl: DJIMissionControl) {
