@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 import DJISDK
 import Combine
 
@@ -109,6 +110,18 @@ struct ContentView: View {
         // steering
         List {
             Button {
+                let point1 = DJIWaypoint(coordinate: CLLocationCoordinate2DMake(46.74685695584437, 11.358539437386618))
+                let point2 = DJIWaypoint(coordinate: CLLocationCoordinate2DMake(46.74661592553349, 11.358415773941866))
+                
+                point1.altitude = 10
+                point2.altitude = 20
+                // Wait at point 2 for 6000 ms.
+                point2.add(DJIWaypointAction.init(actionType: .stay, param: 6000))
+                
+                let mission = DJIMutableWaypointMission()
+                mission.add(point1)
+                mission.add(point2)
+                viewModel.aircraft.initializeMission(mission: mission)
             } label: {
                 Text("Takeoff").padding(20)
             }.contentShape(Rectangle())
@@ -135,15 +148,16 @@ extension ContentView {
         @Published
         var logEntries = [String]()
         
+        let aircraft: Aircraft
+        
         private var subscription: AnyCancellable?
         
         init() {
+            UIApplication.shared.isIdleTimerDisabled = true
+            self.aircraft = Aircraft()
             self.subscription = Logger.getInstance().$logEntries.sink(receiveValue: { entries in
                 self.logEntries = entries
             })
-            
-            let connection = AircraftConnection()
-            let aircraft = Aircraft()
         }
     }
 }

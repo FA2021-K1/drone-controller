@@ -9,26 +9,46 @@ import Foundation
 import DJISDK
 
 final class Aircraft: NSObject {
+    /**
+     The current location of the aircraft as a coordinate. `nil` if the location is invalid.
+     
+     [DJI SDK Documentation](https://developer.dji.com/api-reference/ios-api/Components/FlightController/DJIFlightController_DJIFlightControllerCurrentState.html#djiflightcontroller_djiflightcontrollercurrentstate_aircraftlocation_inline)
+     */
+    
+    func getCurrentPosition() -> CLLocation? {
+        guard let key = DJIFlightControllerKey(param: DJIFlightControllerParamAircraftLocation)
+        else {
+            Logger.getInstance().add(message: "Cannot retrieve current location: Missing Controller Key")
+            return nil
+        }
+        
+        let value = DJISDKManager.keyManager()?.getValueFor(key)
+        guard let location = value?.value as? CLLocation else {
+            Logger.getInstance().add(message: "Cannot retrieve current location")
+            return nil
+        }
+        
+        return location
+    }
+
+    
     override init() {
         super.init()
-        let point1 = DJIWaypoint(coordinate: CLLocationCoordinate2DMake(46.74599747777796, 11.358470588842453))
-        let point2 = DJIWaypoint(coordinate: CLLocationCoordinate2DMake(46.746195, 11.358094))
         
-        point1.altitude = 10
-        point2.altitude = 20
-        
-        let mission = DJIMutableWaypointMission()
-        mission.add(point1)
-        mission.add(point2)
-        
-        initializeMission(mission: mission)
+        let _ = AircraftConnection() {
+            guard let missionControl = DJISDKManager.missionControl() else {
+                Logger.getInstance().add(message: "Mission Control unavailable")
+                return
+            }
+            self.setupTimelineListeners(for: missionControl)
+        }
     }
     
     func initializeMission(mission: DJIMutableWaypointMission) {
         if DJISDKManager.product() == nil {
-            Logger.getInstance().add(message: "Product is nil")
+            Logger.getInstance().add(message: "Could not initialize mission: Product is nil")
             DispatchQueue.main.asyncAfter(deadline: .now() + 5, execute: {
-                Logger.getInstance().add(message: "Restarting initializeMission")
+                Logger.getInstance().add(message: "Restarting initializeMission()")
                 self.initializeMission(mission: mission)
             })
             return
@@ -43,39 +63,6 @@ final class Aircraft: NSObject {
             Logger.getInstance().add(message: "Mission Control unavailable")
             return
         }
-        
-        missionControl.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
-            
-            if error != nil {
-                Logger.getInstance().add(message: error!.localizedDescription)
-            }
-            
-            // https://github.com/dji-sdk/Mobile-SDK-iOS/issues/161#issuecomment-330616112
-            switch event {
-            case .started:
-                Logger.getInstance().add(message: "Mission started")
-            case .stopped:
-                Logger.getInstance().add(message: "Mission stopped")
-            case .paused:
-                Logger.getInstance().add(message: "Mission paused")
-            case .resumed:
-                Logger.getInstance().add(message: "Mission resumed")
-            case .finished:
-                Logger.getInstance().add(message: "Mission Scheduler finished a mission \(String(describing: element))")
-            case .unknown:
-                Logger.getInstance().add(message: "Mission Scheduler unknown status")
-            case .progressed:
-                //Logger.getInstance().add(message: "Mission Scheduler progressed status")
-                break
-            case .startError, .pauseError, .resumeError, .stopError:
-                Logger.getInstance().add(message: "DJIMissionControl reported an error event")
-            default:
-                Logger.getInstance().add(message: "DJIMissionControl reported an event not included in the enum")
-                break
-            }
-        })
-        
-        // let missionOperator = missionControl.waypointMissionOperator()
         
         mission.finishedAction = .noAction
         mission.autoFlightSpeed = 2
@@ -109,22 +96,58 @@ final class Aircraft: NSObject {
         elements.append(goHome)
         elements.append(land)
         
+        guard let currentPosition = self.getCurrentPosition() else {
+            Logger.getInstance().add(message: "Unable to get drone location.")
+            return
+        }
+        
+        aircraft.flightController?.setHomeLocation(currentPosition, withCompletion: { error in
+            Logger.getInstance().add(message: "Home position set: \(error?.localizedDescription ?? "No error")")
+        })
         
         missionControl.scheduleElements(elements)
         missionControl.startTimeline()
         
         missionControl.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
-            
-            if error != nil {
-                Logger.getInstance().add(message: error!.localizedDescription)
-            }
-            
             if element == nil && event == .finished {
                 Logger.getInstance().add(message: "FINISHED")
                 missionControl.stopTimeline()
                 missionControl.unscheduleEverything()
                 missionControl.scheduleElements(elements)
                 missionControl.startTimeline()
+            }
+        })
+    }
+    
+    private func setupTimelineListeners(for missionControl: DJIMissionControl) {
+        missionControl.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
+            
+            if error != nil {
+                Logger.getInstance().add(message: error!.localizedDescription)
+            }
+            
+            // https://github.com/dji-sdk/Mobile-SDK-iOS/issues/161#issuecomment-330616112
+            switch event {
+            case .started:
+                Logger.getInstance().add(message: "Mission started")
+            case .stopped:
+                Logger.getInstance().add(message: "Mission stopped")
+            case .paused:
+                Logger.getInstance().add(message: "Mission paused")
+            case .resumed:
+                Logger.getInstance().add(message: "Mission resumed")
+            case .finished:
+                Logger.getInstance().add(message: "Mission Scheduler finished a mission \(String(describing: element))")
+            case .unknown:
+                Logger.getInstance().add(message: "Mission Scheduler unknown status")
+            case .progressed:
+                //Logger.getInstance().add(message: "Mission Scheduler progressed status")
+                break
+            case .startError, .pauseError, .resumeError, .stopError:
+                Logger.getInstance().add(message: "DJIMissionControl reported an error event")
+            default:
+                Logger.getInstance().add(message: "DJIMissionControl reported an event not included in the enum")
+                break
             }
         })
     }

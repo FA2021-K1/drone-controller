@@ -9,7 +9,10 @@ import Foundation
 import DJISDK
 
 final class AircraftConnection: NSObject {
-    override init() {
+    let onConnected: () -> Void
+    
+    init(onConnected: @escaping () -> Void) {
+        self.onConnected = onConnected
         super.init()
         registerApp()
         connectToProduct()
@@ -73,6 +76,7 @@ extension AircraftConnection: DJISDKManagerDelegate {
      */
     func productConnected(_ product: DJIBaseProduct?) {
         Logger.getInstance().add(message: "Product connected: \(product?.debugDescription ?? "No product")")
+        self.onConnected()
     }
     
     func productChanged(_ product: DJIBaseProduct?) {
