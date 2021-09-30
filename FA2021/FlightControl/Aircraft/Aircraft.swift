@@ -10,6 +10,17 @@ import DJISDK
 
 final class Aircraft: NSObject {
     
+    var connectedAircraft: DJIAircraft? {
+        get {
+            guard let connectedAircraft = DJISDKManager.product() as? DJIAircraft else {
+                Logger.getInstance().add(message: "DJI Aircraft is not available")
+                return nil
+            }
+            return connectedAircraft
+        }
+    }
+    
+    lazy var status = AircraftStatus()
     
     /**
      The current location of the aircraft as a coordinate. `nil` if the location is invalid.
@@ -47,9 +58,8 @@ final class Aircraft: NSObject {
         
         return isFlying
     }
-
     
-    override init() {
+    init(onReady: @escaping () -> Void) {
         super.init()
         
         let _ = AircraftConnection() {
@@ -58,6 +68,7 @@ final class Aircraft: NSObject {
                 return
             }
             self.setupTimelineListeners(for: missionControl)
+            onReady()
         }
     }
     
@@ -81,6 +92,10 @@ final class Aircraft: NSObject {
             return
         }
         
+        if !gpsSignalIsStrongEnough() {
+            Logger.getInstance().add(message: "Warning: Please check that GPS Signal Level is strong enough!")
+        }
+        
         // Before setting up a new mission, any existing mission must be stopped and cleared.
         stopAndClearMission()
         
@@ -100,7 +115,11 @@ final class Aircraft: NSObject {
         }
         
         aircraft.flightController?.setMaxFlightRadius(8000, withCompletion: { error in
-            Logger.getInstance().add(message: "Flight Radius set: \(error?.localizedDescription ?? "No error")")
+            Logger.getInstance().add(message: "Flight Radius set to 8 km: \(error?.localizedDescription ?? "No error")")
+        })
+        
+        aircraft.flightController?.setGoHomeHeightInMeters(20, withCompletion: { error in
+            Logger.getInstance().add(message: "Go Home Height in Meters set to 20 m: \(error?.localizedDescription ?? "No error")")
         })
         
         let takeOff = DJITakeOffAction()
@@ -142,6 +161,15 @@ final class Aircraft: NSObject {
             DJISDKManager.missionControl()?.stopTimeline()
         }
         DJISDKManager.missionControl()?.unscheduleEverything()
+    }
+    
+    private func gpsSignalIsStrongEnough() -> Bool {
+        switch status.gpsSignalLevel {
+        case .level2, .level3, .level4, .level5:
+            return true
+        case .levelNone, .level0, .level1, .none, .some(_):
+            return false
+        }
     }
     
     /**

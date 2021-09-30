@@ -55,6 +55,11 @@ struct ContentView: View {
                 }
                 Button {
                     if !coatyStarted {
+                        if viewModel.aircraft.connectedAircraft == nil {
+                            Logger.getInstance().add(message: "Aircraft is unavailable, abort! Please try again later.")
+                            return
+                        }
+                        
                         if let port: UInt16 = UInt16(portString) {
                             withAnimation {
                                 coatyStarted.toggle()
@@ -74,7 +79,7 @@ struct ContentView: View {
                                                                                        
                                                                                        aircraft: viewModel.aircraft)
                             // starts timer to send data in init()
-                            let _: Telemetry = Telemetry(api: coatyAPI, taskmanager: firstComeFirstServe)
+                            let _: MissionControlTelemetry = MissionControlTelemetry(aircraft: viewModel.aircraft, api: coatyAPI, taskmanager: firstComeFirstServe)
                             
                             
                             firstComeFirstServe.scanForTask()
@@ -157,7 +162,9 @@ extension ContentView {
         
         init() {
             UIApplication.shared.isIdleTimerDisabled = true
-            self.aircraft = Aircraft()
+            self.aircraft = Aircraft() {
+                
+            }
             self.subscription = Logger.getInstance().$logEntries.sink(receiveValue: { entries in
                 self.logEntries = entries
             })
