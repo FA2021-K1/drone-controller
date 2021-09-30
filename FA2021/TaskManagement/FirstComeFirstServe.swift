@@ -1,13 +1,19 @@
 import Foundation
 import RxSwift
+import DJISDK
+
+
 class FirstComeFirstServe: TaskManager {
     var api: CoatyAPI
     var droneId: String
     var currentTasksId: Set<String>
     var finishedTasksId: Set<String>
     var waitBeforeStarting: Bool
+    var aircraft: Aircraft
 
-    init(api: CoatyAPI, droneId: String, waitBeforeStarting: Bool) {
+    init(api: CoatyAPI, droneId: String, waitBeforeStarting: Bool, aircraft: Aircraft) {
+        self.aircraft = aircraft
+        
         self.droneId = droneId
         self.api = api
         api.start()
@@ -79,7 +85,35 @@ class FirstComeFirstServe: TaskManager {
             task in
             task.id == taskId
         }).first
-        let steps = taskClaimed?.getTerminalTasksList()
+        let steps = taskClaimed?.getTerminalTasksList() ?? []
+        var points: [DJIWaypoint] = []
+        
+        for step in steps {
+            if step is IdleTask {
+                if points.endIndex > 0 {
+                    let lastWaypoint = points[points.endIndex - 1]
+                    points.removeLast()
+                    
+                    lastWaypoint.add(
+                        DJIWaypointAction.init(actionType: DJIWaypointActionType.stay,
+                                               param: Int16(1000 * (step as! IdleTask).delay)))
+                    points.append(lastWaypoint)
+                }
+            } else if step is FlyTask{
+                let waypoint = DJIWaypoint(coordinate: CLLocationCoordinate2DMake(
+                    (step as! FlyTask).coordinate.latitude,
+                    (step as! FlyTask).coordinate.longitude))
+                waypoint.altitude = Float((step as! FlyTask).coordinate.altitude)
+                
+                points.append(waypoint)
+            }
+        }
+        
+        let mission = DJIMutableWaypointMission()
+        for point in points {
+            mission.add(point)
+        }
+        
 //        taskContext.add(steps: steps)
 //        taskContext.startTask()
         
@@ -88,13 +122,13 @@ class FirstComeFirstServe: TaskManager {
             let seconds = 5.0
             DispatchQueue.main.asyncAfter(deadline: .now() + seconds) {
                 if (!self.currentTasksId.isEmpty){
-                    
+                    self.aircraft.initializeMission(mission: mission)
                 }else{
                     Logger.getInstance().add(message: "don't start task \(taskId) because too late")
                 }
             }
         }else {
-            
+            self.aircraft.initializeMission(mission: mission)
         }
     }
     

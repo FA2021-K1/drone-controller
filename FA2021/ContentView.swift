@@ -56,30 +56,32 @@ struct ContentView: View {
                 Button {
                     if !coatyStarted {
                         if let port: UInt16 = UInt16(portString) {
-                        withAnimation {
-                            coatyStarted.toggle()
+                            withAnimation {
+                                coatyStarted.toggle()
+                            }
+                            
+                            defaults.set(ip, forKey: "coaty_ip")
+                            defaults.set(String(port), forKey: "coaty_port")
+                            
+                            /*
+                             Potentialy the same iPhone could control different drones, meaning that the uuid of the iPhone might not always refer to the same drone.
+                             In our use case, each drone is assigned to one iPhone, so we can assume that the iPhones to not differ.
+                             */
+                            
+                            let coatyAPI: CoatyAPI = CoatyAPI(host_ip: ip, port: port)
+                            let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString,
+                                                                                       waitBeforeStarting: true,
+                                                                                       
+                                                                                       aircraft: viewModel.aircraft)
+                            // starts timer to send data in init()
+                            let _: Telemetry = Telemetry(api: coatyAPI, taskmanager: firstComeFirstServe)
+                            
+                            
+                            firstComeFirstServe.scanForTask()
+                            
+                        } else {
+                            showingInvalidPortAlert = true
                         }
-                        
-                        defaults.set(ip, forKey: "coaty_ip")
-                        defaults.set(String(port), forKey: "coaty_port")
-                        
-                        /*
-                         Potentialy the same iPhone could control different drones, meaning that the uuid of the iPhone might not always refer to the same drone.
-                         In our use case, each drone is assigned to one iPhone, so we can assume that the iPhones to not differ.
-                         */
-                        
-                        let coatyAPI: CoatyAPI = CoatyAPI(host_ip: ip, port: port)
-                        let firstComeFirstServe: TaskManager = FirstComeFirstServe(api: coatyAPI, droneId: UIDevice.current.identifierForVendor!.uuidString,
-                                                                                waitBeforeStarting: true)
-                        // starts timer to send data in init()
-                        let _: Telemetry = Telemetry(api: coatyAPI, taskmanager: firstComeFirstServe)
-
-
-                        firstComeFirstServe.scanForTask()
-                        
-                    } else {
-                        showingInvalidPortAlert = true
-                    }
                         
                     }
                     
@@ -114,6 +116,7 @@ struct ContentView: View {
                 let point2 = DJIWaypoint(coordinate: CLLocationCoordinate2DMake(46.74661592553349, 11.358415773941866))
                 
                 point1.altitude = 10
+                point1.add(DJIWaypointAction.init(actionType: DJIWaypointActionType.stay, param: 1000))
                 point2.altitude = 20
                 // Wait at point 2 for 6000 ms.
                 point2.add(DJIWaypointAction.init(actionType: .stay, param: 6000))
