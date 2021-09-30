@@ -140,7 +140,9 @@ final class Aircraft: NSObject {
     }
     
     func stopAndClearMission() {
-        DJISDKManager.missionControl()?.stopTimeline()
+        if(DJISDKManager.missionControl()?.isTimelineRunning ?? true){
+            DJISDKManager.missionControl()?.stopTimeline()
+        }
         DJISDKManager.missionControl()?.unscheduleEverything()
     }
     
