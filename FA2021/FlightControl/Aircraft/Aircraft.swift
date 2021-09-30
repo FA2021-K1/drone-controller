@@ -81,6 +81,7 @@ final class Aircraft: NSObject {
             return
         }
         
+        // Before setting up a new mission, any existing mission must be stopped and cleared.
         stopAndClearMission()
         
         mission.finishedAction = .noAction
@@ -130,51 +131,68 @@ final class Aircraft: NSObject {
         
         missionControl.scheduleElements(elements)
         missionControl.startTimeline()
-        
-        missionControl.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
-            if element == nil && event == .finished {
-                Logger.getInstance().add(message: "FINISHED")
-                self.stopAndClearMission()
-            }
-        })
     }
     
+    /**
+     Stops timeline / DJI Mission if it is running and then unschedules all actions.
+     */
     func stopAndClearMission() {
+        // if we don't check beforehand, there will be an error (timelines not running cannot be stopped)
         if(DJISDKManager.missionControl()?.isTimelineRunning ?? true){
             DJISDKManager.missionControl()?.stopTimeline()
         }
         DJISDKManager.missionControl()?.unscheduleEverything()
     }
     
+    /**
+     Set up listeners on the timeline of a DJI Mission.
+     */
     private func setupTimelineListeners(for missionControl: DJIMissionControl) {
         missionControl.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
             
+            // A general error logger for events.
             if error != nil {
                 Logger.getInstance().add(message: error!.localizedDescription)
             }
             
-            // https://github.com/dji-sdk/Mobile-SDK-iOS/issues/161#issuecomment-330616112
+            // https://github.com/dji-sdk/Mobile-SDK-iOS/issues/161#issuecomment-330616112 :
+            // When element is nil, then the event refers to the whole timeline.
+            // That is, iff element is not nil, the event is specific to the element.
+            // Here in the following, we are setting up handlers specific to the start, stop, ... events of a specific timeline event.
+            if element == nil {
+                return
+            }
+            
             switch event {
             case .started:
-                Logger.getInstance().add(message: "Mission started")
+                Logger.getInstance().add(message: "\(element?.debugDescription ?? "Timeline event:") started")
             case .stopped:
-                Logger.getInstance().add(message: "Mission stopped")
+                Logger.getInstance().add(message: "\(element?.debugDescription ?? "Timeline event:") stopped")
             case .paused:
-                Logger.getInstance().add(message: "Mission paused")
+                Logger.getInstance().add(message: "\(element?.debugDescription ?? "Timeline event:") paused")
             case .resumed:
-                Logger.getInstance().add(message: "Mission resumed")
+                Logger.getInstance().add(message: "\(element?.debugDescription ?? "Timeline event:") resumed")
             case .finished:
-                Logger.getInstance().add(message: "Mission Scheduler finished a mission \(String(describing: element))")
+                Logger.getInstance().add(message: "\(element?.debugDescription ?? "Timeline event:") finished")
             case .unknown:
-                Logger.getInstance().add(message: "Mission Scheduler unknown status")
+                Logger.getInstance().add(message: "\(element?.debugDescription ?? "Timeline event:") unknown status")
             case .progressed:
-                //Logger.getInstance().add(message: "Mission Scheduler progressed status")
+                //Logger.getInstance().add(message: "\(element?.debugDescription ?? "Timeline event:") progressed")
                 break
             case .startError, .pauseError, .resumeError, .stopError:
                 Logger.getInstance().add(message: "DJIMissionControl reported an error event")
             default:
-                Logger.getInstance().add(message: "DJIMissionControl reported an event not included in the enum")
+                Logger.getInstance().add(message: "DJIMissionControl reported an event not included in the listener handlers")
                 break
+            }
+        })
+        
+        missionControl.addListener(self, toTimelineProgressWith: { (event: DJIMissionControlTimelineEvent, element: DJIMissionControlTimelineElement?, error: Error?, info: Any?) in
+            // See comment with the Github Link above
+            // Since the element is nil, the events reported here are referring to the whole timeline
+            if element == nil && event == .finished {
+                Logger.getInstance().add(message: "FINISHED MISSION")
+                self.stopAndClearMission()
             }
         })
     }
